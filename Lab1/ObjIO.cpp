@@ -16,6 +16,8 @@
 #include <iostream>
 #include <vector>
 
+#include <windows.h>
+
 bool ObjIO::load(Mesh *mesh, std::istream & is){	
   //std::cerr << "Reading obj file.\nOutputting any skipped line(s) for reference.\n";
   bool success = readHeader(is);
@@ -102,7 +104,7 @@ bool ObjIO::readData(std::istream & is){
         else if (count == 4){
           // Assume quad
           Vector3<unsigned int> tri1, tri2;
-          splitQuad(buf, tri1, tri2);
+			splitQuad(buf, tri1, tri2, loadData);
           loadData.tris.push_back(tri1);
           loadData.tris.push_back(tri2);
         }
@@ -134,7 +136,7 @@ Vector3<unsigned int> ObjIO::readTri(std::istream &is){
   return Vector3<unsigned int>(v)-1; // obj file format is 1-based
 }
   
-void ObjIO::splitQuad(std::istream &is, Vector3<unsigned int>& tri1, Vector3<unsigned int>& tri2)
+void ObjIO::splitQuad(std::istream &is, Vector3<unsigned int>& tri1, Vector3<unsigned int>& tri2, const LoadData& data)
 {
   //  This is a simplified version of an obj reader that can't read normal and texture indices
   std::string buf;
@@ -148,7 +150,44 @@ void ObjIO::splitQuad(std::istream &is, Vector3<unsigned int>& tri1, Vector3<uns
   }  
   // Add code to split the quad here (indices[4] contains the 4 vertex indices)
 
+	//Edges
+	Vector3<float> vec1 = data.verts.at(indices[1]) - data.verts.at(indices[0]);
+	Vector3<float> vec2 = data.verts.at(indices[2]) - data.verts.at(indices[1]);
+	Vector3<float> vec3 = data.verts.at(indices[3]) - data.verts.at(indices[2]);
+	Vector3<float> vec4 = data.verts.at(indices[0]) - data.verts.at(indices[3]);
+	//Cross sections
+	Vector3<float> vec5 = data.verts.at(indices[3]) - data.verts.at(indices[1]);
+	Vector3<float> vec6 = data.verts.at(indices[2]) - data.verts.at(indices[0]);
 
-}
+	//take norms
+	float len1 = vec1.norm();
+	float len2 = vec1.norm();
+	float len3 = vec1.norm();
+	float len4 = vec1.norm();
+	float len5 = vec1.norm();
+	float len6 = vec1.norm();
+
+	float averageA1 = (len1 + len2 + len6)/3.0f;
+	float averageA2 = (len3 + len4 + len6)/3.0f;
+	//Ratio should be always >= 1
+	float ratioA = max(averageA1,averageA2) / min(averageA1,averageA2);
+
+	float averageB1 = (len1 + len5 + len4)/3.0f;
+	float averageB2 = (len2 + len3 + len5)/3.0f;
+	//Ratio should be always >= 1
+	float ratioB = max(averageB1,averageB2) / min(averageB1,averageB2);
+
+	//ratio closer to 1 is better: to get equal sized are
+	if(ratioA<ratioB)
+		{
+		tri1.set( indices[0], indices[1], indices[2] );
+		tri2.set( indices[2], indices[3], indices[0] );
+		}
+	else
+		{
+		tri1.set( indices[0], indices[1], indices[3] );
+		tri2.set( indices[1], indices[2], indices[3] );
+		}
+	}
 
 
