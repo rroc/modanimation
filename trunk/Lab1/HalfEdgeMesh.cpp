@@ -18,12 +18,11 @@
 #endif
 #include <limits>
 #include <queue>
+#include <set>
+#include <vector>
 
-//const unsigned int HalfEdgeMesh::BORDER = std::numeric_limits<unsigned int>::max();
-//const unsigned int HalfEdgeMesh::UNINITIALIZED = std::numeric_limits<unsigned int>::max()-1;
-
-const unsigned int HalfEdgeMesh::BORDER = UINT_MAX;
-const unsigned int HalfEdgeMesh::UNINITIALIZED = UINT_MAX-1;
+const unsigned int HalfEdgeMesh::BORDER = std::numeric_limits<unsigned int>::max();
+const unsigned int HalfEdgeMesh::UNINITIALIZED = std::numeric_limits<unsigned int>::max()-1;
 
 HalfEdgeMesh::HalfEdgeMesh()
 {
@@ -47,10 +46,15 @@ bool HalfEdgeMesh::addTriangle(const Vector3<float> &v1, const Vector3<float> &v
 	// Add all half-edge pairs
 	unsigned int edgeind1, edgeind2, edgeind3;
 	unsigned int edgeind1pair, edgeind2pair, edgeind3pair;
-	
-	addHalfEdgePair( ind1, ind2, edgeind1, edgeind1pair );
-	addHalfEdgePair( ind2, ind3, edgeind2, edgeind2pair );
-	addHalfEdgePair( ind3, ind1, edgeind3, edgeind3pair );
+
+	bool newEdge1 = addHalfEdgePair( ind1, ind2, edgeind1, edgeind1pair );
+	bool newEdge2 = addHalfEdgePair( ind2, ind3, edgeind2, edgeind2pair );
+	bool newEdge3 = addHalfEdgePair( ind3, ind1, edgeind3, edgeind3pair );
+
+	std::vector<std::pair<std::pair<unsigned int, unsigned int>,bool> > edges;
+	edges.push_back( std::make_pair( std::make_pair(edgeind1, edgeind1pair), newEdge1) );
+	edges.push_back( std::make_pair( std::make_pair(edgeind2, edgeind2pair), newEdge2) );
+	edges.push_back( std::make_pair( std::make_pair(edgeind3, edgeind3pair), newEdge3) );
 
 	// Connect inner ring
 	mEdges.at( edgeind1 ).next = edgeind2;
@@ -62,7 +66,6 @@ bool HalfEdgeMesh::addTriangle(const Vector3<float> &v1, const Vector3<float> &v
 	mEdges.at( edgeind3 ).next = edgeind1;
 	mEdges.at( edgeind3 ).prev = edgeind2;
 
-
 	// Finally, create the face
 	Face f;
 	f.edge = edgeind1;
@@ -70,6 +73,24 @@ bool HalfEdgeMesh::addTriangle(const Vector3<float> &v1, const Vector3<float> &v
 
 	// All half-edges share the same left face (previously added)
 	int index = mFaces.size()-1;
+
+
+
+	for(int i=0,endI=edges.size(); i<endI; i++)
+		{
+		//BORDER EDGE
+		if ( edges.at(i).second )
+			{
+			//pass the inner edge
+			insertBoundaryEdge( edges.at(i).first.first );
+			}
+		//CONNECT TO ANOTHER EDGE
+		else
+			{
+			//pass the pair
+			mergeBoundaryEdge( edges.at(i).first.first );
+			}
+		}
 
 	mEdges.at( edgeind1 ).face = index;
 	mEdges.at( edgeind2 ).face = index;
@@ -137,9 +158,60 @@ bool HalfEdgeMesh::addHalfEdgePair(unsigned int v1, unsigned int v2, unsigned in
 
 
 void HalfEdgeMesh::mergeBoundaryEdge(unsigned int indx)
-{
+	{
+	//Find the previous border
+	int prev(0);
+	int prevPair = mEdges[indx].pair;
+	while( BORDER != mEdges[prevPair].face )
+		{
+		prev = mEdges[prevPair].prev;
+		prevPair = mEdges[prev].pair;
+		}
 
-}
+	//Find the next border
+	int next(0);
+	int nextPair = indx;
+	while( BORDER != mEdges[nextPair].face && ( UNINITIALIZED != mEdges[nextPair].face ) )
+		{
+		next = mEdges[nextPair].next;
+		nextPair = mEdges[next].pair;
+		}
+
+	//link borders
+	mEdges[prevPair].prev = nextPair;
+	mEdges[nextPair].next = prevPair;
+
+	}
+
+void HalfEdgeMesh::insertBoundaryEdge( unsigned int indx )
+	{
+	//Set the face of the edge's pair to border
+	int pair =	mEdges[indx].pair;
+	mEdges[pair].face = BORDER;
+
+	//Find the next border
+	int prev(0);
+	int next = indx;
+	while( ( BORDER != mEdges[next].face  ) && ( UNINITIALIZED != mEdges[next].face  ) )
+		{
+		prev = mEdges[next].prev;
+		next = mEdges[prev].pair;
+		}
+	//link PAIR of the current with the next
+	mEdges[pair].next = next;
+	mEdges[next].prev = pair;
+
+	//Find the previous border
+	prev = indx;
+	while( ( BORDER != mEdges[prev].face ) && ( UNINITIALIZED != mEdges[prev].face ) )
+		{
+		next = mEdges[prev].next;
+		prev = mEdges[next].pair;
+		}
+	//link PAIR of the current with the previous
+	mEdges[pair].prev = prev;
+	mEdges[prev].next = pair;
+	}
 
 
 void HalfEdgeMesh::validate()
@@ -258,18 +330,103 @@ float HalfEdgeMesh::volume()
 	return totalVolume/3.0f;
 	}
 int HalfEdgeMesh::genus() const
-{
-  printf("Genus calculation not implemented for half-edge mesh!\n");
-	return 0;
+	{
+	int E = mEdges.size() / 2; //half edge is just a half edge
+	int V = mVerts.size();
+	int F = mFaces.size();
+	int S = shells();
+
+	std::cerr << "Shells: " << S << std::endl;
+
+	return (E-V-F)/2 + S;
 	}
 
 int HalfEdgeMesh::shells() const 
 	{
-	std::queue<Vertex> vertexQueue;
-		
 
-	return 0;
+	int numberOfShells = 0;
+	//	std::queue<int> vertexQueue;
+	std::set<int> vertexQueue;
+	std::set<int> vertexSet;
+	//vertexQueue.push( 0 );
+	vertexQueue.insert(0);
+
+
+	std::cout << "Vertices: " << mVerts.size() << std::endl;
+
+	int v;
+	std::set<int>::iterator position;
+
+	int totalVerts = mVerts.size();
+
+	//Browse vertices until all are inserted to the set
+	while (vertexSet.size() != totalVerts)
+		{
+		//OPTIMIZE!
+		//Search one vertex which is still NOT in the set
+		for (int vertIndex = 0; vertIndex<totalVerts; vertIndex++ )
+			{
+			if( vertexSet.end() == vertexSet.find( vertIndex ))
+				{
+				vertexQueue.insert(vertIndex);
+				break;
+				}
+			}
+		//fill the current set (shell)
+		while(!vertexQueue.empty())
+			{
+			//		v = vertexQueue.front();
+			position = vertexQueue.begin();
+			v = *position;
+			//		vertexQueue.pop();
+			vertexQueue.erase( position );
+			vertexSet.insert( v );
+
+			//std::cout << "Value: " << v << std::endl;
+			//std::cout << "vque: " << vertexQueue.size() << std::endl;
+			//std::cout << "vertset: " << vertexSet.size() << std::endl;
+
+			std::vector<unsigned int> faces;
+			findNeighbourTriangles(v, faces);
+			for (int i=0,endI=faces.size();i<endI;i++)
+				{
+				std::vector<unsigned int> verts;
+				getTriangleVerts( faces.at(i), verts );
+
+				for (int j=0, endJ=verts.size(); j<endJ; j++)
+					{
+					int vj = verts.at(j);
+					if ( vertexSet.end() != vertexSet.find(vj) )
+						{
+						//Do nothing
+						}
+					else
+						{
+						//vertexQueue.push(vj);
+						vertexQueue.insert(vj);
+						}
+					}
+				}
+			}
+		numberOfShells++;
+		}
+
+	return numberOfShells;
 	}
+
+void HalfEdgeMesh::getTriangleVerts(int aTriangle, std::vector<unsigned int>& aVerts ) const
+	{
+	//mFaces.at( aTriangle ).ha
+	int edge1 = mFaces.at( aTriangle).edge;
+	aVerts.push_back( mEdges.at(edge1).vert );
+
+	int edge2 = mEdges.at(edge1).next;
+	aVerts.push_back( mEdges.at(edge2).vert );
+
+	int edge3 = mEdges.at(edge2).next;
+	aVerts.push_back( mEdges.at(edge3).vert );
+	}
+
 
 float HalfEdgeMesh::curvature(const unsigned int vertexIndex, const Vector3<float>& n)
 {
