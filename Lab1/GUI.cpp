@@ -423,7 +423,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 
 		  // Open input file
 		  //      std::string filename("../Objs/cube.obj");
-		  std::string filename("../Objs/cube.obj");
+		  std::string filename("../Objs/nonmanifold_cube.obj");
 
 		  // Create new mesh
 		  HalfEdgeMesh* mesh = new HalfEdgeMesh;
