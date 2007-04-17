@@ -96,6 +96,13 @@ public:
   Real& y() {return v[1];}
   Real& z() {return v[2];}
   Real *getArrayPtr() { return v; }
+
+  void set(Real v0, Real v1, Real v2) 
+  {
+    v[0] = v0;
+    v[1] = v1;
+    v[2] = v2;
+  }
   
   // Algebraic operators
   Vector3 operator-(const Vector3& vec3) const {
