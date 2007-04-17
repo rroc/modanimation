@@ -24,6 +24,11 @@
 const unsigned int HalfEdgeMesh::BORDER = std::numeric_limits<unsigned int>::max();
 const unsigned int HalfEdgeMesh::UNINITIALIZED = std::numeric_limits<unsigned int>::max()-1;
 
+bool sortEdges( std::pair<unsigned int, bool> a, std::pair<unsigned int, bool> b)
+	{
+	return a.second>b.second;
+	}
+
 HalfEdgeMesh::HalfEdgeMesh()
 {
 }
@@ -51,13 +56,13 @@ bool HalfEdgeMesh::addTriangle(const Vector3<float> &v1, const Vector3<float> &v
 	bool newEdge2 = addHalfEdgePair( ind2, ind3, edgeind2, edgeind2pair );
 	bool newEdge3 = addHalfEdgePair( ind3, ind1, edgeind3, edgeind3pair );
 
-	std::vector<std::pair<std::pair<unsigned int, unsigned int>,bool> > edges;
-	edges.push_back( std::make_pair( std::make_pair(edgeind1, edgeind1pair), newEdge1) );
-	edges.push_back( std::make_pair( std::make_pair(edgeind2, edgeind2pair), newEdge2) );
-	edges.push_back( std::make_pair( std::make_pair(edgeind3, edgeind3pair), newEdge3) );
+	std::vector<std::pair<unsigned int, bool> > edges;
+	edges.push_back( std::make_pair( edgeind1, newEdge1) );
+	edges.push_back( std::make_pair( edgeind2, newEdge2) );
+	edges.push_back( std::make_pair( edgeind3, newEdge3) );
 
 	// Connect inner ring
-	mEdges.at( edgeind1 ).next = edgeind2;
+ 	mEdges.at( edgeind1 ).next = edgeind2;
 	mEdges.at( edgeind1 ).prev = edgeind3;
 
 	mEdges.at( edgeind2 ).next = edgeind3;
@@ -74,7 +79,11 @@ bool HalfEdgeMesh::addTriangle(const Vector3<float> &v1, const Vector3<float> &v
 	// All half-edges share the same left face (previously added)
 	int index = mFaces.size()-1;
 
+	mEdges.at( edgeind1 ).face = index;
+	mEdges.at( edgeind2 ).face = index;
+	mEdges.at( edgeind3 ).face = index;
 
+	sort( edges.begin(), edges.end(), sortEdges );
 
 	for(int i=0,endI=edges.size(); i<endI; i++)
 		{
@@ -82,19 +91,15 @@ bool HalfEdgeMesh::addTriangle(const Vector3<float> &v1, const Vector3<float> &v
 		if ( edges.at(i).second )
 			{
 			//pass the inner edge
-			insertBoundaryEdge( edges.at(i).first.first );
+			insertBoundaryEdge( edges.at(i).first );
 			}
 		//CONNECT TO ANOTHER EDGE
 		else
 			{
 			//pass the pair
-			mergeBoundaryEdge( edges.at(i).first.first );
+			mergeBoundaryEdge( edges.at(i).first );
 			}
 		}
-
-	mEdges.at( edgeind1 ).face = index;
-	mEdges.at( edgeind2 ).face = index;
-	mEdges.at( edgeind3 ).face = index;
 
   return true;
 }
@@ -166,6 +171,12 @@ void HalfEdgeMesh::mergeBoundaryEdge(unsigned int indx)
 		{
 		prev = mEdges[prevPair].prev;
 		prevPair = mEdges[prev].pair;
+
+		//make sure we don't loop infinitely
+		if( mEdges[indx].face == mEdges[prevPair].face )
+			{
+			return;
+			}
 		}
 
 	//Find the next border
@@ -175,6 +186,12 @@ void HalfEdgeMesh::mergeBoundaryEdge(unsigned int indx)
 		{
 		next = mEdges[nextPair].next;
 		nextPair = mEdges[next].pair;
+
+		//make sure we don't loop infinitely
+		if( mEdges[indx].face == mEdges[nextPair].face )
+			{
+			return;
+			}
 		}
 
 	//link borders
@@ -200,6 +217,8 @@ void HalfEdgeMesh::insertBoundaryEdge( unsigned int indx )
 	//link PAIR of the current with the next
 	mEdges[pair].next = next;
 	mEdges[next].prev = pair;
+
+
 
 	//Find the previous border
 	prev = indx;
@@ -483,6 +502,12 @@ void HalfEdgeMesh::calculateVertexNormals()
 
 Vector3<float> HalfEdgeMesh::calculateFaceNormal( unsigned int aTriangle )
 	{
+	//For non manifold surfaces
+	if( BORDER == aTriangle )
+		{
+		return Vector3<float>(0.0f,0.0f,0.0f);
+		}
+
 	HalfEdge* edge = &mEdges[mFaces[aTriangle].edge];
 
 	Vector3<float>& p0 = mVerts[edge->vert].vec;
