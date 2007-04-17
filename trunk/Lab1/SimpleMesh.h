@@ -12,11 +12,6 @@
 #ifndef __simplemesh_h__
 #define __simplemesh_h__
 
-#ifdef __APPLE__
-#include "GLUT/glut.h"
-#else
-#include "GL/glut.h"
-#endif
 #include "Mesh.h"
 
 #include <set>
@@ -27,10 +22,16 @@
 #include <cmath>
 #include <utility>
 
+#ifdef __APPLE__
+#include "GLUT/glut.h"
+#else
+#include "GL/glut.h"
+#endif
+
 #include "Vector3.h"
 
 struct MyEdge{
-	MyEdge(unsigned int a, unsigned int b) : a(min(a, b)), b(max(a,b)) {}
+	MyEdge(unsigned int a, unsigned int b) : a(std::min(a, b)), b(std::max(a,b)) {}
 	bool operator < (const MyEdge &eb) const {
 		if (a<eb.a)
 			return true;

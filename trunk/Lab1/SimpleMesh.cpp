@@ -345,8 +345,8 @@ float SimpleMesh::curvature(const unsigned int vertexIndex, const Vector3<float>
 
 void SimpleMesh::calcCurv()
 {	
-	mMinCurv = FLT_MIN;
-	mMaxCurv = FLT_MAX;
+	mMinCurv = std::numeric_limits<float>::max();
+	mMaxCurv = std::numeric_limits<float>::min();
 
 	float area = 0;	
 	for (unsigned int i = 0; i < mFaces.size(); i++){
