@@ -387,7 +387,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
       std::cerr << "Loading mesh...\n";
 
       // Open input file
-      std::string filename("Objs/bunnySmall.obj");
+      std::string filename("../Objs/bunnySmall.obj");
 
       // Create new mesh
       SimpleMesh* mesh = new SimpleMesh;
@@ -420,7 +420,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
       std::cerr << "Loading half edge mesh...\n";
 
       // Open input file
-      std::string filename("Objs/sphere1.0.obj");
+      std::string filename("../Objs/sphere1.0.obj");
 
       // Create new mesh
       HalfEdgeMesh* mesh = new HalfEdgeMesh;
@@ -451,7 +451,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
       std::cerr << "Loading simple decimation mesh...\n";
 
       // Open input file
-      std::string filename("Objs/cow.obj");
+      std::string filename("../Objs/cow.obj");
 
       // Create new mesh
       SimpleDecimationMesh* mesh = new SimpleDecimationMesh;
