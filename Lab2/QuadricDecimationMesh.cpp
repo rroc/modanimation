@@ -44,12 +44,6 @@ void QuadricDecimationMesh::computeCollapse(EdgeCollapse * collapse)
 	// Compute collapse->position and collapse->key here
 	// based on the quadrics at the edge endpoints
 
-
-
-	// This edge collapse places the new vertex halfway along the edge.
-	// The cost is computed as the vertex-to-vertex distance between the new vertex
-	// and the old vertices at the edge's endpoints.
-
 	unsigned int v1Index = mEdges[collapse->halfEdge].vert;
 	unsigned int v2Index = mEdges[mEdges[collapse->halfEdge].pair].vert;
 
@@ -57,8 +51,8 @@ void QuadricDecimationMesh::computeCollapse(EdgeCollapse * collapse)
 	const Vector3<float>& v1 = mVerts[ v1Index ].vec;
 	const Vector3<float>& v2 = mVerts[ v2Index ].vec;
 
-	Matrix4x4<float> Q1( mQuadrics.at(v1) );
-	Matrix4x4<float> Q2 = mQuadrics.at(v2);
+	Matrix4x4<float> Q1( mQuadrics.at(v1Index) );
+	Matrix4x4<float> Q2 = mQuadrics.at(v2Index);
 
 	Q1 += Q2;
 
@@ -76,13 +70,8 @@ void QuadricDecimationMesh::computeCollapse(EdgeCollapse * collapse)
 
 	// Then, compute the new position and the cost
 
-	collapse->position = Vector3( v );
-	//collapse->cost = (collapse->position - v0).length();
-
-
-
-
-	std::cerr << "computeCollapse in QuadricDecimationMesh not implemented.\n";
+	collapse->position = Vector3<float>( v );
+	collapse->cost = v * (invQ * v);
 }
 
 /*! After each edge collapse the vertex properties need need to be updated */
@@ -184,6 +173,23 @@ void QuadricDecimationMesh::drawQuadrics()
 		// The quadrics are stored in the mQuadrics array.
 		// The sphere can be drawn by calling 'gluSphere(mQuadratic,radius, numSlices , numStacks)';
 		// Example: gluSphere(mQuadratic,1.0, 10 , 10)
+		//std::vector< Matrix4x4<float> >::const_iterator quadIterator = mQuadrics.begin();
+		//std::vector< Matrix4x4<float> >::const_iterator quadItEnd = mQuadrics.end();
+
+		//float openGLMatrix[16];
+
+		//for (; quadIterator != quadItEnd; quadIterator++)
+		//{
+		//	Matrix4x4<float> quadric = *quadIterator;
+		//	glPushMatrix();
+		//	{
+		//		//glScalef(quadric(0, 0), quadric(2, 2), quadric(3, 3));
+		//		quadric.toGLMatrix( openGLMatrix );
+		//		glMultMatrixf( openGLMatrix );
+		//		gluSphere(mQuadratic, 1.0, 10, 10);
+		//	}
+		//	glPopMatrix();
+		//}
 	}
 
 }
