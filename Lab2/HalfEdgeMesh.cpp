@@ -19,6 +19,7 @@
 #include <limits>
 #include <queue>
 
+
 //const unsigned int HalfEdgeMesh::BORDER = std::numeric_limits<unsigned int>::max();
 //const unsigned int HalfEdgeMesh::UNINITIALIZED = std::numeric_limits<unsigned int>::max()-1;
 
@@ -26,12 +27,15 @@ const unsigned int HalfEdgeMesh::BORDER = UINT_MAX;
 const unsigned int HalfEdgeMesh::UNINITIALIZED = UINT_MAX-1;
 
 HalfEdgeMesh::HalfEdgeMesh()
-{
-}
+: mVertSize(0)
+, mFaceSize(0)
+, mEdgeSize(0)
+	{
+	}
 
 HalfEdgeMesh::~HalfEdgeMesh()
-{
-}
+	{
+	}
 
 
 
@@ -53,14 +57,14 @@ bool HalfEdgeMesh::addTriangle(const Vector3<float> &v1, const Vector3<float> &v
 	addHalfEdgePair( ind3, ind1, edgeind3, edgeind3pair );
 
 	// Connect inner ring
-	mEdges.at( edgeind1 ).next = edgeind2;
-	mEdges.at( edgeind1 ).prev = edgeind3;
+	mEdges[edgeind1].next = edgeind2;
+	mEdges[edgeind1 ].prev = edgeind3;
 
-	mEdges.at( edgeind2 ).next = edgeind3;
-	mEdges.at( edgeind2 ).prev = edgeind1;
+	mEdges[ edgeind2 ].next = edgeind3;
+	mEdges[ edgeind2 ].prev = edgeind1;
 
-	mEdges.at( edgeind3 ).next = edgeind1;
-	mEdges.at( edgeind3 ).prev = edgeind2;
+	mEdges[edgeind3 ].next = edgeind1;
+	mEdges[ edgeind3 ].prev = edgeind2;
 
 
 	// Finally, create the face
@@ -69,81 +73,105 @@ bool HalfEdgeMesh::addTriangle(const Vector3<float> &v1, const Vector3<float> &v
 	mFaces.push_back( f );
 
 	// All half-edges share the same left face (previously added)
-	int index = mFaces.size()-1;
+	int index = mFaceSize++;
 
-	mEdges.at( edgeind1 ).face = index;
-	mEdges.at( edgeind2 ).face = index;
-	mEdges.at( edgeind3 ).face = index;
+	mEdges[edgeind1 ].face = index;
+	mEdges[ edgeind2 ].face = index;
+	mEdges[ edgeind3 ].face = index;
 
 	return true;
-}
+	}
 
 
 
 //-----------------------------------------------------------------------------
-bool HalfEdgeMesh::addVertex(const Vector3<float> & v, unsigned int &indx){
-	std::map<Vector3<float>,unsigned int>::iterator it = mUniqueVerts.find(v);
+bool HalfEdgeMesh::addVertex(const Vector3<float> & v, unsigned int &indx)
+	{
+	//	THashTable::iterator it = hash.find( x );
+	//	std::map<Vector3<float>,unsigned int>::iterator it = mUniqueVerts.find(v);
+	VertexHashTable::iterator it = mUniqueVerts.find( v );
+
 	if (it != mUniqueVerts.end()){
 		indx = (*it).second; // (*it).second == it.second, which to me was not as clear...
 		return false;
-	}
+		}
 
-	mUniqueVerts[v] = indx = mVerts.size(); // op. [ ] constructs a new entry in map
+	mUniqueVerts[v] = indx = mVertSize; // op. [ ] constructs a new entry in map
+	mVertSize++;
+
 	Vertex vert;
 	vert.vec = v;
 	mVerts.push_back(vert);
 
 	return true;
-}
+	}
 
 
 bool HalfEdgeMesh::addHalfEdgePair(unsigned int v1, unsigned int v2, unsigned int &indx1, unsigned int &indx2)
-{
-	// Search for the HalfEdge pair among existing edges
-	std::vector<HalfEdge>::reverse_iterator iter = mEdges.rbegin();
-	std::vector<HalfEdge>::reverse_iterator iend = mEdges.rend();
-	while (iter != iend) {
-		if ((*iter).vert == v1 && mEdges[(*iter).pair].vert == v2) {
-			indx1 = iter.base() - mEdges.begin() - 1;
-			indx2 = (*iter).pair;
-			return false;
+	{
+	//// Search for the HalfEdge pair among existing edges
+	//std::vector<HalfEdge>::reverse_iterator iter = mEdges.rbegin();
+	//std::vector<HalfEdge>::reverse_iterator iend = mEdges.rend();
+	//while (iter != iend) 
+	//	{
+	//	if ((*iter).vert == v1 && mEdges[(*iter).pair].vert == v2) 
+	//		{
+	//		indx1 = iter.base() - mEdges.begin() - 1;
+	//		indx2 = (*iter).pair;
+	//		return false;
+	//		}
+	//	iter++;
+	//	}
+
+	std::pair<unsigned int, unsigned int> key = std::make_pair( std::min(v1,v2), std::max(v1,v2) );
+	EdgeHashTable::iterator it = mUniqueEdges.find( key );
+
+	//does not exist yet
+	if ( mUniqueEdges.end() == it)
+		{
+		// If not found, add both half-edges
+		indx1 = mEdgeSize++;
+		indx2 = mEdgeSize++;
+
+		// Create edges and set pair index
+		HalfEdge edge1, edge2;
+		edge1.pair = indx2;
+		edge2.pair = indx1;
+
+		// Connect the edges to the verts
+		edge1.vert = v1;
+		edge2.vert = v2;
+
+		// Connect the verts to the edges
+		mVerts[v1].edge = indx1;
+		mVerts[v2].edge = indx2;
+
+		// Store the edges
+		mEdges.push_back(edge1);
+		mEdges.push_back(edge2);
+
+		mUniqueEdges[key] = mVerts[ std::min(v1,v2)].edge;
+
+		return true;
 		}
-		iter++;
+	//edge already created
+	else
+		{
+		indx1 = (v1<v2)? it->second : mEdges[ it->second].pair;
+		indx2 = (v1<v2)? mEdges[ it->second ].pair : it->second;
+		return false;
+		}
 	}
-
-	// If not found, add both half-edges
-	indx1 = mEdges.size();
-	indx2 = indx1+1;
-
-	// Create edges and set pair index
-	HalfEdge edge1, edge2;
-	edge1.pair = indx2;
-	edge2.pair = indx1;
-
-	// Connect the edges to the verts
-	edge1.vert = v1;
-	edge2.vert = v2;
-
-	// Connect the verts to the edges
-	mVerts[v1].edge = indx1;
-	mVerts[v2].edge = indx2;
-
-	// Store the edges
-	mEdges.push_back(edge1);
-	mEdges.push_back(edge2);
-
-	return true;
-}
 
 
 void HalfEdgeMesh::mergeBoundaryEdge(unsigned int indx)
-{
+	{
 
-}
+	}
 
 
 void HalfEdgeMesh::validate()
-{
+	{
 	std::vector<HalfEdge>::iterator iterEdge = mEdges.begin();
 	std::vector<HalfEdge>::iterator iterEdgeEnd = mEdges.end();
 	while (iterEdge != iterEdgeEnd) {
@@ -155,8 +183,8 @@ void HalfEdgeMesh::validate()
 			std::cerr << "HalfEdge " << iterEdge - mEdges.begin() << " not properly initialized" << std::endl;
 
 		iterEdge++;
-	}
-	std::cerr << "Done with edge check (checked " << mEdges.size() << " edges)" << std::endl;
+		}
+	std::cerr << "Done with edge check (checked " << mEdgeSize << " edges)" << std::endl;
 
 	std::vector<Face>::iterator iterFace = mFaces.begin();
 	std::vector<Face>::iterator iterFaceEnd = mFaces.end();
@@ -165,8 +193,8 @@ void HalfEdgeMesh::validate()
 			std::cerr << "Face " << iterFace - mFaces.begin() << " not properly initialized" << std::endl;
 
 		iterFace++;
-	}
-	std::cerr << "Done with face check (checked " << mFaces.size() << " faces)" << std::endl;
+		}
+	std::cerr << "Done with face check (checked " << mFaceSize << " faces)" << std::endl;
 
 	std::vector<Vertex>::iterator iterVertex = mVerts.begin();
 	std::vector<Vertex>::iterator iterVertexEnd = mVerts.end();
@@ -175,8 +203,8 @@ void HalfEdgeMesh::validate()
 			std::cerr << "Vertex " << iterVertex - mVerts.begin() << " not properly initialized" << std::endl;
 
 		iterVertex++;
-	}
-	std::cerr << "Done with vertex check (checked " << mVerts.size() << " vertices)" << std::endl;
+		}
+	std::cerr << "Done with vertex check (checked " << mVertSize << " vertices)" << std::endl;
 
 	std::cerr << "Looping through triangle neighborhood of each vertex... ";
 	iterVertex = mVerts.begin();
@@ -188,16 +216,16 @@ void HalfEdgeMesh::validate()
 			emptyCount++;
 
 		iterVertex++;
-	}
+		}
 	std::cerr << std::endl << "Done: " << emptyCount << " isolated vertices found" << std::endl;
 
 
-}
+	}
 
 
 //-----------------------------------------------------------------------------
 bool HalfEdgeMesh::findNeighbourTriangles(const unsigned int vertexIndex, std::vector<unsigned int>& foundTriangles) const
-{
+	{
 	foundTriangles.clear();
 
 	unsigned int edge = mVerts.at( vertexIndex ).edge;
@@ -210,36 +238,36 @@ bool HalfEdgeMesh::findNeighbourTriangles(const unsigned int vertexIndex, std::v
 
 	//find the neighbours
 	do
-	{
+		{
 		foundTriangles.push_back( mEdges.at( pair ).face );
 
 		next = mEdges[pair].next;
 		pair = mEdges[next].pair;
 
-	} while( pair != edge );
+		} while( pair != edge );
 
 
-	return !(foundTriangles.size() == 0);			
-}
+		return !(foundTriangles.size() == 0);			
+	}
 
 float HalfEdgeMesh::area()
-{
-	float totalArea(0);
-	unsigned int numTriangles = mFaces.size();
-	for (unsigned int i = 0; i < numTriangles; i++)
 	{
+	float totalArea(0);
+	unsigned int numTriangles = mFaceSize;
+	for (unsigned int i = 0; i < numTriangles; i++)
+		{
 		totalArea += calculateFaceNormal( i ).length() / 2.0f;
-	}		
+		}		
 	return totalArea;
-}
+	}
 
 float HalfEdgeMesh::volume()
-{
+	{
 	float totalVolume(0);
 
-	unsigned int numTriangles = mFaces.size();
+	unsigned int numTriangles = mFaceSize;
 	for (unsigned int i = 0; i < numTriangles; i++)
-	{
+		{
 		Vector3<float> normal = calculateFaceNormal( i );
 		float length = normal.length();
 		normal.normalize();
@@ -253,33 +281,33 @@ float HalfEdgeMesh::volume()
 
 		float area = length / 2.0f;
 		totalVolume += (( v1.vec + v2.vec + v3.vec ) / 3.0f)*normal * area;
-	}
+		}
 
 	return totalVolume/3.0f;
-}
+	}
 int HalfEdgeMesh::genus() const
-{
+	{
 	printf("Genus calculation not implemented for half-edge mesh!\n");
 	return 0;
-}
+	}
 
 int HalfEdgeMesh::shells() const 
-{
+	{
 	std::queue<Vertex> vertexQueue;
 
 
 	return 0;
-}
+	}
 
 float HalfEdgeMesh::curvature(const unsigned int vertexIndex, const Vector3<float>& n)
-{
+	{
 	printf("Curvature calculation not implemented for half-edge mesh!\n");
 	return 0;
-}
+	}
 
 void HalfEdgeMesh::calculateFaceNormals()
-{
-	unsigned int numTriangles = mFaces.size();
+	{
+	unsigned int numTriangles = mFaceSize;
 	for (unsigned int i = 0; i < numTriangles; i++){
 
 		HalfEdge* edge = &mEdges[mFaces[i].edge];
@@ -298,33 +326,33 @@ void HalfEdgeMesh::calculateFaceNormals()
 		Vector3<float> n = cross(v1,v2);
 		n.normalize();
 		mFaces[i].normal = n; // assign normal to face
-	}	
-}
+		}	
+	}
 
 void HalfEdgeMesh::calculateVertexNormals()
-{
+	{
 	std::vector<unsigned int> foundTriangles;
 
-	for (int i=0, endI=mVerts.size(); i<endI; i++)
-	{
+	for (int i=0, endI=mVertSize; i<endI; i++)
+		{
 		findNeighbourTriangles(i, foundTriangles );
 
 		Vector3<float> normal;
 		int endJ=foundTriangles.size();
 		for (int j=0; j<endJ; j++)
-		{
+			{
 			normal += calculateFaceNormal( foundTriangles[j] ).normalize();
-		}
+			}
 		normal = normal/endJ;
 
 		//mNormals.push_back( normal );
 		mVerts[i].normal = normal;
+		}
 	}
-}
 
 
 Vector3<float> HalfEdgeMesh::calculateFaceNormal( unsigned int aTriangle )
-{
+	{
 	HalfEdge* edge = &mEdges[mFaces[aTriangle].edge];
 
 	Vector3<float>& p0 = mVerts[edge->vert].vec;
@@ -340,11 +368,11 @@ Vector3<float> HalfEdgeMesh::calculateFaceNormal( unsigned int aTriangle )
 	Vector3<float> v2 = p2-p0;
 	Vector3<float> n = cross(v1,v2);
 	return n;
-}
+	}
 
 //-----------------------------------------------------------------------------
 void HalfEdgeMesh::draw() 
-{
+	{
 	ColorMap colorMap;
 
 	glMatrixMode(GL_MODELVIEW);
@@ -361,7 +389,7 @@ void HalfEdgeMesh::draw()
 
 	// Draw geometry	
 	glBegin(GL_TRIANGLES);
-	const int numTriangles = mFaces.size();
+	const int numTriangles = mFaceSize;
 	for (int i = 0; i < numTriangles; i++){
 
 		HalfEdge* edge = &mEdges[mFaces[i].edge];
@@ -383,7 +411,7 @@ void HalfEdgeMesh::draw()
 			glVertex3f(p0[0], p0[1], p0[2]);
 			glVertex3f(p1[0], p1[1], p1[2]);
 			glVertex3f(p2[0], p2[1], p2[2]);
-		}
+			}
 		else if (getShadingFlag() == SMOOTH_SHADING){
 
 			HalfEdge* edge = &mEdges[mFaces[i].edge];
@@ -417,17 +445,17 @@ void HalfEdgeMesh::draw()
 			glColor3f(color2[0],color2[1], color2[2]); 				 		
 			glNormal3f(n2[0], n2[1], n2[2]);
 			glVertex3f(p2[0], p2[1], p2[2]);					
-		}
+			}
 		else{
 			// No normals
 			glVertex3f(p0[0], p0[1], p0[2]);
 			glVertex3f(p1[0], p1[1], p1[2]);
 			glVertex3f(p2[0], p2[1], p2[2]);			
-		}		
+			}		
 
-	}  
+		}  
 	glEnd();
 
 	// Restore modelview matrix
 	glPopMatrix();
-}
+	}

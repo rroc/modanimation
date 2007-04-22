@@ -209,6 +209,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SupportCode\Hashtable.h"
+				>
+			</File>
+			<File
 				RelativePath=".\SupportCode\Heap.cpp"
 				>
 			</File>
@@ -222,6 +226,10 @@
 			</File>
 			<File
 				RelativePath=".\SupportCode\Matrix4x4_Impl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SupportCode\stdint.h"
 				>
 			</File>
 			<File

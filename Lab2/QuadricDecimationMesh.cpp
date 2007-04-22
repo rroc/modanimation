@@ -51,16 +51,19 @@ void QuadricDecimationMesh::computeCollapse(EdgeCollapse * collapse)
 	const Vector3<float>& v1 = mVerts[ v1Index ].vec;
 	const Vector3<float>& v2 = mVerts[ v2Index ].vec;
 
-	Matrix4x4<float> Q1( mQuadrics.at(v1Index) );
-	Matrix4x4<float> Q2 = mQuadrics.at(v2Index);
+	Matrix4x4<float> Q( mQuadrics.at(v1Index) );
+	Matrix4x4<float> Q2( mQuadrics.at(v2Index) );
 
-	Q1 += Q2;
+	// the result of this is our Q 
+	Q += Q2;
+
+	Matrix4x4<float> invQ( Q );
 
 	// "clean" last row
-	Q1(3, 0) = Q1(3, 1) = Q1(3, 2) = 0.0f;
-	Q1(3, 3) = 1.0f;
+	invQ(3, 0) = invQ(3, 1) = invQ(3, 2) = 0.0f;
+	invQ(3, 3) = 1.0f;
 
-	Matrix4x4<float> invQ = Q1.inverse();
+	invQ = invQ.inverse();
 	Vector4<float> v(0.0f, 0.0f, 0.0f, 1.0f);
 
 	/************************************************************************/
@@ -71,7 +74,7 @@ void QuadricDecimationMesh::computeCollapse(EdgeCollapse * collapse)
 	// Then, compute the new position and the cost
 
 	collapse->position = Vector3<float>( v );
-	collapse->cost = v * (invQ * v);
+	collapse->cost = v * (Q * v);
 }
 
 /*! After each edge collapse the vertex properties need need to be updated */
