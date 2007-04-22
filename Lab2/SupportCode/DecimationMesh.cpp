@@ -95,10 +95,12 @@ bool DecimationMesh::decimate()
   unsigned int f1 = mEdges[e1].face;
   unsigned int f2 = mEdges[e2].face;
 
+#ifdef _DEBUG
   std::cout << "Collapsing faces " << f1 << " and " << f2 << std::endl;
   std::cout << "Collapsing edges " << e1 << ", " << mEdges[e1].next << ", " << mEdges[e1].prev;
   std::cout << ", " << e2 << ", " << mEdges[e2].next << " and " << mEdges[e2].prev << std::endl;
   std::cout << "Collapsing vertex " << v1 << std::endl;
+#endif // _DEBUG
 
 
   // Verify that the collapse is valid, exit if not so
@@ -106,7 +108,9 @@ bool DecimationMesh::decimate()
     delete collapse;
     mHalfEdge2EdgeCollapse[e1] = NULL;
     mHalfEdge2EdgeCollapse[e2] = NULL;
+#ifdef _DEBUG
     std::cout << "failed..." << std::endl;
+#endif // _DEBUG
     return false;
   }
 
@@ -188,7 +192,9 @@ bool DecimationMesh::decimate()
         delete mHeap.remove(collapse);
         mHalfEdge2EdgeCollapse[edge] = NULL;
         mHalfEdge2EdgeCollapse[mEdges[edge].pair] = NULL;
+#ifdef _DEBUG
         std::cout << "Removed one invalid edge collapse" << std::endl;
+#endif // _DEBUG
       }
       else {
         computeCollapse(collapse);
@@ -445,3 +451,7 @@ void DecimationMesh::draw()
   glPopMatrix();
 }
 
+bool DecimationMesh::cleanup()
+	{
+
+	}

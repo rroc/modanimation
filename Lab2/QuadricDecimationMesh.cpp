@@ -27,10 +27,14 @@ void QuadricDecimationMesh::initialize()
 		Vector4<float> v(v0.x(),v0.y(),v0.z(),1);
 		Matrix4x4<float> m = mQuadrics.back();
 
+#ifdef _DEBUG
 		float error = v*(m*v);
 		std::cerr << std::scientific << std::setprecision(2) << error << " ";
+#endif // _DEBUG
 	}
+#ifdef _DEBUG
 	std::cerr << std::setprecision(width) << std::fixed; // reset stream precision
+#endif // _DEBUG
 
 	// Run the initialize for the parent class to initialize the edge collapses
 	DecimationMesh::initialize();
@@ -63,17 +67,22 @@ void QuadricDecimationMesh::computeCollapse(EdgeCollapse * collapse)
 	invQ(3, 0) = invQ(3, 1) = invQ(3, 2) = 0.0f;
 	invQ(3, 3) = 1.0f;
 
-	invQ = invQ.inverse();
 	Vector4<float> v(0.0f, 0.0f, 0.0f, 1.0f);
+	if ( !invQ.isSingular(0.000001) )
+		{
+		invQ = invQ.inverse();
+		/************************************************************************/
+		/* OPTIMIZE USING JUST THE LAST COLUMN ?????!!!                         */
+		/************************************************************************/
+		v = invQ * v;
+		collapse->position = Vector3<float>( v );
+		}
+	else
+		{
+		collapse->position = (v1+v2)/2;
+		}
 
-	/************************************************************************/
-	/* OPTIMIZE USING JUST THE LAST COLUMN ?????!!!                         */
-	/************************************************************************/
-	v = invQ * v;
-
-	// Then, compute the new position and the cost
-
-	collapse->position = Vector3<float>( v );
+	// Then, compute the new position and the cost	
 	collapse->cost = v * (Q * v);
 }
 

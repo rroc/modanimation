@@ -367,7 +367,7 @@ Vector3<float> HalfEdgeMesh::calculateFaceNormal( unsigned int aTriangle )
 	Vector3<float> v1 = p1-p0;
 	Vector3<float> v2 = p2-p0;
 	Vector3<float> n = cross(v1,v2);
-	return n;
+	return n.normalize();
 	}
 
 //-----------------------------------------------------------------------------

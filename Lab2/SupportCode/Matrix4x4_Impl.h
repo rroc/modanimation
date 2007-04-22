@@ -177,12 +177,15 @@ Matrix4x4<Real> Matrix4x4<Real>::inverse() const
     }
     indxr[i]=irow;
     indxc[i]=icol;
-    
+
+
+#ifdef _DEBUG
 	if (a[icol][icol] == 0.0) 
 		{
 		printf("gaussj: Singular Matrix!\n");
 		exit(1);
 		}
+#endif // _DEBUG
     
 	pivinv=1.0/a[icol][icol];
     a[icol][icol]=1.0;

@@ -156,8 +156,8 @@ void GUI::displayFunc()
 
 
   // Draw rotating cube
-  Real angle = 5*2*M_PI*mClockArray[ANIMATION_CLOCK].read();
-  drawCube(angle);
+//  Real angle = 5*2*M_PI*mClockArray[ANIMATION_CLOCK].read();
+//  drawCube(angle);
 
 
   // Draw geometry object(s)
@@ -493,7 +493,8 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 	std::cerr << "Loading simple decimation mesh...\n";
 
 	// Open input file
-	std::string filename("../Objs/cow.obj");
+	//std::string filename("../Objs/cow.obj");
+	std::string filename("../Objs/bunnyMedium.obj");
 
 	// Create new mesh
 	QuadricDecimationMesh* mesh = new QuadricDecimationMesh;
@@ -522,7 +523,12 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
     break;
   case '8' :
     {
-      // Add other objects to load here...
+	unsigned int targetFaces;
+	std::cout << "Enter target number of faces: ";
+	std::cin >> targetFaces;
+
+	QuadricDecimationMesh * mesh = static_cast<QuadricDecimationMesh *>(mGeometryList[mGeometryList.size()-1]);
+	mesh->decimate(targetFaces);
     }
     break;
   case '9' :
