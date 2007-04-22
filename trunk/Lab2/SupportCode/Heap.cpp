@@ -52,10 +52,13 @@ Heap::Heapable * Heap::remove(Heapable * h)
   mNodes.pop_back();
   h->position = std::numeric_limits<unsigned int>::max();
 
-  if (*mNodes[hole] < *h)
-    percolateUp(hole);
-  else
-    percolateDown(hole);
+  if( hole < mNodes.size())
+	  {
+	  if (*mNodes[hole] < *h)
+		percolateUp(hole);
+	  else
+		percolateDown(hole);
+	  }
 
   return h;
 }
