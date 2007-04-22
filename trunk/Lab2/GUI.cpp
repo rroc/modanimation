@@ -490,12 +490,34 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
     break;
   case '6' :
     {
-      // Add other objects to load here...
+	std::cerr << "Loading simple decimation mesh...\n";
+
+	// Open input file
+	std::string filename("../Objs/cow.obj");
+
+	// Create new mesh
+	QuadricDecimationMesh* mesh = new QuadricDecimationMesh;
+
+	// Load mesh and add to geometry list
+	std::ifstream infile;
+	ObjIO objIO;
+	infile.open(filename.c_str());
+	objIO.load(mesh, infile);
+
+	mesh->validate();
+	mesh->calculateFaceNormals();
+	mesh->calculateVertexNormals();
+
+	mesh->initialize();
+	mesh->setShadingFlag(Mesh::FLAT_SHADING);
+
+	mGeometryList.push_back(mesh);
     }
     break;
   case '7' :
     {
-      // Add other objects to load here...
+	QuadricDecimationMesh * mesh = static_cast<QuadricDecimationMesh *>(mGeometryList[mGeometryList.size()-1]);
+	mesh->decimate();
     }
     break;
   case '8' :

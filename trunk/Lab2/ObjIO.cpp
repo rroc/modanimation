@@ -26,7 +26,8 @@ bool ObjIO::load(Mesh *mesh, std::istream & is){
 
   // Build mesh
   const unsigned int numTris = loadData.tris.size();
-  for (unsigned int t = 0; t < numTris; t++){
+  for (unsigned int t = 0; t < numTris; t++)
+	{
     Vector3<unsigned int>& triangle = loadData.tris[t];
 
     Vector3<float>& v0 = loadData.verts[triangle[0]];
@@ -34,14 +35,14 @@ bool ObjIO::load(Mesh *mesh, std::istream & is){
     Vector3<float>& v2 = loadData.verts[triangle[2]];
 
     mesh->addTriangle(v0,v1,v2);
-  }
+	}
   return true;
 }
 
 bool ObjIO::readHeader(std::istream & is){
   std::string buf;
   // just read to the first line starting with a 'v'
-  while(!is.eof() && is.peek() != 'v'){
+  while(is.good() && !is.eof() && is.peek() != 'v'){
     getline(is, buf);
     //std::cerr << "\"" << buf << "\"\n";
   }
