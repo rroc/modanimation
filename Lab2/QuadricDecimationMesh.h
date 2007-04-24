@@ -23,40 +23,45 @@
 #endif
 
 class QuadricDecimationMesh : public DecimationMesh
-{
-public :
-	QuadricDecimationMesh()
 	{
-		mQuadratic = NULL;
-	}
-	virtual ~QuadricDecimationMesh() { }
+	public :
+		QuadricDecimationMesh()
+			{
+			mQuadratic = NULL;
+			}
+		virtual ~QuadricDecimationMesh() { }
 
-	//! Initialize member data (error quadrics)
-	virtual void initialize();
+		//! Initialize member data (error quadrics)
+		virtual void initialize();
 
-	//! Draws the mesh
-	virtual void draw();
+		//! Draws the mesh
+		virtual void draw();
 
-protected :
-	//! Draws the error ellipsoids
-	void drawQuadrics();
+	protected :
+		//! Draws the error ellipsoids
+		void drawQuadrics();
 
-	//! The quadric object used to draw the error ellipsoids
-	GLUquadricObj *mQuadratic;
+		void calculateIsoSurface( unsigned int aIndex );
 
-	//! Compute the cost and new position for an edge collapse
-	virtual void computeCollapse(EdgeCollapse * collapse);
-	//! Update vertex properties. Used after an edge collapse
-	virtual void updateVertexProperties(unsigned int ind);
-	//! Compute the quadric for a vertex
-	Matrix4x4<float> createQuadricForVert(unsigned int indx) const;
-	//! Copmute the quadric for a face
-	Matrix4x4<float> createQuadricForFace(unsigned int indx) const;
+		//! The quadric object used to draw the error ellipsoids
+		GLUquadricObj *mQuadratic;
 
-	//! The quadrics used in the decimation
-	std::vector<Matrix4x4<float> > mQuadrics;
+		//! Compute the cost and new position for an edge collapse
+		virtual void computeCollapse(EdgeCollapse * collapse);
 
-};
+		//! Update vertex properties. Used after an edge collapse
+		virtual void updateVertexProperties(unsigned int ind);
+
+		//! Compute the quadric for a vertex
+		Matrix4x4<float> createQuadricForVert(unsigned int indx) const;
+
+		//! Copmute the quadric for a face
+		Matrix4x4<float> createQuadricForFace(unsigned int indx) const;
+
+		//! The quadrics used in the decimation
+		std::vector<Matrix4x4<float> > mQuadrics;
+		std::vector<float*> mErrorIsoSurfaces;
+	};
 
 #endif
 

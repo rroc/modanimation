@@ -494,7 +494,9 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 
 	// Open input file
 	//std::string filename("../Objs/cow.obj");
-	std::string filename("../Objs/bunnyMedium.obj");
+	//std::string filename("../Objs/cube.obj");
+	//std::string filename("../Objs/cowFix.obj");
+	std::string filename("../Objs/BunnySmall.obj");
 
 	// Create new mesh
 	QuadricDecimationMesh* mesh = new QuadricDecimationMesh;
@@ -513,12 +515,15 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 	mesh->setShadingFlag(Mesh::FLAT_SHADING);
 
 	mGeometryList.push_back(mesh);
+	
     }
     break;
   case '7' :
     {
 	QuadricDecimationMesh * mesh = static_cast<QuadricDecimationMesh *>(mGeometryList[mGeometryList.size()-1]);
 	mesh->decimate();
+	mesh->cleanup();
+
     }
     break;
   case '8' :
@@ -529,6 +534,8 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 
 	QuadricDecimationMesh * mesh = static_cast<QuadricDecimationMesh *>(mGeometryList[mGeometryList.size()-1]);
 	mesh->decimate(targetFaces);
+	mesh->cleanup();
+
     }
     break;
   case '9' :
