@@ -10,17 +10,21 @@
 *
 *************************************************************************************************/
 #include "QuadricDecimationMesh.h"
+#include <cassert>
 
 void QuadricDecimationMesh::initialize()
-{
+	{
 	// Allocate memory for the quadric array
 	unsigned int numVerts = mVerts.size();
 	mQuadrics.reserve(numVerts);
+	mErrorIsoSurfaces.resize(numVerts, NULL);
+
 	std::streamsize width = std::cerr.precision(); // store stream precision
 	for (unsigned int i = 0; i < numVerts; i++) {
 
 		// Compute quadric for vertex i here
 		mQuadrics.push_back(createQuadricForVert(i));
+		calculateIsoSurface(i);
 
 		// Calculate initial error, should be numerically close to 0
 		Vector3<float> v0 = mVerts[i].vec;
@@ -31,20 +35,23 @@ void QuadricDecimationMesh::initialize()
 		float error = v*(m*v);
 		std::cerr << std::scientific << std::setprecision(2) << error << " ";
 #endif // _DEBUG
-	}
+		}
 #ifdef _DEBUG
 	std::cerr << std::setprecision(width) << std::fixed; // reset stream precision
 #endif // _DEBUG
 
 	// Run the initialize for the parent class to initialize the edge collapses
 	DecimationMesh::initialize();
-}
+	}
+
+
+
 
 /*!
 * \param[in,out] collapse The edge collapse object to (re-)compute, DecimationMesh::EdgeCollapse
 */
 void QuadricDecimationMesh::computeCollapse(EdgeCollapse * collapse)
-{
+	{
 	// Compute collapse->position and collapse->key here
 	// based on the quadrics at the edge endpoints
 
@@ -84,23 +91,24 @@ void QuadricDecimationMesh::computeCollapse(EdgeCollapse * collapse)
 
 	// Then, compute the new position and the cost	
 	collapse->cost = v * (Q * v);
-}
+	}
 
 /*! After each edge collapse the vertex properties need need to be updated */
 void QuadricDecimationMesh::updateVertexProperties(unsigned int ind)
-{
+	{
 	DecimationMesh::updateVertexProperties(ind);
 	mQuadrics[ind] = createQuadricForVert(ind);
-}
+	calculateIsoSurface(ind);
+	}
 
 /*!
 * \param[in] indx vertex index, points into HalfEdgeMesh::mVerts
 */
 Matrix4x4<float> QuadricDecimationMesh::createQuadricForVert(unsigned int indx) const{
 	float q[4][4] = {{0,0,0,0},
-	{0,0,0,0},
-	{0,0,0,0},
-	{0,0,0,0}};
+		{0,0,0,0},
+		{0,0,0,0},
+		{0,0,0,0}};
 	Matrix4x4<float> Q(q);
 
 	// get the neighboring triangles
@@ -110,12 +118,12 @@ Matrix4x4<float> QuadricDecimationMesh::createQuadricForVert(unsigned int indx) 
 	std::vector<unsigned int>::iterator faces = foundTriangles.begin();
 	std::vector<unsigned int>::iterator facesEnd = foundTriangles.end();
 	for (; faces != facesEnd; faces++)
-	{
+		{
 		// get the first half-edge of the current face
 		unsigned int curFaceIndex = *faces;
 		Face f = mFaces[curFaceIndex];
 		unsigned int edge = f.edge;
-		
+
 		// get the first vertex: any one is good
 		unsigned int vertexIndex = mEdges[edge].vert;
 		Vector3<float> v1 = mVerts[vertexIndex].vec;
@@ -142,7 +150,7 @@ Matrix4x4<float> QuadricDecimationMesh::createQuadricForVert(unsigned int indx) 
 		Q(2, 3) += c*d;
 		Q(3, 3) += d*d;
 
-	}
+		}
 
 	// the remaining items can now be assigned
 	Q(1, 0) = Q(0, 1);
@@ -152,10 +160,29 @@ Matrix4x4<float> QuadricDecimationMesh::createQuadricForVert(unsigned int indx) 
 	Q(3, 1) = Q(1, 3);
 	Q(3, 2) = Q(2, 3);
 
+	//To prevent too many singular matrices
+	//const float epsilon = 0.1; //1e-10;
+	//Q(0, 0) += epsilon;
+	//Q(0, 1) += epsilon;
+	//Q(0, 2) += epsilon;
+	//Q(0, 3) += epsilon;
+	//Q(1, 1) += epsilon;
+	//Q(1, 2) += epsilon;
+	//Q(1, 3) += epsilon;
+	//Q(2, 2) += epsilon;
+	//Q(2, 3) += epsilon;
+	//Q(3, 3) += epsilon;
+	//Q(1, 0) += epsilon;
+	//Q(2, 0) += epsilon;
+	//Q(3, 0) += epsilon;
+	//Q(2, 1) += epsilon;
+	//Q(3, 1) += epsilon;
+	//Q(3, 2) += epsilon;
+
 	// The quadric for a vertex is the sum of all the quadrics for the adjacent faces
 	// Tip: Matrix4x4 has an operator +=
 	return Q;
-}
+	}
 
 /*!
 * \param[in] indx face index, points into HalfEdgeMesh::mFaces
@@ -164,44 +191,71 @@ Matrix4x4<float> QuadricDecimationMesh::createQuadricForFace(unsigned int indx) 
 
 	// Calculate the quadric for a face here using the formula from Garland and Heckbert
 	return Matrix4x4<float>();
-}
+	}
 
 void QuadricDecimationMesh::draw()
-{
+	{
 	HalfEdgeMesh::draw();
 	drawQuadrics();
-}
+	}
 
 
 void QuadricDecimationMesh::drawQuadrics()
-{
+	{
 	if (mQuadratic == NULL){
 		mQuadratic = gluNewQuadric();// Create A Pointer To The Quadric Object
 		gluQuadricNormals(mQuadratic, GLU_SMOOTH);// Create Smooth Normals
 		gluQuadricTexture(mQuadratic, GL_TRUE);// Create Texture Coords
-	}
+		}
 	else{
 		// Draw the quadrics here by applying the appropriate transform to a sphere.
 		// The quadrics are stored in the mQuadrics array.
 		// The sphere can be drawn by calling 'gluSphere(mQuadratic,radius, numSlices , numStacks)';
 		// Example: gluSphere(mQuadratic,1.0, 10 , 10)
-		//std::vector< Matrix4x4<float> >::const_iterator quadIterator = mQuadrics.begin();
-		//std::vector< Matrix4x4<float> >::const_iterator quadItEnd = mQuadrics.end();
+		std::vector<float*>::const_iterator isoIterator	= mErrorIsoSurfaces.begin();
+		std::vector<float*>::const_iterator isoItEnd		= mErrorIsoSurfaces.end();
 
-		//float openGLMatrix[16];
+		glColor3f( 0.0f,1.0f,0.0f);
 
-		//for (; quadIterator != quadItEnd; quadIterator++)
-		//{
-		//	Matrix4x4<float> quadric = *quadIterator;
-		//	glPushMatrix();
-		//	{
-		//		//glScalef(quadric(0, 0), quadric(2, 2), quadric(3, 3));
-		//		quadric.toGLMatrix( openGLMatrix );
-		//		glMultMatrixf( openGLMatrix );
-		//		gluSphere(mQuadratic, 1.0, 10, 10);
-		//	}
-		//	glPopMatrix();
-		//}
+		for (; isoIterator != isoItEnd; isoIterator++ )
+			{
+			if( NULL != *isoIterator)
+				{
+				glPushMatrix();
+					{
+
+					glMultMatrixf( *isoIterator );
+					gluSphere(mQuadratic, 1.0, 10, 10);
+					}
+				glPopMatrix();
+				}
+			}
+		}
 	}
 
-}
+
+void QuadricDecimationMesh::calculateIsoSurface( unsigned int aIndex )
+	{
+	if( mErrorIsoSurfaces[aIndex] != NULL )
+		{
+		delete[] mErrorIsoSurfaces[aIndex];
+		mErrorIsoSurfaces[aIndex] = NULL;
+		}
+
+	static Matrix4x4<float> R;
+	R = R.identity();
+	mQuadrics[aIndex].choleskyFactorization( R );
+
+//#ifdef _DEBUG
+//	assert(R.isSingular(0.000001));
+//#endif // _DEBUG
+
+	if( !R.isSingular(0.000001) )
+		{
+		float* openGLMatrix = new float[16];
+		R = R.inverse();
+		R.toGLMatrix( openGLMatrix );
+		mErrorIsoSurfaces[aIndex] = openGLMatrix;
+		}
+
+	}

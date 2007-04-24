@@ -16,6 +16,10 @@
 #include "HalfEdgeMesh.h"
 #include "Heap.h"
 
+//Defines
+static const unsigned int UNCOLLAPSED = ( std::numeric_limits<unsigned int>::max()-2 );
+static const unsigned int COLLAPSED = ( std::numeric_limits<unsigned int>::max()-3 );
+
 class DecimationMesh : public DecimationInterface, public HalfEdgeMesh
 	{
 	public :
@@ -48,33 +52,31 @@ class DecimationMesh : public DecimationInterface, public HalfEdgeMesh
 
 		bool isValidCollapse(EdgeCollapse * collapse);
 
-		inline bool isVertexCollapsed(unsigned int ind) { return mCollapsedVerts[ind]; }
-		inline bool isEdgeCollapsed(unsigned int ind)	{ return mCollapsedEdges[ind]; }
-		inline bool isFaceCollapsed(unsigned int ind)	{ return mCollapsedFaces[ind]; }
+		inline bool isVertexCollapsed(unsigned int ind) { return (COLLAPSED == mCollapsedVerts[ind]); }
+		inline bool isEdgeCollapsed(unsigned int ind)	{ return (COLLAPSED == mCollapsedEdges[ind]); }
+		inline bool isFaceCollapsed(unsigned int ind)	{ return (COLLAPSED == mCollapsedFaces[ind]); }
 
 
 		inline void collapseVertex(unsigned int ind) {
-			mCollapsedVerts[ind] = true;
+			mCollapsedVerts[ind] = COLLAPSED;
 			mNumCollapsedVerts++;
 			}
 		inline void collapseEdge(unsigned int ind) {
 			mHalfEdge2EdgeCollapse[ind] = NULL;
-			mCollapsedEdges[ind] = true;
+			mCollapsedEdges[ind] = COLLAPSED;
 			mNumCollapsedEdges++;
 			}
 		inline void collapseFace(unsigned int ind) {
-			mCollapsedFaces[ind] = true;
+			mCollapsedFaces[ind] = COLLAPSED;
 			mNumCollapsedFaces++;
 			}
 
-
-
 		//! State array of 'active' verts
-		std::vector<bool> mCollapsedVerts;
+		std::vector<unsigned int> mCollapsedVerts;
 		//! State array of 'active' edges
-		std::vector<bool> mCollapsedEdges;
+		std::vector<unsigned int> mCollapsedEdges;
 		//! State array of 'active' faces
-		std::vector<bool> mCollapsedFaces;
+		std::vector<unsigned int> mCollapsedFaces;
 
 		//! Number of collapsed verts
 		unsigned int mNumCollapsedVerts;
