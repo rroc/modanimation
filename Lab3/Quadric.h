@@ -26,9 +26,14 @@ public:
   virtual Vector3<float> getGradient(float x, float y, float z, float delta = 0) const;
   //! calculate the curvature at world coordinates x y z
   virtual float getCurvature(float x, float y, float z) const;
+
+  //! Set transformation for the Q
+  virtual void setTransform(const Matrix4x4<float> & transform);
+
 protected:
   //! The quadrics coefficent matrix
   Matrix4x4<float> mQuadric;
+  Matrix4x4<float> mQuadricPrime;
 };
 
 #endif

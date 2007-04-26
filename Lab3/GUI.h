@@ -12,11 +12,7 @@
 #ifndef __GUI_H__
 #define __GUI_H__
 
-#ifdef __APPLE__
-#include "GLUT/glut.h"
-#else
-#include "GL/glut.h"
-#endif
+
 
 #include <vector>
 #include "Vector3.h"
@@ -36,6 +32,12 @@
 #include "Stopwatch.h"
 #include "Util.h"
 #include "Camera.h"
+
+#ifdef __APPLE__
+#include "GLUT/glut.h"
+#else
+#include "GL/glut.h"
+#endif
 
 class GUI
 {

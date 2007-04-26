@@ -62,6 +62,43 @@ struct Bbox
     return b2;
   }
 
+  //! Intersection of two Bbox :es
+  friend Bbox boxIntersection(const Bbox& b1, const Bbox &b2)
+	  {
+	  Bbox b;
+	  b.pMin.x() = std::min(b1.pMin.x(), b2.pMin.x());
+	  b.pMin.y() = std::min(b1.pMin.y(), b2.pMin.y());
+	  b.pMin.z() = std::min(b1.pMin.z(), b2.pMin.z());
+
+	  b.pMax.x() = std::max(b1.pMax.x(), b2.pMax.x());
+	  b.pMax.y() = std::max(b1.pMax.y(), b2.pMax.y());
+	  b.pMax.z() = std::max(b1.pMax.z(), b2.pMax.z());
+	  return b;
+	  }
+
+  friend Bbox pointIntersection(const Bbox& b, const Vector3<float> & v)
+	  {
+	  Bbox b2;
+	  if (b.pMin == 0 && b.pMax == 0) {
+		  b2.pMin = b2.pMax = v;
+		  }
+
+	  b2.pMin.x() = std::max(b.pMin.x(), v.x());
+	  b2.pMin.y() = std::max(b.pMin.y(), v.y());
+	  b2.pMin.z() = std::max(b.pMin.z(), v.z());
+
+	  b2.pMax.x() = std::min(b.pMax.x(), v.x());
+	  b2.pMax.y() = std::min(b.pMax.y(), v.y());
+	  b2.pMax.z() = std::min(b.pMax.z(), v.z());
+	  return b2;
+	  }
+
+  //! Difference of two Bbox :es
+  friend Bbox boxDifference(const Bbox& b1, const Bbox &b2)
+	  {
+	  return b1;
+	  }
+
   Bbox transform(const Matrix4x4<float> & t) const
   {
     Bbox b;

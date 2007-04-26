@@ -148,7 +148,6 @@ Matrix4x4<Real> Matrix4x4<Real>::inverse() const
   Matrix4x4 a = Matrix4x4(m);  // the inverse
   Matrix4x4 b = identity();
 
-
   //
   // Taken from Numerical Recipes in C++;
   // void NR::gaussj(Mat_IO_DP &a, Mat_IO_DP &b)
@@ -203,6 +202,35 @@ Matrix4x4<Real> Matrix4x4<Real>::inverse() const
   }
   return a;
 }
+
+template <typename Real>
+Matrix4x4<Real> Matrix4x4<Real>::transpose() const
+	{
+	Matrix4x4 b;
+	//diagonal
+	b[0][0] = m[0][0];
+	b[1][1] = m[1][1];
+	b[2][2] = m[2][2];
+	b[3][3] = m[3][3];
+
+	//lower to upper
+	b[0][1] = m[1][0];
+	b[0][2] = m[2][0];
+	b[0][3] = m[3][0];
+	b[1][2] = m[2][1];
+	b[1][3] = m[3][1];
+	b[2][3] = m[3][2];
+
+	//upper to lower
+	b[1][0] = m[0][1];
+	b[2][0] = m[0][2];
+	b[3][0] = m[0][3];
+	b[2][1] = m[1][2];
+	b[3][1] = m[1][3];
+	b[3][2] = m[2][3];
+
+	return b;
+	}
 
 // Originally based on public domain code by <Ajay_Shah@rand.org>
 // which can be found at http://lib.stat.cmu.edu/general/ajay

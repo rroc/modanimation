@@ -29,6 +29,7 @@ public:
   bool isSingular(Real epsilon = 1e-6) const;
   Real determinant() const;
   Matrix4x4 inverse() const;
+  Matrix4x4 transpose() const;
 
   bool choleskyFactorization(Matrix4x4& U);
 
