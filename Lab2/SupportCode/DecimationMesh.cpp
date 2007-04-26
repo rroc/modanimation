@@ -286,7 +286,7 @@ bool DecimationMesh::isValidCollapse(EdgeCollapse * collapse)
 	unsigned int v4 = mEdges[mEdges[e2].prev].vert;
 
 	// Do a dummy check
-	if (isEdgeCollapsed(e1) || isEdgeCollapsed(e1) || isVertexCollapsed(v1) || isVertexCollapsed(v2)) return false;
+	if (isEdgeCollapsed(e1) || isEdgeCollapsed(e2) || isVertexCollapsed(v1) || isVertexCollapsed(v2)) return false;
 
 	unsigned int edge = mVerts[v2].edge;
 	std::vector<unsigned int> neighbors;
@@ -503,7 +503,8 @@ bool DecimationMesh::cleanup()
 				{
 				mCollapsedEdges[ tempEdgeSize ] = UNCOLLAPSED;
 				mEdges.pop_back();
-				//mHalfEdge2EdgeCollapse.pop_back();
+				
+				mHalfEdge2EdgeCollapse.pop_back();
 				mEdgeSize--;
 				}
 
@@ -514,8 +515,8 @@ bool DecimationMesh::cleanup()
 				mEdges.pop_back();
 
 				//copy from the end to replace the removed one
-				//mHalfEdge2EdgeCollapse[ i ] = mHalfEdge2EdgeCollapse[ tempEdgeSize ];
-				//mHalfEdge2EdgeCollapse.pop_back();
+				mHalfEdge2EdgeCollapse[ i ] = mHalfEdge2EdgeCollapse[ tempEdgeSize ];
+				mHalfEdge2EdgeCollapse.pop_back();
 
 				mEdgeSize--;
 				mCollapsedEdges[ tempEdgeSize ] = i;
@@ -544,15 +545,17 @@ bool DecimationMesh::cleanup()
 				mVerts.pop_back();
 				mVertSize--;
 
-				
+				//pass information about the collapse to other parties
+				vertexCollapsed( tempVertSize );
 				}
 
 			if(i <= tempVertSize )
 				{
 				mVerts[ i ] = mVerts[ tempVertSize ];
-				
+
 				mVerts.pop_back();
 				mVertSize--;
+				vertexCollapsed( i );
 
 				mCollapsedVerts[ tempVertSize ] = i;
 				mCollapsedVerts[ i ] = UNCOLLAPSED;
@@ -636,6 +639,9 @@ bool DecimationMesh::cleanup()
 	mNumCollapsedVerts=0;
 	mNumCollapsedEdges=0;
 	mNumCollapsedFaces=0;
-
 	return true;
+	}
+
+void DecimationMesh::vertexCollapsed( unsigned int aIndex )
+	{
 	}
