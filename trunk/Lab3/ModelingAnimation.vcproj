@@ -1,112 +1,174 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="8,00"
 	Name="ModelingAnimation"
 	ProjectGUID="{D74B26E3-FFF8-43FB-B45B-D4DC597EE88E}"
-	Keyword="Win32Proj">
+	Keyword="Win32Proj"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="Debug"
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
-			CharacterSet="2">
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="./;./SupportCode;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_USE_MATH_DEFINES"
-				MinimalRebuild="TRUE"
+				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="5"
-				RuntimeTypeInfo="TRUE"
+				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="4"/>
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="4"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="opengl32.lib glut32.lib glu32.lib"
 				OutputFile="$(OutDir)/ModelingAnimation.exe"
 				LinkIncremental="2"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/ModelingAnimation.pdb"
 				SubSystem="1"
-				TargetMachine="1"/>
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCWebDeploymentTool"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
-			CharacterSet="2">
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="./;./SupportCode;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_USE_MATH_DEFINES"
-				RuntimeLibrary="4"
-				RuntimeTypeInfo="TRUE"
+				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"/>
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="opengl32.lib glut32.lib glu32.lib"
 				OutputFile="$(OutDir)/ModelingAnimation.exe"
 				LinkIncremental="1"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				TargetMachine="1"/>
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCWebDeploymentTool"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -114,142 +176,195 @@
 	<Files>
 		<Filter
 			Name="SupportCode"
-			Filter="">
+			>
 			<File
-				RelativePath=".\SupportCode\Bbox.h">
+				RelativePath=".\SupportCode\Bbox.h"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\Camera.h">
+				RelativePath=".\SupportCode\Camera.h"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\ColorMap.cpp">
+				RelativePath=".\SupportCode\ColorMap.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\ColorMap.h">
+				RelativePath=".\SupportCode\ColorMap.h"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\DecimationInterface.h">
+				RelativePath=".\SupportCode\DecimationInterface.h"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\DecimationMesh.cpp">
+				RelativePath=".\SupportCode\DecimationMesh.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\DecimationMesh.h">
+				RelativePath=".\SupportCode\DecimationMesh.h"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\Geometry.h">
+				RelativePath=".\SupportCode\Geometry.h"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\Heap.cpp">
+				RelativePath=".\SupportCode\Hashtable.h"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\Heap.h">
+				RelativePath=".\SupportCode\Heap.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\MarchingCubes.cpp">
+				RelativePath=".\SupportCode\Heap.h"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\MarchingCubes.h">
+				RelativePath=".\SupportCode\MarchingCubes.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\MarchingCubesTable.h">
+				RelativePath=".\SupportCode\MarchingCubes.h"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\Matrix4x4.h">
+				RelativePath=".\SupportCode\MarchingCubesTable.h"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\Matrix4x4_Impl.h">
+				RelativePath=".\SupportCode\Matrix4x4.h"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\Stopwatch.h">
+				RelativePath=".\SupportCode\Matrix4x4_Impl.h"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\Util.cpp">
+				RelativePath=".\SupportCode\stdint.h"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\Util.h">
+				RelativePath=".\SupportCode\Stopwatch.h"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\Vector3.h">
+				RelativePath=".\SupportCode\Util.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\SupportCode\Vector4.h">
+				RelativePath=".\SupportCode\Util.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SupportCode\Vector3.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SupportCode\Vector4.h"
+				>
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\CSG.h">
+			RelativePath=".\CSG.h"
+			>
 		</File>
 		<File
-			RelativePath=".\Cyclide.cpp">
+			RelativePath=".\Cyclide.cpp"
+			>
 		</File>
 		<File
-			RelativePath=".\Cyclide.h">
+			RelativePath=".\Cyclide.h"
+			>
 		</File>
 		<File
-			RelativePath=".\GUI.cpp">
+			RelativePath=".\GUI.cpp"
+			>
 		</File>
 		<File
-			RelativePath=".\GUI.h">
+			RelativePath=".\GUI.h"
+			>
 		</File>
 		<File
-			RelativePath=".\HalfEdgeMesh.cpp">
+			RelativePath=".\HalfEdgeMesh.cpp"
+			>
 		</File>
 		<File
-			RelativePath=".\HalfEdgeMesh.h">
+			RelativePath=".\HalfEdgeMesh.h"
+			>
 		</File>
 		<File
-			RelativePath=".\Implicit.cpp">
+			RelativePath=".\Implicit.cpp"
+			>
 		</File>
 		<File
-			RelativePath=".\Implicit.h">
+			RelativePath=".\Implicit.h"
+			>
 		</File>
 		<File
-			RelativePath=".\main.cpp">
+			RelativePath=".\main.cpp"
+			>
 		</File>
 		<File
-			RelativePath=".\Mesh.cpp">
+			RelativePath=".\Mesh.cpp"
+			>
 		</File>
 		<File
-			RelativePath=".\Mesh.h">
+			RelativePath=".\Mesh.h"
+			>
 		</File>
 		<File
-			RelativePath=".\ObjIO.cpp">
+			RelativePath=".\ObjIO.cpp"
+			>
 		</File>
 		<File
-			RelativePath=".\ObjIO.h">
+			RelativePath=".\ObjIO.h"
+			>
 		</File>
 		<File
-			RelativePath=".\Quadric.cpp">
+			RelativePath=".\Quadric.cpp"
+			>
 		</File>
 		<File
-			RelativePath=".\Quadric.h">
+			RelativePath=".\Quadric.h"
+			>
 		</File>
 		<File
-			RelativePath=".\QuadricDecimationMesh.cpp">
+			RelativePath=".\QuadricDecimationMesh.cpp"
+			>
 		</File>
 		<File
-			RelativePath=".\QuadricDecimationMesh.h">
+			RelativePath=".\QuadricDecimationMesh.h"
+			>
 		</File>
 		<File
-			RelativePath=".\SimpleDecimationMesh.cpp">
+			RelativePath=".\SimpleDecimationMesh.cpp"
+			>
 		</File>
 		<File
-			RelativePath=".\SimpleDecimationMesh.h">
+			RelativePath=".\SimpleDecimationMesh.h"
+			>
 		</File>
 		<File
-			RelativePath=".\SimpleMesh.cpp">
+			RelativePath=".\SimpleMesh.cpp"
+			>
 		</File>
 		<File
-			RelativePath=".\SimpleMesh.h">
+			RelativePath=".\SimpleMesh.h"
+			>
 		</File>
 		<File
-			RelativePath=".\Sphere.cpp">
+			RelativePath=".\Sphere.cpp"
+			>
 		</File>
 		<File
-			RelativePath=".\Sphere.h">
+			RelativePath=".\Sphere.h"
+			>
 		</File>
 		<File
-			RelativePath=".\SphereFractal.cpp">
+			RelativePath=".\SphereFractal.cpp"
+			>
 		</File>
 	</Files>
 	<Globals>

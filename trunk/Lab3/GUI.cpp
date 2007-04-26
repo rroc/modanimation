@@ -387,7 +387,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
       std::cerr << "Loading mesh...\n";
 
       // Open input file
-      std::string filename("Objs/bunnySmall.obj");
+      std::string filename("../Objs/bunnySmall.obj");
 
       // Create new mesh
       SimpleMesh* mesh = new SimpleMesh;
@@ -416,7 +416,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
       std::cerr << "Loading half edge mesh...\n";
 
       // Open input file
-      std::string filename("Objs/sphere1.0.obj");
+      std::string filename("../Objs/sphere1.0.obj");
 
       // Create new mesh
       HalfEdgeMesh* mesh = new HalfEdgeMesh;
@@ -442,7 +442,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
       std::cerr << "Loading simple decimation mesh...\n";
 
       // Open input file
-      std::string filename("Objs/cow.obj");
+      std::string filename("../Objs/cow.obj");
 
       // Create new mesh
       SimpleDecimationMesh* mesh = new SimpleDecimationMesh;
@@ -482,30 +482,95 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
   case '6' :
     {
       // Create an implicit sphere and transform it
-      Sphere * s = new Sphere(1.0);
-      s->translate(0, .1, 0);
-      s->scale(0.2);
+      Sphere * s1 = new Sphere(1.0);
+      s1->translate(0, 0, 0.1);
+      s1->scale(0.2);
 
-      // Triangulate the sphere using a sample distance of 0.02
+	  // Create an implicit sphere and transform it
+	  Sphere * s2 = new Sphere(1.0);
+	  s2->translate(0, 0, -0.1);
+	  s2->scale(0.2);
+
+	  Union* blob = new Union( s1, s2 );
+
+	  // Triangulate the sphere using a sample distance of 0.02
       // using a SimpleMesh and compute face and vertex normals
-      s->triangulate<SimpleMesh>(0.02);
-      s->getMesh<SimpleMesh>().calculateFaceNormals();
-      s->getMesh<SimpleMesh>().calculateVertexNormals();
+      blob->triangulate<SimpleMesh>(0.02);
+      blob->getMesh<SimpleMesh>().calculateFaceNormals();
+      blob->getMesh<SimpleMesh>().calculateVertexNormals();
 
       // Add it to the geometry list
-      mGeometryList.push_back(s);
+      mGeometryList.push_back(blob);
     }
     break;
   case '7' :
     {
+	// Create an implicit sphere and transform it
+	Sphere * s1 = new Sphere(1.0);
+	s1->translate(0, 0, 0.1);
+	s1->scale(0.2);
+
+	// Create an implicit sphere and transform it
+	Sphere * s2 = new Sphere(1.0);
+	s2->translate(0, 0, -0.1);
+	s2->scale(0.2);
+
+	Intersection* blob = new Intersection( s1, s2 );
+
+	// Triangulate the sphere using a sample distance of 0.02
+	// using a SimpleMesh and compute face and vertex normals
+	blob->triangulate<SimpleMesh>(0.02);
+	blob->getMesh<SimpleMesh>().calculateFaceNormals();
+	blob->getMesh<SimpleMesh>().calculateVertexNormals();
+
+	// Add it to the geometry list
+	mGeometryList.push_back(blob);
     }
     break;
   case '8' :
     {
+	// Create an implicit sphere and transform it
+	Sphere * s1 = new Sphere(1.0);
+	s1->translate(0, 0, 0.1);
+	s1->scale(0.2);
+
+	// Create an implicit sphere and transform it
+	Sphere * s2 = new Sphere(1.0);
+	s2->translate(0, 0, -0.1);
+	s2->scale(0.2);
+
+	Difference* blob = new Difference( s1, s2 );
+
+	// Triangulate the sphere using a sample distance of 0.02
+	// using a SimpleMesh and compute face and vertex normals
+	blob->triangulate<SimpleMesh>(0.01);
+	blob->getMesh<SimpleMesh>().calculateFaceNormals();
+	blob->getMesh<SimpleMesh>().calculateVertexNormals();
+
+	// Add it to the geometry list
+	mGeometryList.push_back(blob);
     }
     break;
   case '9' :
     {
+	float q[4][4] = {
+		{1,0,0,0},
+		{0,1,0,0},
+		{0,0,0,0},
+		{0,0,0,-1}};
+
+	Matrix4x4<float> cylinder( q );
+
+	Quadric* quadric=new Quadric( cylinder );
+	
+	quadric->scale(1.0);
+
+	quadric->triangulate<SimpleMesh>(0.1);
+	quadric->getMesh<SimpleMesh>().calculateFaceNormals();
+	quadric->getMesh<SimpleMesh>().calculateVertexNormals();
+
+	// Add it to the geometry list
+	mGeometryList.push_back(quadric);
     }
     break;
 
