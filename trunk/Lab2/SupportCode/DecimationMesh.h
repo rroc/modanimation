@@ -44,6 +44,9 @@ class DecimationMesh : public DecimationInterface, public HalfEdgeMesh
 		virtual void draw();
 
 	protected :
+
+		virtual void vertexCollapsed( unsigned int aIndex);
+
 		virtual void updateVertexProperties(unsigned int ind);
 
 		virtual void updateFaceProperties(unsigned int ind);
