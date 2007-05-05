@@ -457,6 +457,8 @@ float HalfEdgeMesh::curvature(const unsigned int vertexIndex, const Vector3<floa
 	return 0;
 	}
 
+
+
 void HalfEdgeMesh::calculateFaceNormals()
 	{
 	std::cerr << "calculateFaceNormals() in HalfEdgeMesh.cpp not implemented" << std::endl;
@@ -478,8 +480,7 @@ void HalfEdgeMesh::calculateFaceNormals()
 		Vector3<float> v1 = p1-p0;
 		Vector3<float> v2 = p2-p0;
 		Vector3<float> n = cross(v1,v2);
-		n.normalize();
-		mFaces[i].normal = n; // assign normal to face
+		mFaces[i].normal = n.normalize(); // assign normal to face
 		}	
 	}
 
