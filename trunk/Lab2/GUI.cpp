@@ -494,9 +494,9 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 
 	// Open input file
 	//std::string filename("../Objs/cow.obj");
-	std::string filename("../Objs/cube.obj");
+	//std::string filename("../Objs/cube.obj");
 	//std::string filename("../Objs/cowFix.obj");
-	//std::string filename("../Objs/BunnySmall.obj");
+	std::string filename("../Objs/BunnySmall.obj");
 
 	// Create new mesh
 	QuadricDecimationMesh* mesh = new QuadricDecimationMesh;

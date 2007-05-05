@@ -159,8 +159,8 @@ Matrix4x4<float> QuadricDecimationMesh::createQuadricForVert(unsigned int indx) 
 	Q(3, 1) = Q(1, 3);
 	Q(3, 2) = Q(2, 3);
 
-	//To prevent too many singular matrices
-	const float epsilon = 1e-3;
+	////To prevent too many singular matrices
+	const float epsilon = 1e-10;
 	Q(0, 0) += epsilon;
 	Q(1, 1) += epsilon;
 	Q(2, 2) += epsilon;
@@ -247,7 +247,7 @@ void QuadricDecimationMesh::calculateIsoSurface( unsigned int aIndex )
 //	assert(R.isSingular(0.000001));
 //#endif // _DEBUG
 
-	if( !R.isSingular(0.001) )
+	if( !R.isSingular(0.00001) )
 		{
 		float* openGLMatrix = new float[16];
 		R = R.inverse();
