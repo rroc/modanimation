@@ -34,7 +34,6 @@ public:
   virtual float curvature(const unsigned int vertexIndex, const Vector3<float>& n);
 
   virtual void calculateFaceNormals();
-
   virtual void calculateVertexNormals();
 
   Vector3<float> calculateFaceNormal( unsigned int aTriangle );
