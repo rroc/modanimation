@@ -21,7 +21,8 @@ Sphere::~Sphere() { }
 
 float Sphere::getValue(float x, float y, float z) const
 {
-  Vector4<float> vprim, v = Vector4<float>(x, y, z, 1.f);
+  Vector4<float> vprim;
+  Vector4<float> v(x, y, z, 1.f);
   vprim = mWorld2Obj*v;
   return (vprim*vprim - 1.f - radius2);
 }

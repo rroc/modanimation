@@ -23,7 +23,7 @@ public:
   //! evaluate the quadric at world coordinates x y z
   virtual float getValue(float x, float y, float z) const;
   //! calculate the gradient at world coordinates x y z
-  virtual Vector3<float> getGradient(float x, float y, float z, float delta = 0) const;
+  virtual Vector3<float> getGradient(float x, float y, float z, float delta = 1e-3) const;
   //! calculate the curvature at world coordinates x y z
   virtual float getCurvature(float x, float y, float z) const;
 
