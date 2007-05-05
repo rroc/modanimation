@@ -90,4 +90,98 @@ class Difference : public CSG_Operator
 			}
 	};
 
+//Blended
+/*! \brief Union boolean operation */
+class BlendedUnion : public CSG_Operator
+	{
+	private:
+		float p;
+	public:
+		BlendedUnion(Implicit * l, Implicit * r, float aP) 
+			: CSG_Operator(l, r) 
+			, p( aP )
+			{
+			// Compute the resulting (axis aligned) bounding box from
+			// the left and right children
+			mBox = boxUnion(l->getBoundingBox(), r->getBoundingBox());
+			}
+
+		virtual float getValue(float x, float y, float z) const {
+			// Get values from left and right children and perform the
+			// boolean operation. The coordinates (x,y,z) are passed in
+			// from the world space, remember to transform them into
+			// object space (Hint: Implicit::transformWorld2Obj())
+
+			//return std::min( left->getValue(x,y,z), right->getValue(x,y,z) );
+
+			float Da = exp(-left->getValue(x,y,z) * p );
+			float Db = exp(-right->getValue(x,y,z)* p );
+			return -log( pow( Da + Db, 1.0f/p ) );
+
+			//float Da = exp(-left->getValue(x,y,z)  );
+			//float Db = exp(-right->getValue(x,y,z) );
+			//return  log( pow( pow(Da, p) + pow(Db, p), 1.0f/p ) );
+			}
+	};
+
+
+/*! \brief BlendedIntersection boolean operation */
+class BlendedIntersection : public CSG_Operator
+	{
+	private:
+		float p;
+	public:
+		BlendedIntersection(Implicit * l, Implicit * r, float aP)
+			: CSG_Operator(l, r) 
+			, p( aP )
+			{
+			// Compute the resulting (axis aligned) bounding box from
+			// the left and right children
+			mBox = boxIntersection(l->getBoundingBox(), r->getBoundingBox());
+			}
+
+		virtual float getValue(float x, float y, float z) const {
+			// Get values from left and right children and perform the
+			// boolean operation. The coordinates (x,y,z) are passed in
+			// from the world space, remember to transform them into
+			// object space (Hint: Implicit::transformWorld2Obj())
+
+			float Da = exp(-left->getValue(x,y,z) * -p );
+			float Db = exp(-right->getValue(x,y,z)* -p );
+			return -log( pow( Da + Db, 1.0f/-p ) );
+			}
+	};
+
+/*! \brief BlendedDifference boolean operation */
+class BlendedDifference : public CSG_Operator
+	{
+	private:
+		float p;
+	public:
+		BlendedDifference(Implicit * l, Implicit * r, float aP)
+			: CSG_Operator(l, r) 
+			, p( aP )
+			{
+			// Compute the resulting (axis aligned) bounding box from
+			// the left and right children
+			mBox = boxDifference(l->getBoundingBox(), r->getBoundingBox());
+			} 
+
+		virtual float getValue(float x, float y, float z) const {
+			// Get values from left and right children and perform the
+			// boolean operation. The coordinates (x,y,z) are passed in
+			// from the world space, remember to transform them into
+			// object space (Hint: Implicit::transformWorld2Obj())
+
+			float Da = exp(-left->getValue(x,y,z) * -p );
+			float Db = exp( right->getValue(x,y,z)* -p );
+			return -log( pow( Da + Db, 1.0f/-p ) );
+			}
+	};
+
+
+
+
+
+
 #endif
