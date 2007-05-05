@@ -27,6 +27,8 @@ class SphereFractal : public Implicit {
     std::vector<Implicit*> mSpheres;
     Implicit* mFractal;
 
+	float p;
+
 };
 
 #endif
