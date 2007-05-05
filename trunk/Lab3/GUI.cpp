@@ -465,8 +465,21 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 	  break;
   case '4' :
 	  {
-	  SimpleDecimationMesh * mesh = static_cast<SimpleDecimationMesh *>(mGeometryList[mGeometryList.size()-1]);
-	  mesh->decimate();
+//	  SimpleDecimationMesh * mesh = static_cast<SimpleDecimationMesh *>(mGeometryList[mGeometryList.size()-1]);
+//	  mesh->decimate();
+
+	  SphereFractal* sf = new SphereFractal(2);
+	  sf->scale(1.0);
+
+	  // Triangulate the sphere using a sample distance of 0.02
+	  // using a SimpleMesh and compute face and vertex normals
+	  sf->triangulate<SimpleMesh>(0.02);
+	  sf->getMesh<SimpleMesh>().calculateFaceNormals();
+	  sf->getMesh<SimpleMesh>().calculateVertexNormals();
+
+	  // Add it to the geometry list
+	  mGeometryList.push_back(sf);
+
 	  }
 	  break;
   case '5' :
@@ -505,7 +518,8 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 	  s2->translate(0, 0, -0.1);
 	  s2->scale(0.2);
 
-	  Union* blob = new Union( s1, s2 );
+	  //Union* blob = new Union( s1, s2 );
+	  BlendedUnion* blob = new BlendedUnion( s1, s2, 2 );
 
 	  // Triangulate the sphere using a sample distance of 0.02
 	     // using a SimpleMesh and compute face and vertex normals
@@ -529,7 +543,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 	  s2->translate(0, 0, -0.1);
 	  s2->scale(0.2);
 
-	  Intersection* blob = new Intersection( s1, s2 );
+	  BlendedIntersection* blob = new BlendedIntersection( s1, s2, 10 );
 
 	  // Triangulate the sphere using a sample distance of 0.02
 	  // using a SimpleMesh and compute face and vertex normals
@@ -553,7 +567,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 	  s2->translate(0, 0, -0.1);
 	  s2->scale(0.2);
 
-	  Difference* blob = new Difference( s1, s2 );
+	  BlendedDifference* blob = new BlendedDifference( s1, s2, 2 );
 
 	  // Triangulate the sphere using a sample distance of 0.02
 	  // using a SimpleMesh and compute face and vertex normals
