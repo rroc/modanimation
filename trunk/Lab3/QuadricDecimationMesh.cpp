@@ -223,7 +223,6 @@ void QuadricDecimationMesh::drawQuadrics()
 				{
 				glPushMatrix();
 					{
-
 					glMultMatrixf( *isoIterator );
 					gluSphere(mQuadratic, 1.0, 10, 10);
 					}

@@ -30,8 +30,12 @@ public:
   virtual float getValue(float x, float y, float z) const = 0;
   //! calculate the gradient of the implicit at world coordinates x y z
   virtual Vector3<float> getGradient(float x, float y, float z, float delta = 1e-3) const;  // delta is the dx used for calculating the normal.
+
   //! calculate the curvature of the implicit at world coordinates x y z
   virtual float getCurvature(float x, float y, float z, float delta = 1e-3) const;  // delta is the dx used for calculating the normal.
+
+
+
 
   //! Creates a drawable mesh by running marching cubes over the bounding box
   template <class MeshType> void triangulate(float sampleDensity);

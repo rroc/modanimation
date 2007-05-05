@@ -13,8 +13,9 @@
 
 Quadric::Quadric(const Matrix4x4<float> & q)
 	{
+	const float side(1.0f);
 	this->mQuadric = q;
-	this->mBox = Bbox(Vector3<float>(-1.0f, -1.0f, -1.0f), Vector3<float>(1.0f,1.0f,1.0f));
+	this->mBox = Bbox(Vector3<float>(-side, -side, -side), Vector3<float>(side,side,side));
 	}
 
 Quadric::~Quadric(){}
@@ -33,9 +34,11 @@ float Quadric::getValue(float x, float y, float z) const
 /*!
 * Use the quadric matrix to evaluate the gradient.
 */
-Vector3<float> Quadric::getGradient(float x, float y, float z, float d) const
+Vector3<float> Quadric::getGradient(float x, float y, float z, float delta) const
 	{
-	return Vector3<float>(0,0,0);
+	Vector4<float> p(x, y, z, 1.f);	
+	p = mQuadric * ( mWorld2Obj * p);
+	return 2.0f *( Vector3<float> ( p[0],p[1],p[2] ) );
 	}
 
 float Quadric::getCurvature(float x, float y, float z) const
