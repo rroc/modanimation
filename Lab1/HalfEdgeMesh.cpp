@@ -83,6 +83,7 @@ bool HalfEdgeMesh::addTriangle(const Vector3<float> &v1, const Vector3<float> &v
 	mEdges.at( edgeind2 ).face = index;
 	mEdges.at( edgeind3 ).face = index;
 
+	// new edges precede existent ones
 	sort( edges.begin(), edges.end(), sortEdges );
 
 	for(int i=0,endI=edges.size(); i<endI; i++)
