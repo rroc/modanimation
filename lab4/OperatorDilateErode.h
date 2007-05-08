@@ -39,7 +39,7 @@ public :
     std::vector<float> buffer;
 
     // Determine timestep for stability
-    float dt = 0;
+    float dt = mLS->getDx() / abs( mA );
 
     // Propagate level set with stable timestep dt
     // until requested time is reached
@@ -60,6 +60,7 @@ public :
         float ddx2, ddy2, ddz2;
 
         // Compute the new value and store it in the buffer
+	
         buffer.push_back(0);
 
         iter++;

@@ -49,38 +49,38 @@ public :
   inline const float getDx() const { return mDx; }
 
   //! First order negative differential in x
-  float diffXm(int i, int j, int k);
+  float diffXm(int i, int j, int k) const;
   //! First order positive differential in x
-  float diffXp(int i, int j, int k);
+  float diffXp(int i, int j, int k) const;
   //! Second order central differential in x
-  float diffXpm(int i, int j, int k);
+  float diffXpm(int i, int j, int k) const;
   //! Second order second central differential in x
-  float diff2Xpm(int i, int j, int k);
+  float diff2Xpm(int i, int j, int k) const;
 
   //! First order negative differential in y
-  float diffYm(int i, int j, int k);
+  float diffYm(int i, int j, int k) const;
   //! First order positive differential in y
-  float diffYp(int i, int j, int k);
+  float diffYp(int i, int j, int k) const;
   //! Second order central differential in y
-  float diffYpm(int i, int j, int k);
+  float diffYpm(int i, int j, int k) const;
   //! Second order second central differential in y
-  float diff2Ypm(int i, int j, int k);
+  float diff2Ypm(int i, int j, int k) const;
 
   //! First order negative differential in z
-  float diffZm(int i, int j, int k);
+  float diffZm(int i, int j, int k) const;
   //! First order positive differential in z
-  float diffZp(int i, int j, int k);
+  float diffZp(int i, int j, int k) const;
   //! Second order central differential in z
-  float diffZpm(int i, int j, int k);
+  float diffZpm(int i, int j, int k) const;
   //! Second order second central differential in z
-  float diff2Zpm(int i, int j, int k);
+  float diff2Zpm(int i, int j, int k) const;
 
   //! First order mixed differential in x,y
-  float diff2XYpm(int i, int j, int k);
+  float diff2XYpm(int i, int j, int k) const;
   //! First order mixed differential in y,z
-  float diff2YZpm(int i, int j, int k);
+  float diff2YZpm(int i, int j, int k) const;
   //! First order mixed differential in z,x
-  float diff2ZXpm(int i, int j, int k);
+  float diff2ZXpm(int i, int j, int k) const;
 
   friend std::ostream& operator << (std::ostream &os, const LevelSet &LS)
   {
