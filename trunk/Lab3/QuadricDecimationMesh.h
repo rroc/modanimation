@@ -41,6 +41,8 @@ class QuadricDecimationMesh : public DecimationMesh
 		//! Draws the error ellipsoids
 		void drawQuadrics();
 
+		virtual void vertexCollapsed( unsigned int aIndex);
+
 		void calculateIsoSurface( unsigned int aIndex );
 
 		//! The quadric object used to draw the error ellipsoids
