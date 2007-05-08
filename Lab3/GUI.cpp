@@ -473,23 +473,32 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 
 	  // Triangulate the sphere using a sample distance of 0.02
 	  // using a SimpleMesh and compute face and vertex normals
-	  sf->triangulate<SimpleMesh>(0.02);
-	  sf->getMesh<SimpleMesh>().calculateFaceNormals();
-	  sf->getMesh<SimpleMesh>().calculateVertexNormals();
+	  //sf->triangulate<SimpleMesh>(0.02);
+	  //sf->getMesh<SimpleMesh>().calculateFaceNormals();
+	  //sf->getMesh<SimpleMesh>().calculateVertexNormals();
+	  sf->triangulate<QuadricDecimationMesh>(0.1);
+	  sf->getMesh<QuadricDecimationMesh>().calculateFaceNormals();
+	  sf->getMesh<QuadricDecimationMesh>().calculateVertexNormals();
 
 	  // Add it to the geometry list
 	  mGeometryList.push_back(sf);
-
 	  }
 	  break;
+
   case '5' :
 	  {
 	  unsigned int targetFaces;
 	  std::cout << "Enter target number of faces: ";
 	  std::cin >> targetFaces;
 
-	  SimpleDecimationMesh * mesh = static_cast<SimpleDecimationMesh *>(mGeometryList[mGeometryList.size()-1]);
-	  mesh->decimate(targetFaces);
+	  if( mGeometryList.size()>0 )
+		  {
+		  SphereFractal* sf = static_cast<SphereFractal*>(mGeometryList[mGeometryList.size()-1]);
+		  QuadricDecimationMesh& mesh = sf->getMesh<QuadricDecimationMesh>();
+		  mesh.initialize();
+		  mesh.decimate(targetFaces);
+		  //mesh.cleanup();
+		  }
 	  }
 	  break;
   case '6' :

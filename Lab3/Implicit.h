@@ -92,6 +92,8 @@ void Implicit::triangulate(float delta)
   unsigned int currentSample = 0;
   unsigned int reportFreq = totalSamples / 30;
 
+  unsigned int numTriangles(0);
+
   // Loop over bounding box
   std::cerr << "Triangulating [";
   for(float i = pmin.x(); i< pmax.x(); i += delta ) {
@@ -110,6 +112,7 @@ void Implicit::triangulate(float delta)
 	      std::vector<Vector3<float> > tris = ::triangulate(voxelValues, i, j, k, delta);
 	      for(unsigned int n = 0; n < tris.size(); n+=3){
 	        mMesh->addTriangle(tris.at(n), tris.at(n+2), tris.at(n+1)); // triangulation uses clockwise orientation
+			numTriangles++;
 	      }
 
         currentSample++;
@@ -118,7 +121,7 @@ void Implicit::triangulate(float delta)
       }
     }
   }
-  std::cerr << "] done" << std::endl;
+  std::cerr << "]" << std::endl<< "done: " << numTriangles << std::endl;
 }
 
 
