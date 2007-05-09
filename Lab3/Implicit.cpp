@@ -152,7 +152,7 @@ void Implicit::draw(){
 		mMesh->draw();
 
 	//  Turn these on to visualize gradients and curvature
-	//drawGradients();
+	drawGradients();
 	//drawCurvature();
 
 	// Draw bounding box for debugging
