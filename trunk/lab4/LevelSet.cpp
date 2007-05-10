@@ -354,6 +354,11 @@ void LevelSet::world2Grid( float x, float y, float z, int& i, int& j, int& k ) c
 
 void LevelSet::grid2World( int i, int j, int k, float& x, float& y, float& z ) const
 	{
+		/************************************************************************/
+		/* SHOULD WE ALSO TRANSFORM X, Y AND Z TO WORLD?? BB IN LOCAL OR WC?    */
+		/************************************************************************/
+
+		
 	x = i * mDx + mBox.pMin.x();
 	y = j * mDx + mBox.pMin.y();
 	z = k * mDx + mBox.pMin.z();

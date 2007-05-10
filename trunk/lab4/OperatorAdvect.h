@@ -45,6 +45,7 @@ public :
 	float x = delta / abs( v.x() ); 
 	float y = delta / abs( v.y() );
 	float z = delta / abs( v.z() );
+	float alpha = 0.9f;
 	float dt =  std::min( x, std::min( y, z ) );
 
     // Propagate level set with stable timestep dt
@@ -68,6 +69,8 @@ public :
 		float x,y,z;
 		this->mLS->grid2World(i,j,k, x,y,z);
 		v = mVectorField->getValue( x,y,z );
+
+		getGrid().getValue(i, j, k);
 		
         // calculate upwind differentials
 		float ddx, ddy, ddz;
@@ -79,7 +82,7 @@ public :
 
         // compute time differential as dot product
 		Vector3<float> gradient(ddx, ddy, ddz);
-		float flowRate = gradient * v;
+		float flowRate = -gradient * v;
 
 		// update the new value using first-order forward Euler
 		float phiCurrent	= mLS->getValue(x, y, z);
