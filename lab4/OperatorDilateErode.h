@@ -39,7 +39,8 @@ public :
     std::vector<float> buffer;
 
     // Determine timestep for stability
-    float dt = ( mLS->getDx() / abs( mA ) );
+	float alpha = 0.9f;
+    float dt = alpha * ( mLS->getDx() / abs( mA ) );
 
 	printf("time = %f\n", time);
 	printf("dt = %f\n", dt);
@@ -70,8 +71,8 @@ public :
 		float dPhiDt = -mA * gradientNorm;
 
 		float x,y,z;
-		this->mLS->grid2World(i,j,k, x,y,z);
-		float phiCurrent	= mLS->getValue(x, y, z);
+
+		float phiCurrent	= getGrid().getValue(i, j, k);
 		float phiNext		= phiCurrent + dPhiDt * dt;
 
         buffer.push_back( phiNext );

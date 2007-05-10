@@ -36,11 +36,15 @@ public :
 
   virtual void propagate(float time)
   {
+	  std::cout << "applying mean curvature flow operator " << std::endl;
+
     // Create buffer used to store intermediate results
     std::vector<float> buffer;
 
     // calculate stable timestep dt
-    float dt = 0;
+	float bound = 0.9f;
+	float dX = mLS->getDx();
+	float dt = bound * (dX * dX) / (6 * mAlpha );
 
     // Propagate level set with stable timestep dt
     // until requested time is reached
@@ -52,22 +56,67 @@ public :
 
       LevelSetGrid::Iterator iter = getGrid().beginNarrowBand();
       LevelSetGrid::Iterator iend = getGrid().endNarrowBand();
-      while (iter != iend) {
+	  
+	  int counter = 0;
+      while (iter != iend) 
+	  {
+
+		  if ( (counter++ % 10) == 0)
+		  {
+			  std::cout << ".";
+		  }
+
         unsigned int i = iter.getI();
         unsigned int j = iter.getJ();
         unsigned int k = iter.getK();
 
-        // calculate curvature
+        /* *** calculate curvature *** */
 
-        // calculate gradient using central differentials
+		// second order derivatives
+		float ddx2 = mLS->diff2Xpm(i, j, k);
+		float ddy2 = mLS->diff2Ypm(i, j, k);
+		float ddz2 = mLS->diff2Zpm(i, j, k);
 
-        // compute time differential as product
+		// first order derivatives
+		float ddx = mLS->diffXpm(i, j, k);
+		float ddy = mLS->diffYpm(i, j, k);
+		float ddz = mLS->diffZpm(i, j, k);
+
+		// mixed derivatives
+		float dydz = mLS->diff2YZpm(i, j, k);
+		float dxdz = mLS->diff2ZXpm(i, j, k);
+		float dxdy = mLS->diff2XYpm(i, j, k);
+
+		// squares of the first derivatives
+		float ddxSqr = ddx * ddx;
+		float ddySqr = ddy * ddy;
+		float ddzSqr = ddz * ddz;
+
+		float denominator = 2.0f * pow(ddxSqr + ddySqr + ddzSqr, 3.0f/2.0f);
+		float curvatureK =	(ddxSqr * (ddy2 + ddz2) - 2.0f*ddy*ddz*dydz) / denominator + 
+					(ddySqr * (ddx2 + ddz2) - 2.0f*ddx*ddz*dxdz) / denominator +
+					(ddzSqr * (ddx2 + ddy2) - 2.0f*ddx*ddy*dxdy) / denominator;
+
+        /* *** calculate gradient using central differentials *** */
+		ddx = mLS->diffXpm(i, j, k);
+		ddy = mLS->diffYpm(i, j, k);
+		ddz = mLS->diffZpm(i, j, k);
+
+		/* *** compute time differential as product *** */
+		float gradientNorm = sqrt(ddx*ddx + ddy*ddy + ddz*ddz);
+		float changeRate = mAlpha * curvatureK * gradientNorm;
+
+        /* *** update phi using first order forward Euler time integration *** */
+		float currentPhi	= getGrid().getValue(i, j, k);
+		float nextPhi		=  currentPhi + changeRate * dt;
 
         // assign new value and store it in the buffer
-        buffer.push_back(0);
+        buffer.push_back( nextPhi );
 
         iter++;
       }
+
+	  std::cout << std::endl;
 
       // Copy new values from buffer to grid
       iter = getGrid().beginNarrowBand();
@@ -83,6 +132,8 @@ public :
       }
       buffer.clear();
     }
+
+	std::cout << std::endl;
   }
 
 };
