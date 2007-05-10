@@ -35,8 +35,8 @@ class LevelSet : public Implicit
 
 		virtual void draw();
 
-		virtual void world2Grid(float x, float y, float z, int& i, int& j, int& k);
-		virtual void grid2World(int i, int j, int k, float& x, float& y, float& z);
+		virtual void world2Grid(float x, float y, float z, int& i, int& j, int& k) const;
+		virtual void grid2World(int i, int j, int k, float& x, float& y, float& z) const;
 
 		//! evaluate the implicit at world coordinates x y z
 		virtual float getValue(float x, float y, float z) const;

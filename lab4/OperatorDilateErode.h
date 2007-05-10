@@ -67,7 +67,14 @@ public :
 		godunov(i, j, k, mA, ddx2, ddy2, ddz2 );
 
 		float gradientNorm = sqrt( ddx2 + ddy2 + ddz2 );
-        buffer.push_back( -mA * gradientNorm );
+		float dPhiDt = -mA * gradientNorm;
+
+		float x,y,z;
+		this->mLS->grid2World(i,j,k, x,y,z);
+		float phiCurrent	= mLS->getValue(x, y, z);
+		float phiNext		= phiCurrent + dPhiDt * dt;
+
+        buffer.push_back( phiNext );
 
         iter++;
       }
