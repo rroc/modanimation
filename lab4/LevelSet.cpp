@@ -58,13 +58,17 @@ LevelSet::LevelSet(float dx, const Implicit & impl, const Bbox & box) : mDx(dx)
 	}
 
 
+
+
 float LevelSet::getValue(float x, float y, float z) const
 	{
 	transformWorld2Obj(x,y,z);
 
-	int i = (int)((x - mBox.pMin.x()) / mDx);
-	int j = (int)((y - mBox.pMin.y()) / mDx);
-	int k = (int)((z - mBox.pMin.z()) / mDx);
+	//int i = (int)((x - mBox.pMin.x()) / mDx);
+	//int j = (int)((y - mBox.pMin.y()) / mDx);
+	//int k = (int)((z - mBox.pMin.z()) / mDx);
+	int i,j,k;
+	world2Grid(x,y,z, i,j,k);
 
 	float bx = (x - mBox.pMin.x()) / mDx - i;
 	float by = (y - mBox.pMin.y()) / mDx - j;
@@ -339,4 +343,18 @@ float LevelSet::diff2ZXpm(int i, int j, int k)  const
 void LevelSet::draw()
 	{
 	Implicit::draw();
+	}
+
+void LevelSet::world2Grid( float x, float y, float z, int& i, int& j, int& k )
+	{
+	i = (int)((x - mBox.pMin.x()) / mDx);
+	j = (int)((y - mBox.pMin.y()) / mDx);
+	k = (int)((z - mBox.pMin.z()) / mDx);
+	}
+
+void LevelSet::grid2World( int i, int j, int k, float& x, float& y, float& z )
+	{
+	x = i * mDx + mBox.pMin.x();
+	y = j * mDx + mBox.pMin.y();
+	z = k * mDx + mBox.pMin.z();
 	}

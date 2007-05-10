@@ -39,14 +39,18 @@ public :
     std::vector<float> buffer;
 
     // Determine timestep for stability
-    float dt = mLS->getDx() / abs( mA );
+    float dt = ( mLS->getDx() / abs( mA ) );
+
+	printf("time = %f\n", time);
+	printf("dt = %f\n", dt);
 
     // Propagate level set with stable timestep dt
     // until requested time is reached
     for (float elapsed = 0; elapsed < time;) {
 
-      if (dt > time-elapsed)
-        dt = time-elapsed;
+		printf(".");
+      if (dt > time - elapsed)
+        dt = time - elapsed;
       elapsed += dt;
 
       // Iterate over grid and compute the grid values for the next timestep
@@ -60,11 +64,14 @@ public :
         float ddx2, ddy2, ddz2;
 
         // Compute the new value and store it in the buffer
-	
-        buffer.push_back(0);
+		godunov(i, j, k, mA, ddx2, ddy2, ddz2 );
+
+		float gradientNorm = sqrt( ddx2 + ddy2 + ddz2 );
+        buffer.push_back( -mA * gradientNorm );
 
         iter++;
       }
+	  printf("\n");
 
       // Copy new values from buffer to grid
       iter = getGrid().beginNarrowBand();

@@ -33,11 +33,14 @@ ColorMap::ColorMap()
 Vector3<float> ColorMap::map(float val, float low, float high) const {
   float h = switch1(val, low, high);
   h = clamp(h, 0.f, 1.f);
-  float pos = h*(colors.size()-1);
+  int size = colors.size()-1;
+  float pos = h*size;
   float t  = pos - floorf(pos);
-  unsigned int index = (unsigned int) floorf(pos);
+  unsigned int index  = (unsigned int) floorf(pos);
+  unsigned int index2 = (index+1>size)? size: index+1;
+
   // linear interpolation
-  return colors[index]*(1-t) + colors[index+1]*t;
+  return colors[index]*(1-t) + colors[index2]*t;
 }
 //-----------------------------------------------------------------------------
 Vector3<float> ColorMap::map(const Vector3<float> & vec, float low, float high) const {

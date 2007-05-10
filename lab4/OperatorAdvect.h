@@ -38,8 +38,14 @@ public :
     // Create buffer used to store intermediate results
     std::vector<float> buffer;
 
+
     // Determine timestep for stability
-    float dt = 0;
+	Vector3 v = mVectorField->getMaxValue();
+	float delta = mLS->getDx();
+	float x = delta / abs( v.x() ); 
+	float y = delta / abs( v.y() );
+	float z = delta / abs( v.z() );
+    float dt =  min( x, min( y, z ) );
 
     // Propagate level set with stable timestep dt
     // until requested time is reached
@@ -59,8 +65,12 @@ public :
 
         // Get vector for grid point (i,j,k) from vector field
         // Remember to translate (i,j,k) into world coordinates (x,y,z)
-
+		float x,y,z;
+		this->mLS->grid2World(i,j,k, x,y,z);
+		v = mVectorField->getValue( x,y,z );
+		
         // calculate upwind differentials
+		float ddx, ddy, ddz;
 
         // compute time differential as dot product
 
