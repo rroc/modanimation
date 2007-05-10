@@ -495,8 +495,11 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 	  // Fetch the geometry called 'LevelSet'
 	  LevelSet * LS = getGeometry<LevelSet>("LevelSet");
 
-	  OperatorDilateErode op(LS, 1);
+	  OperatorDilateErode op(LS, -1.0);
 	  op.propagate(0.01);
+
+	  //OperatorReinitialize op2(LS);
+	  //op2.propagate(0.05);
 
 	  // Triangulate and calculate face normals
 	  LS->triangulate<SimpleMesh>(0.02);
@@ -561,7 +564,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 
 	  // Fetch the geometry called 'LevelSet'
 	  LevelSet * LS = getGeometry<LevelSet>("LevelSet");
-	  LS->setNarrowBandWidth(5);
+	  LS->setNarrowBandWidth(12);
 
 	  // Triangulate and calculate face normals
 	  LS->triangulate<SimpleMesh>(0.02);
