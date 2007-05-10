@@ -345,14 +345,14 @@ void LevelSet::draw()
 	Implicit::draw();
 	}
 
-void LevelSet::world2Grid( float x, float y, float z, int& i, int& j, int& k )
+void LevelSet::world2Grid( float x, float y, float z, int& i, int& j, int& k ) const
 	{
 	i = (int)((x - mBox.pMin.x()) / mDx);
 	j = (int)((y - mBox.pMin.y()) / mDx);
 	k = (int)((z - mBox.pMin.z()) / mDx);
 	}
 
-void LevelSet::grid2World( int i, int j, int k, float& x, float& y, float& z )
+void LevelSet::grid2World( int i, int j, int k, float& x, float& y, float& z ) const
 	{
 	x = i * mDx + mBox.pMin.x();
 	y = j * mDx + mBox.pMin.y();

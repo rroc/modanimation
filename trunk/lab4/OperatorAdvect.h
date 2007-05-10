@@ -40,12 +40,12 @@ public :
 
 
     // Determine timestep for stability
-	Vector3 v = mVectorField->getMaxValue();
+	Vector3<float> v = mVectorField->getMaxValue();
 	float delta = mLS->getDx();
 	float x = delta / abs( v.x() ); 
 	float y = delta / abs( v.y() );
 	float z = delta / abs( v.z() );
-    float dt =  min( x, min( y, z ) );
+	float dt =  std::min( x, std::min( y, z ) );
 
     // Propagate level set with stable timestep dt
     // until requested time is reached
@@ -72,10 +72,21 @@ public :
         // calculate upwind differentials
 		float ddx, ddy, ddz;
 
+		// flow in the negative direction: use upwind difXp
+		ddx = ( v.x() < 0.0f ) ? mLS->diffXp(i, j, k) : mLS->diffXm(i, j, k);
+		ddy = ( v.y() < 0.0f ) ? mLS->diffYp(i, j, k) : mLS->diffYm(i, j, k);
+		ddz = ( v.z() < 0.0f ) ? mLS->diffZp(i, j, k) : mLS->diffZm(i, j, k);
+
         // compute time differential as dot product
+		Vector3<float> gradient(ddx, ddy, ddz);
+		float flowRate = gradient * v;
+
+		// update the new value using first-order forward Euler
+		float phiCurrent	= mLS->getValue(x, y, z);
+		float phiNext		= phiCurrent + flowRate * dt;
 
         // assign new value and store it in the buffer
-        buffer.push_back(0);
+        buffer.push_back( phiNext );
 
         iter++;
       }
