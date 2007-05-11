@@ -17,7 +17,7 @@
 /*! \brief A level set operator that does mean curvature flow.
  *
  * This class implements level set propagation in the normal direction
- * as defined by the mean curvature flow \$\kappa\$ in the following PDE
+ * as defined by the mean curvature flow \f$\kappa\f$ in the following PDE
  *
  *  \f[
  *  \dfrac{\partial \phi}{\partial t} + \alpha \kappa|\nabla \phi| = 0
@@ -61,10 +61,10 @@ public :
       while (iter != iend) 
 	  {
 
-		  if ( (counter++ % 10) == 0)
-		  {
-			  std::cout << ".";
-		  }
+//		  if ( (counter++ % 100) == 0)
+//		  {
+//			  std::cout << ".";
+//		  }
 
         unsigned int i = iter.getI();
         unsigned int j = iter.getJ();
@@ -116,8 +116,6 @@ public :
         iter++;
       }
 
-	  std::cout << std::endl;
-
       // Copy new values from buffer to grid
       iter = getGrid().beginNarrowBand();
       std::vector<float>::iterator iterBuffer = buffer.begin();
@@ -132,8 +130,6 @@ public :
       }
       buffer.clear();
     }
-
-	std::cout << std::endl;
   }
 
 };
