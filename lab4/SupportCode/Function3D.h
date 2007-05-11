@@ -25,19 +25,4 @@ public:
   virtual ~Function3D() {}
 };
 
-#include "Vector3.h"
-/*! Constant vector field that always returns a constant vector */
-class VFConstant : public Function3D<Vector3<float> >{
-protected:
-  Vector3<float> mV;
-public:
-  VFConstant(const Vector3<float> v) : mV(v) {}
-  Vector3<float> getValue(float x, float y, float z) const {
-    return mV;
-  }
-  //! Return a bound on the maximum value of the function
-  Vector3<float> getMaxValue() const {
-    return getValue(0.f,0.f,0.f);
-  }
-};
 #endif
