@@ -201,6 +201,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SupportCode\ConstantVectorField.h"
+				>
+			</File>
+			<File
 				RelativePath=".\SupportCode\DecimationInterface.h"
 				>
 			</File>
@@ -221,11 +225,31 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SupportCode\glext.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SupportCode\Hashtable.h"
+				>
+			</File>
+			<File
 				RelativePath=".\SupportCode\Heap.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\SupportCode\Heap.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SupportCode\ImplicitGradientField.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SupportCode\ImplicitValueField.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SupportCode\IsoContourColorMap.h"
 				>
 			</File>
 			<File
@@ -273,6 +297,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SupportCode\stdint.h"
+				>
+			</File>
+			<File
 				RelativePath=".\SupportCode\Stopwatch.h"
 				>
 			</File>
@@ -304,9 +332,21 @@
 				RelativePath=".\SupportCode\Volume.h"
 				>
 			</File>
+			<File
+				RelativePath=".\SupportCode\VortexVectorField.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\CSG.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Cyclide.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Cyclide.h"
 			>
 		</File>
 		<File
@@ -427,6 +467,10 @@
 		</File>
 		<File
 			RelativePath=".\SphereFractal.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\SphereFractal.h"
 			>
 		</File>
 	</Files>
