@@ -560,7 +560,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 		  LevelSet * LS = getGeometry<LevelSet>("LevelSet");
 
 		  ConstantVectorField field(Vector3<float>(-1, -1, -1));
-		  OperatorAdvect op(LS, &field);
+		  OperatorAdvect op(LS, &field, true );
 		  op.propagate(0.01);
 
 		  // Triangulate and calculate face normals
@@ -581,7 +581,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 
 		  // Fetch the geometry called 'LevelSet'
 		  LevelSet * LS = getGeometry<LevelSet>("LevelSet");
-		  LS->setNarrowBandWidth(6);
+		  LS->setNarrowBandWidth(24);
 
 		  // Triangulate and calculate face normals
 		  LS->triangulate<SimpleMesh>(0.02);
