@@ -85,6 +85,23 @@ class LevelSet : public Implicit
 		//! First order mixed differential in z,x
 		float diff2ZXpm(int i, int j, int k) const;
 
+
+		//WENO (weighted essentially nonoscillatory - polynomial approximation)
+		//! WENO negative differential in x
+		float diffXmWENO(int i, int j, int k) const;
+		//! WENO  positive differential in x
+		float diffXpWENO(int i, int j, int k) const;
+		//! WENO negative differential in x
+		float diffYmWENO(int i, int j, int k) const;
+		//! WENO  positive differential in x
+		float diffYpWENO(int i, int j, int k) const;
+		//! WENO negative differential in x
+		float diffZmWENO(int i, int j, int k) const;
+		//! WENO  positive differential in x
+		float diffZpWENO(int i, int j, int k) const;
+
+		inline float weno(const float& v1, const float& v2, const float& v3, const float& v4, const float& v5 ) const;
+
 		friend std::ostream& operator << (std::ostream &os, const LevelSet &LS)
 			{
 			os << "Level set bounding box: " << LS.mBox.pMin << " -> " << LS.mBox.pMax << std::endl;

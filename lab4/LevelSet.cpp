@@ -13,6 +13,13 @@
 #include "LevelSet.h"
 #include "Util.h"
 
+static const float oneByThree(1.0f/3.0f);
+static const float oneBySix(1.0f/6.0f);
+static const float fiveBySix(5.0f/6.0f);
+static const float sevenBySix(7.0f/6.0f);
+static const float elevenBySix(11.0f/6.0f);
+static const float oneByFour(1.0f/4.0f);
+static const float thirteenByTwelve(13.0f/12.0f);
 
 LevelSet::LevelSet(float dx) : mDx(dx)
 	{
@@ -362,4 +369,127 @@ void LevelSet::grid2World( int i, int j, int k, float& x, float& y, float& z ) c
 	x = i * mDx + mBox.pMin.x();
 	y = j * mDx + mBox.pMin.y();
 	z = k * mDx + mBox.pMin.z();
+	}
+
+
+float LevelSet::diffXmWENO( int i, int j, int k ) const
+	{
+	//define variables for HJ ENO approximation
+	// ie. v1 = (D-)phi_i-2
+	float v1  = diffXm( i-2, j, k);
+	float v2  = diffXm( i-1, j, k);
+	float v3  = diffXm( i,   j, k);
+	float v4  = diffXm( i+1, j, k);
+	float v5  = diffXm( i+2, j, k);
+
+	return weno(v1, v2, v3, v4, v5);
+	}
+
+float LevelSet::diffXpWENO( int i, int j, int k ) const
+	{
+	//define variables for HJ ENO approximation
+	// ie. v1 = (D-)phi_i-2
+	float v1  = diffXp( i-2, j, k);
+	float v2  = diffXp( i-1, j, k);
+	float v3  = diffXp( i,   j, k);
+	float v4  = diffXp( i+1, j, k);
+	float v5  = diffXp( i+2, j, k);
+
+	return weno(v1, v2, v3, v4, v5);
+	}
+
+float LevelSet::diffYmWENO( int i, int j, int k ) const
+	{
+	//define variables for HJ ENO approximation
+	// ie. v1 = (D-)phi_i-2
+	float v1  = diffYm( i, j-2, k);
+	float v2  = diffYm( i, j-1, k);
+	float v3  = diffYm( i,  j,  k);
+	float v4  = diffYm( i, j+1, k);
+	float v5  = diffYm( i, j+2, k);
+
+	return weno(v1, v2, v3, v4, v5);
+	}
+
+float LevelSet::diffYpWENO( int i, int j, int k ) const
+	{
+	//define variables for HJ ENO approximation
+	// ie. v1 = (D-)phi_i-2
+	float v1  = diffYp( i, j-2, k);
+	float v2  = diffYp( i, j-1, k);
+	float v3  = diffYp( i, j,   k);
+	float v4  = diffYp( i, j+1, k);
+	float v5  = diffYp( i, j+2, k);
+
+	return weno(v1, v2, v3, v4, v5);
+	}
+
+float LevelSet::diffZmWENO( int i, int j, int k ) const
+	{
+	//define variables for HJ ENO approximation
+	// ie. v1 = (D-)phi_i-2
+	float v1  = diffZm( i, j, k-2);
+	float v2  = diffZm( i, j, k-1);
+	float v3  = diffZm( i, j, k  );
+	float v4  = diffZm( i, j, k+1);
+	float v5  = diffZm( i, j, k+2);
+
+	return weno(v1, v2, v3, v4, v5);
+	}
+
+float LevelSet::diffZpWENO( int i, int j, int k ) const
+	{
+	//define variables for HJ ENO approximation
+	// ie. v1 = (D-)phi_i-2
+	float v1  = diffZp( i, j, k-2);
+	float v2  = diffZp( i, j, k-1);
+	float v3  = diffZp( i, j, k  );
+	float v4  = diffZp( i, j, k+1);
+	float v5  = diffZp( i, j, k+2);
+
+	return weno(v1, v2, v3, v4, v5);
+	}
+
+
+
+
+float LevelSet::weno( const float& v1, const float& v2, const float& v3, const float& v4, const float& v5 ) const
+	{
+	//float maxV = std::max( std::max( std::max( std::max(v1, v2), v3 ),v4 ),v5 );
+	//float epsilon = ((1e-6)* maxV*maxV) + (1e-99); //1e-99 to avoid div by 0
+	float maxV = std::max( std::max( std::max( std::max(v1*v1, v2*v2), v3*v3 ),v4*v4 ),v5*v5 );
+	float epsilon = ((1e-6)* maxV) + (1e-99); //1e-99 to avoid div by 0
+
+	//Possible HJ ENO approximations
+	float phi1 =  oneByThree * v1 - sevenBySix * v2 + elevenBySix * v3;
+	float phi2 = -oneBySix   * v2 + fiveBySix  * v3 + oneByThree  * v4;
+	float phi3 =  oneByThree * v3 + fiveBySix  * v4 - oneBySix    * v5;
+
+	//Approximate Stencil Smoothness
+	float term1 = (v1 - 2.0f * v2 + v3 );
+	float term2 = (v1 - 4.0f * v2 + 3.0f * v3);
+	float S1 = thirteenByTwelve * (  term1*term1 ) + oneByFour * (term2 * term2); 
+	term1 = (v2 - 2.0f*v3 + v4);
+	term2 = (v2-v4);
+	float S2 = thirteenByTwelve * (  term1*term1 ) + oneByFour * (term2 * term2); 
+	term1 = (v3 - 2.0f*v4 + v5);
+	term2 = (3.0f*v3 - 4.0f*v4 +v5);
+	float S3 = thirteenByTwelve * (  term1*term1 ) + oneByFour * (term2 * term2); 
+
+	//Calculate alphas with smoothness
+	S1 += epsilon;
+	float alpha1 = 0.1f / (S1*S1);
+	S2 += epsilon;
+	float alpha2 = 0.6f / (S2*S2);
+	S3 += epsilon;
+	float alpha3 = 0.3f / (S3*S3);
+
+	//calculate weights with alphas
+	float denominator( 1.0f /(alpha1 + alpha2 + alpha3) );
+	float w1 = alpha1 * denominator;
+	float w2 = alpha2 * denominator;
+	float w3 = alpha3 * denominator;
+
+	//return the weighted ENO
+	return ( w1*phi1 + w2*phi2 + w3*phi3 );
 	}

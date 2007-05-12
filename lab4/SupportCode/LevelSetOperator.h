@@ -15,24 +15,26 @@
 #include "LevelSet.h"
 
 class LevelSetOperator
-{
-protected :
-  LevelSet * mLS;
+	{
+	protected :
+		LevelSet * mLS;
 
-  //! Exposes access to the level set grid internally
-  LevelSetGrid & getGrid() { return mLS->mGrid; }
-  const LevelSetGrid & getGrid() const { return mLS->mGrid; }
+		//! Exposes access to the level set grid internally
+		LevelSetGrid & getGrid() { return mLS->mGrid; }
+		const LevelSetGrid & getGrid() const { return mLS->mGrid; }
 
-  void godunov(unsigned int i, unsigned int j, unsigned int k, float a,
-               float & ddx2, float & ddy2, float & ddz2);
+		void godunov(unsigned int i, unsigned int j, unsigned int k, float a,
+			float & ddx2, float & ddy2, float & ddz2);
+
+		float forwardEuler( const Vector3<float>& v, const float& x, const float& y, const float& z );
 
 
-public :
+	public :
 
-  LevelSetOperator(LevelSet * LS) : mLS(LS) { }
-  virtual ~LevelSetOperator() {}
-  virtual void propagate(float time) = 0;
-};
+		LevelSetOperator(LevelSet * LS) : mLS(LS) { }
+		virtual ~LevelSetOperator() {}
+		virtual void propagate(float time) = 0;
+	};
 
 
 #endif
