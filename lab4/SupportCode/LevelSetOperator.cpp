@@ -32,3 +32,33 @@ void LevelSetOperator::godunov(unsigned int i, unsigned int j, unsigned int k, f
     ddz2 = std::max( std::pow(std::min(ddzm,0.0f),2), std::pow(std::max(ddzp,0.0f),2) );
   }
 }
+
+Vector3<float> LevelSetOperator::gradient( const Vector3<float>& v, const float& i, const float& j, const float& k, bool useWENO )
+	{
+	// calculate upwind differentials
+	float ddx, ddy, ddz;
+	if(!useWENO)
+		{
+		// flow in the negative direction: use upwind difXp
+		ddx = ( v.x() < 0.0f ) ? mLS->diffXp(i, j, k) : mLS->diffXm(i, j, k);
+		ddy = ( v.y() < 0.0f ) ? mLS->diffYp(i, j, k) : mLS->diffYm(i, j, k);
+		ddz = ( v.z() < 0.0f ) ? mLS->diffZp(i, j, k) : mLS->diffZm(i, j, k);
+		}
+	else
+		{
+		// flow in the negative direction: use upwind difXp
+		ddx = ( v.x() < 0.0f ) ? mLS->diffXpWENO(i, j, k) : mLS->diffXmWENO(i, j, k);
+		ddy = ( v.y() < 0.0f ) ? mLS->diffYpWENO(i, j, k) : mLS->diffYmWENO(i, j, k);
+		ddz = ( v.z() < 0.0f ) ? mLS->diffZpWENO(i, j, k) : mLS->diffZmWENO(i, j, k);
+		}
+
+	// compute time differential as dot product
+	return Vector3<float>(ddx, ddy, ddz);
+	}
+
+float LevelSetOperator::forwardEuler( const float& i, const float& j, const float& k, const float& velocity, const float& dt )
+	{
+	// update the new value using first-order forward Euler
+	float phiCurrent	= getGrid().getValue(i, j, k); //mLS->getValue(x, y, z);
+	return ( phiCurrent + velocity * dt );
+	}

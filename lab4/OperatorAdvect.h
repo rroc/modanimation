@@ -32,6 +32,7 @@ class OperatorAdvect : public LevelSetOperator
 
 	private :
 		bool mUseWENO;
+		bool mUseRungeKutta;
 
 	public :
 
@@ -39,12 +40,21 @@ class OperatorAdvect : public LevelSetOperator
 			: LevelSetOperator(LS)
 			, mVectorField(vf) 
 			, mUseWENO(false)
+			, mUseRungeKutta(false)
 			{ }
 
 		OperatorAdvect(LevelSet * LS, Function3D<Vector3<float> > * vf, bool aUseWENO) 
 			: LevelSetOperator(LS)
 			, mVectorField(vf) 
 			, mUseWENO(aUseWENO)
+			, mUseRungeKutta(false)
+			{ }
+
+		OperatorAdvect(LevelSet * LS, Function3D<Vector3<float> > * vf, bool aUseWENO, bool aRungeKutta) 
+			: LevelSetOperator(LS)
+			, mVectorField(vf) 
+			, mUseWENO(aUseWENO)
+			, mUseRungeKutta(aRungeKutta)
 			{ }
 
 		virtual void propagate(float time)
@@ -84,38 +94,14 @@ class OperatorAdvect : public LevelSetOperator
 					this->mLS->grid2World(i,j,k, x,y,z);
 					v = mVectorField->getValue( x,y,z );
 
+
 					//getGrid().getValue(i, j, k);
-
-
-
-					// calculate upwind differentials
-					float ddx, ddy, ddz;
-					if(!mUseWENO)
-						{
-						// flow in the negative direction: use upwind difXp
-						ddx = ( v.x() < 0.0f ) ? mLS->diffXp(i, j, k) : mLS->diffXm(i, j, k);
-						ddy = ( v.y() < 0.0f ) ? mLS->diffYp(i, j, k) : mLS->diffYm(i, j, k);
-						ddz = ( v.z() < 0.0f ) ? mLS->diffZp(i, j, k) : mLS->diffZm(i, j, k);
-						}
-					else
-						{
-						// flow in the negative direction: use upwind difXp
-						ddx = ( v.x() < 0.0f ) ? mLS->diffXpWENO(i, j, k) : mLS->diffXmWENO(i, j, k);
-						ddy = ( v.y() < 0.0f ) ? mLS->diffYpWENO(i, j, k) : mLS->diffYmWENO(i, j, k);
-						ddz = ( v.z() < 0.0f ) ? mLS->diffZpWENO(i, j, k) : mLS->diffZmWENO(i, j, k);
-						}
-
-					// compute time differential as dot product
-					Vector3<float> gradient(ddx, ddy, ddz);
-					float flowRate = -gradient * v;
-
-					// update the new value using first-order forward Euler
-					float phiCurrent	= mLS->getValue(x, y, z);
-					float phiNext		= phiCurrent + flowRate * dt;
+					float velocity = - gradient(v, i,j,k, mUseWENO) * v;
+					float phiNext = forwardEuler( i,j,k, velocity, dt );
+					
 
 					// assign new value and store it in the buffer
 					buffer.push_back( phiNext );
-
 					iter++;
 					}
 

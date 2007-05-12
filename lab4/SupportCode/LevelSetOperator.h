@@ -26,7 +26,14 @@ class LevelSetOperator
 		void godunov(unsigned int i, unsigned int j, unsigned int k, float a,
 			float & ddx2, float & ddy2, float & ddz2);
 
-		float forwardEuler( const Vector3<float>& v, const float& x, const float& y, const float& z );
+		float forwardEuler( const float& i, const float& j, const float& k, const float& velocity, const float& dt );
+
+		Vector3<float> gradient( const Vector3<float>& v, const float& i, const float& j, const float& k) 
+			{ 
+			return gradient( v, i, j, k, false);
+			};
+
+		Vector3<float> gradient( const Vector3<float>& v, const float& i, const float& j, const float& k, bool useWENO );
 
 
 	public :
