@@ -282,6 +282,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\SupportCode\GLMenu.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\SupportCode\GLMenu.h"
+			>
+		</File>
+		<File
 			RelativePath=".\GUI.cpp"
 			>
 		</File>

@@ -33,6 +33,8 @@
 #include "Util.h"
 #include "Camera.h"
 
+#include "GLMenu.h"
+
 #ifdef __APPLE__
 #include "GLUT/glut.h"
 #else
@@ -102,6 +104,8 @@ private:
 
   // Geometry list
   std::vector<Geometry*> mGeometryList;
+  GLMenu mMenu;
+  bool mShowMenu;
 
 };
 

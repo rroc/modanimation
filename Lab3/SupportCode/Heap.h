@@ -52,6 +52,9 @@ public :
 
   void print(std::ostream & os);
 
+  // not actually a good method but it's necessary for the cleanup
+  std::vector<Heapable*>& getNodes() { return this->mNodes; };
+
 protected :
 
   inline unsigned int parent(unsigned int i) { return i/2; }

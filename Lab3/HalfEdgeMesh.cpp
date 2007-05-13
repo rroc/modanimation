@@ -223,7 +223,7 @@ void HalfEdgeMesh::validate()
 
 //-----------------------------------------------------------------------------
 bool HalfEdgeMesh::findNeighbourTriangles(const unsigned int vertexIndex, std::vector<unsigned int>& foundTriangles) const
-	{
+{
 	foundTriangles.clear();
 
 	unsigned int edge = mVerts.at( vertexIndex ).edge;
@@ -233,20 +233,32 @@ bool HalfEdgeMesh::findNeighbourTriangles(const unsigned int vertexIndex, std::v
 	edge = pair;
 
 	int next(0);
+	int face;
 
 	//find the neighbours
 	do
+	{
+		face = mEdges.at( pair ).face;
+
+		for(int i = 0; i < foundTriangles.size(); i++)
 		{
-		foundTriangles.push_back( mEdges.at( pair ).face );
+			// if the face already exists, RETURN
+			if( foundTriangles[i] == face )
+			{
+				return !(foundTriangles.size() == 0);
+			}
+		}
+
+		foundTriangles.push_back( face );
 
 		next = mEdges[pair].next;
 		pair = mEdges[next].pair;
 
-		} while( pair != edge );
+	} while( pair != edge );
 
 
-		return !(foundTriangles.size() == 0);			
-	}
+	return !(foundTriangles.size() == 0);			
+}
 
 float HalfEdgeMesh::area()
 	{

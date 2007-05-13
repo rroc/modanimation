@@ -48,7 +48,34 @@ GUI::GUI()
 	mWindowWidth = DEFAULT_WINDOW_WIDTH;
 	mWindowHeight = DEFAULT_WINDOW_HEIGHT;
 
+	mShowMenu = false;
 
+	mMenu.addMenuLine("(q)   Exit");
+	mMenu.addMenuLine("(p/P) Draw Plane");
+	mMenu.addMenuLine("(W)   Camera Up");
+	mMenu.addMenuLine("(S)   Camera Down");
+	mMenu.addMenuLine("(w)   Accelerate Forwards");
+	mMenu.addMenuLine("(s)   Accelerate Backwards");
+	mMenu.addMenuLine("(a/A) Accelerate Left");
+	mMenu.addMenuLine("(d/D) Accelerate Right");
+	mMenu.addMenuLine("(o/O) Look at Origin");
+	mMenu.addMenuLine("(x/X) Reset Camera");
+	mMenu.addMenuLine("( )   Freeze");
+	mMenu.addMenuLine("(.)   Dolly Pos.");
+	mMenu.addMenuLine("(,)   Dolly Neg.");
+
+	mMenu.addMenuLine("(m/M) Wireframe Render");
+
+	mMenu.addMenuLine(" - - - - - - - - - ");
+	mMenu.addMenuLine("(1)   Load Bunny");
+	mMenu.addMenuLine("(2)   Load Sphere");
+	mMenu.addMenuLine("(3)   Load Cow");
+	mMenu.addMenuLine("(4)   Load Spheres Fractal");
+	mMenu.addMenuLine("(5)   Decimate To ...");
+	mMenu.addMenuLine("(6)   Blended Union (Implicit Spheres)");
+	mMenu.addMenuLine("(7)   Blended Intersection (Implicit Spheres)");
+	mMenu.addMenuLine("(8)   Blended Difference (Implicit Spheres)");
+	mMenu.addMenuLine("(9)   Quadric");
 	}
 
 //-----------------------------------------------------------------------------
@@ -167,9 +194,15 @@ void GUI::displayFunc()
 		}
 
 
-	// Draw fps
+	// Draw fps and menu
 	glDisable(GL_LIGHTING);
 	drawFPS(mCurrentFPS);
+
+	if (mShowMenu)
+	{
+		mMenu.draw();
+	}
+
 	glEnable(GL_LIGHTING);
 
 
@@ -382,6 +415,11 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 	  }
 	  break;
 
+  case 'h' : case 'H':
+	  {
+		  mShowMenu = !mShowMenu;
+	  }
+	break;
   case '1' :
 	  {
 	  std::cerr << "Loading mesh...\n";

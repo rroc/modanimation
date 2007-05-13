@@ -14,6 +14,7 @@
 #include "GUI.h"
 #include <cassert>
 
+#include "Heap.h"
 
 void DecimationMesh::initialize()
 	{
@@ -635,6 +636,20 @@ bool DecimationMesh::cleanup()
 				}
 			}
 		}
+	
+	//UPDATE HEAP
+	std::vector<Heap::Heapable* > heapNodes =  mHeap.getNodes();
+	for (int i = 0; i < heapNodes.size() ; i++)
+	{
+		//HEAP NODES
+		unsigned int edge = heapNodes[i]->position;
+		if( edge != std::numeric_limits<unsigned int>::max() && 
+			UNCOLLAPSED != mCollapsedEdges[edge] )
+		{
+			heapNodes[i]->position = mCollapsedEdges[edge];
+		}
+	}
+
 
 	mNumCollapsedVerts=0;
 	mNumCollapsedEdges=0;
