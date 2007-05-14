@@ -83,6 +83,57 @@ void LevelSetGrid::rebuild()
     int j = it.getJ();
     int k = it.getK();
 
+	//NARROW BANDING
+	float phi = mPhi.getValue(i,j,k);
+	float phiAbs = fabs(phi);
+
+	//float gamma = mOutsideConstant * 1.5f;
+
+	//|phi| <= beta
+	//use the value...
+
+	////|phi| > gamma
+	//if( phiAbs > gamma ) 
+	//	{
+	//	mPhi.setValue(i, j, k, 0.0f );
+	//	mMask.setValue(i, j, k, false);
+	//	}
+
+	//// beta < |phi| <= gamma
+	//else if( phiAbs > mOutsideConstant && phiAbs <= gamma ) 
+	//	{
+	//	float value = 
+	//		( (2.0f*phiAbs + gamma + - 3.0f*mOutsideConstant) * ((phiAbs-gamma)*(phiAbs-gamma)) ) 
+	//		/ pow((gamma - mOutsideConstant), 3.0f );
+	//	mPhi.setValue(i, j, k, value );
+	//	mMask.setValue(i, j, k, true );
+	//	}
+
+	////OUTSIDE GAMMA
+	//if(mPhi.getValue(i,j,k) > mOutsideConstant ) {
+	//	mPhi.setValue(i, j, k, 0.0f);
+	//	mMask.setValue(i, j, k, false);
+	//	}
+	//else if(mPhi.getValue(i,j,k) < mInsideConstant ) {
+	//	mPhi.setValue(i, j, k, 0.0f);
+	//	mMask.setValue(i, j, k, false);
+	//	}
+
+	////OUTSIDE BETA
+	//else if(mPhi.getValue(i,j,k) > mOutsideConstant * (2.0f/3.0f) ) {
+	//	float value = ( (2.0f*phiAbs + mOutsideConstant + - 3.0f*mOutsideConstant * (2.0f/3.0f) ) * ((phiAbs-mOutsideConstant)*(phiAbs-mOutsideConstant)) ) 
+	//				 / pow((mOutsideConstant - mOutsideConstant * (2.0f/3.0f)), 3.0f );
+	//	mPhi.setValue(i, j, k, value);
+	//	mMask.setValue(i, j, k, false);
+	//	}
+	//else if(mPhi.getValue(i,j,k) < mInsideConstant * (2.0f/3.0f)  ) {
+	//	float value = ( (2.0f*phiAbs + mInsideConstant + - 3.0f*mInsideConstant * (2.0f/3.0f) ) * ((phiAbs-mInsideConstant)*(phiAbs-mInsideConstant)) ) 
+	//		/ pow((mInsideConstant - mInsideConstant * (2.0f/3.0f)), 3.0f );
+	//	mPhi.setValue(i, j, k, value);
+	//	mMask.setValue(i, j, k, false);
+	//	}
+
+
     //    std::cerr << mPhi.getValue(i,j,k) << " -> " ;
     if(mPhi.getValue(i,j,k) > mOutsideConstant) {
       mPhi.setValue(i, j, k, mOutsideConstant);
@@ -92,6 +143,7 @@ void LevelSetGrid::rebuild()
       mPhi.setValue(i, j, k, mInsideConstant);
       mMask.setValue(i, j, k, false);
     }
+
     //    std::cerr << mPhi.getValue(i,j,k) << ", " ;
     it++;
   }

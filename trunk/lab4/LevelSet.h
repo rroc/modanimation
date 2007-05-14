@@ -26,6 +26,9 @@ class LevelSet : public Implicit
 		//! Grid spacing
 		float mDx;
 
+		float beta;
+		float gamma;
+
 	public :
 		LevelSet(float dx);
 		LevelSet(float dx, const Implicit & impl);
