@@ -62,7 +62,6 @@ class OperatorAdvect : public LevelSetOperator
 			// Create buffer used to store intermediate results
 			std::vector<float> buffer;
 
-
 			// Determine timestep for stability
 			Vector3<float> v = mVectorField->getMaxValue();
 			float delta = mLS->getDx();
@@ -74,54 +73,133 @@ class OperatorAdvect : public LevelSetOperator
 
 			// Propagate level set with stable timestep dt
 			// until requested time is reached
-			for (float elapsed = 0; elapsed < time;) {
-
+			for (float elapsed = 0; elapsed < time;) 
+				{
 				if (dt > time-elapsed)
 					dt = time-elapsed;
 				elapsed += dt;
 
-				// Iterate over grid and compute the grid values for the next timestep
-				LevelSetGrid::Iterator iter = getGrid().beginNarrowBand();
-				LevelSetGrid::Iterator iend = getGrid().endNarrowBand();
-				while (iter != iend) {
-					unsigned int i = iter.getI();
-					unsigned int j = iter.getJ();
-					unsigned int k = iter.getK();
-
-					// Get vector for grid point (i,j,k) from vector field
-					// Remember to translate (i,j,k) into world coordinates (x,y,z)
-					float x,y,z;
-					this->mLS->grid2World(i,j,k, x,y,z);
-					v = mVectorField->getValue( x,y,z );
-
-
-					//getGrid().getValue(i, j, k);
-					float velocity = - gradient(v, i,j,k, mUseWENO) * v;
-					float phiNext = forwardEuler( i,j,k, velocity, dt );
-					
-
-					// assign new value and store it in the buffer
-					buffer.push_back( phiNext );
-					iter++;
+				//////////////////////////////////////////////////////////////////////////
+				// EULER (first order)
+				//////////////////////////////////////////////////////////////////////////
+				if(!mUseRungeKutta)
+					{
+					nextPhiEuler(dt, buffer );
+					updateGridValues( buffer.begin() );
+					buffer.clear();
 					}
 
-				// Copy new values from buffer to grid
-				iter = getGrid().beginNarrowBand();
-				std::vector<float>::iterator iterBuffer = buffer.begin();
-				while (iter != iend) {
-					unsigned int i = iter.getI();
-					unsigned int j = iter.getJ();
-					unsigned int k = iter.getK();
+				//////////////////////////////////////////////////////////////////////////
+				// RUNGE KUTTA
+				//////////////////////////////////////////////////////////////////////////
+				else
+					{
+					printf("RungeKutta");
+					//store PHI N
+					std::vector<float> bufferPhiN;
+					LevelSetGrid::Iterator iter = getGrid().beginNarrowBand();
+					LevelSetGrid::Iterator iend = getGrid().endNarrowBand();
+					while (iter != iend) 
+						{
+						unsigned int i = iter.getI();
+						unsigned int j = iter.getJ();
+						unsigned int k = iter.getK();
 
-					getGrid().setValue(i,j,k, (*iterBuffer));
-					iter++;
-					iterBuffer++;
+						//store phiN
+						bufferPhiN.push_back( getGrid().getValue( i,j,k ) );
+						iter++;
+						}
+
+					printf(".");
+					//PHI N+1
+					//-----------
+					nextPhiEuler(dt, buffer );
+					updateGridValues( buffer.begin() );
+					buffer.clear();
+
+					printf(".");
+					//PHI N+2
+					//-----------
+					nextPhiEuler(dt, buffer );
+
+					printf(".");
+					//PHI N+(1/2)
+					//-----------
+					for( int i=0, endI=buffer.size(); i<endI; i++ )
+						{
+						buffer[i] = ( 0.75f * bufferPhiN[i] + 0.25f * buffer[i] );
+						}
+					updateGridValues( buffer.begin() );
+					buffer.clear();
+
+					printf(".");
+					//PHI N+(3/2)
+					//-----------
+					nextPhiEuler(dt, buffer );
+
+					printf(".");
+					//FINAL: PHI N+1
+					//-----------
+					for( int i=0, endI=buffer.size(); i<endI; i++ )
+						{
+						buffer[i] = ( (1.0f/3.0f) * bufferPhiN[i] + (2.0f/3.0f) * buffer[i] );
+						}
+					updateGridValues( buffer.begin() );
+					buffer.clear();
+					printf("\n");
 					}
-				buffer.clear();
+
 				std::cerr << elapsed << std::endl;
 				}
 			}
 
+		void nextPhiEuler( float dt, std::vector<float>& buffer  )
+			{
+			Vector3<float> v;
+
+			// Iterate over grid and compute the grid values for the next timestep
+			LevelSetGrid::Iterator iter = getGrid().beginNarrowBand();
+			LevelSetGrid::Iterator iend = getGrid().endNarrowBand();
+
+			while (iter != iend) 
+				{
+				unsigned int i = iter.getI();
+				unsigned int j = iter.getJ();
+				unsigned int k = iter.getK();
+
+				// Get vector for grid point (i,j,k) from vector field
+				// Remember to translate (i,j,k) into world coordinates (x,y,z)
+				float x,y,z;
+				this->mLS->grid2World(i,j,k, x,y,z);
+				v = mVectorField->getValue( x,y,z );
+
+				//getGrid().getValue(i, j, k);
+				float velocity = - gradient(v, i,j,k, mUseWENO) * v;
+				float phiNext  = forwardEuler( i,j,k, velocity, dt );
+
+				// assign new value and store it in the buffer
+				buffer.push_back( phiNext );
+				iter++;
+				}
+			}
+
+		void updateGridValues(std::vector<float>::iterator bufferStart )
+			{
+			// Copy new values from buffer to grid
+			LevelSetGrid::Iterator iter = getGrid().beginNarrowBand();
+			LevelSetGrid::Iterator iend = getGrid().endNarrowBand();
+
+			while (iter != iend) 
+				{
+				unsigned int i = iter.getI();
+				unsigned int j = iter.getJ();
+				unsigned int k = iter.getK();
+
+				getGrid().setValue(i,j,k, (*bufferStart));
+				iter++;
+				bufferStart++;
+				}
+			}
 	};
 
 #endif

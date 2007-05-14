@@ -195,8 +195,11 @@ void LevelSet::setBoundingBox(const Bbox & b)
 
 void LevelSet::setNarrowBandWidth(float width)
 	{
-	mGrid.setInsideConstant(-width*0.5*mDx);
-	mGrid.setOutsideConstant(width*0.5*mDx);
+	beta = width*0.5f*mDx;
+	gamma = beta * 1.5f;
+
+	mGrid.setInsideConstant(-gamma);
+	mGrid.setOutsideConstant(gamma);
 	mGrid.rebuild();
 	}
 
