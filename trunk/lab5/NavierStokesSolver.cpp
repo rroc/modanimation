@@ -92,6 +92,15 @@ void NavierStokesSolver::solve(std::vector<Geometry*>& geometryList, float dt)
 			// Build the velocity field used for advecting the level set
 			ls->buildAdvectionField();
 
+			// Compute Energy
+			static float potentialEnergy, kineticEnergy;
+			calculateEnergy(ls, potentialEnergy, kineticEnergy);
+
+			// Display energy
+			printf("Current Potential Energy: %f\n", potentialEnergy);
+			printf("Current Kinetic Energy: %f\n", kineticEnergy);
+			printf("Total Energy: %f\n", kineticEnergy + potentialEnergy);
+
 			delete mCurrentField;
 			delete mOldField;
 			delete mSolidMask;
@@ -409,6 +418,55 @@ void NavierStokesSolver::velocityFieldCorrection(VolumeLevelSet* ls, float dt)
 		mOldField->setValue(i,j,k, newV);
 		}
 	}
+
+void NavierStokesSolver::calculateEnergy(VolumeLevelSet* ls, float& potentialEnergy, float& kineticEnergy)
+{
+	potentialEnergy = 0.0f;
+	kineticEnergy	= 0.0f;
+
+	const float oo_dx = 1.0/mCellSize;
+	const float epsilon = 1.5;
+
+	const VolumeLevelSet::InsideMask& insideMask = ls->getInsideMask();
+	for (unsigned int p = 0; p < insideMask.size(); p++)
+	{
+		const Vector3<int>& pos = insideMask[p];
+		int i = pos.x();
+		int j = pos.y();
+		int k = pos.z();
+
+		// Compute the voxel mass using a Heavy-Side Function
+		const float phi0 = ls->getValue(i,j,k)*oo_dx;
+
+		float voxelMass;
+		if (phi0 > epsilon){
+			voxelMass = 0.0;
+			}
+		else if (phi0 < -epsilon){
+			voxelMass = 1.0;
+			}
+		else{
+			voxelMass = 0.5 - phi0/(epsilon*2.0) - 1/(2.0*M_PI)*sin(phi0*M_PI/epsilon);
+			}
+
+		// grid to world coordinates
+		float x, height, z;
+		ls->grid2World(i, j, k, x, height, z);
+
+		// Velocity
+		Vector3<float> velocity = ls->getVelocityField()->getValue(i, j, k);
+		
+		// Kinetic Energy
+		kineticEnergy += voxelMass * (velocity*velocity);
+
+		// Potential Energy
+		potentialEnergy += voxelMass * mG * height;
+	}
+
+	// Scale the final energy to the volume
+	kineticEnergy *= mCellSize*mCellSize*mCellSize;
+	potentialEnergy *= mCellSize*mCellSize*mCellSize;
+}
 
 float NavierStokesSolver::calculateVolume(VolumeLevelSet* ls)
 	{
