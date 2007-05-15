@@ -401,6 +401,9 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 	  }
 	  break;
 
+
+///////////////////////////////////////////////////////////////////////
+
   case '1' :
 	  {
 		  // Create an implicit sphere
@@ -477,7 +480,8 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 		  LevelSet * LS = getGeometry<LevelSet>("LevelSet");
 
 		  OperatorReinitialize op(LS);
-		  op.propagate(0.05);
+		  //op.propagate(0.05);
+		  op.propagateTo(1.2f);
 
 		  // Triangulate and calculate face normals
 		  LS->triangulate<SimpleMesh>(0.02);
@@ -538,7 +542,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 		  LevelSet * LS = getGeometry<LevelSet>("LevelSet");
 
 		  OperatorMeanCurvatureFlow op(LS, 1);
-		  op.propagate(0.005);
+		  op.propagate(0.001);
 
 		  // Triangulate and calculate face normals
 		  LS->triangulate<SimpleMesh>(0.02);
@@ -561,7 +565,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 
 		  ConstantVectorField field(Vector3<float>(0, 0, -1));
 		  OperatorAdvect op(LS, &field, true, true );
-		  op.propagate(0.10);
+		  op.propagate(0.01);
 
 		  // Triangulate and calculate face normals
 		  LS->triangulate<SimpleMesh>(0.02);

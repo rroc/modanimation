@@ -72,6 +72,7 @@ public :
 
 		float x,y,z;
 
+		//EULER
 		float phiCurrent	= getGrid().getValue(i, j, k);
 		float phiNext		= phiCurrent + dPhiDt * dt;
 
