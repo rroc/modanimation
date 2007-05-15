@@ -280,33 +280,33 @@ void NavierStokesSolver::processVoxel(int i, int j, int k, float& element, float
 	{
 	//printf("Build poisson matrix not yet implemented!\n");
 
-	element = 1.0f;
+	//element = 1.0f;
 
-	//If outside AND solid
-	if( (ls->getValue(i,j,k) > ls->getInsideConstant()) && (mSolidMask->getValue(i,j,k)) )
-		{
-		// Voxel is inside a solid
-		element = 0.0f;
-		centerElement++;
-		}
-
-	//if (ls->getValue(i,j,k) <= ls->getInsideConstant())
+	////If outside AND solid
+	//if( (ls->getValue(i,j,k) > ls->getInsideConstant()) && (mSolidMask->getValue(i,j,k)) )
 	//	{
-	//	// Voxel is inside the fluid...
-	//	element = 1.0f;
+	//	// Voxel is inside a solid
+	//	element = 0.0f;
+	//	centerElement++;
 	//	}
-	//else{
-	//	if (mSolidMask->getValue(i,j,k))
-	//		{
-	//		// Voxel is inside a solid
-	//		element = 0.0f;
-	//		centerElement++;
-	//		}
-	//	else{
-	//		// Voxel is free (filled with "air")
-	//		element = 1.0f;
-	//		}
-	//	}
+
+	if (ls->getValue(i,j,k) <= ls->getInsideConstant())
+		{
+		// Voxel is inside the fluid...
+		element = 1.0f;
+		}
+	else{
+		if (mSolidMask->getValue(i,j,k))
+			{
+			// Voxel is inside a solid
+			element = 0.0f;
+			centerElement++;
+			}
+		else{
+			// Voxel is free (filled with "air")
+			element = 1.0f;
+			}
+		}
 	}
 
 void NavierStokesSolver::buildMatrix(VolumeLevelSet* ls)
