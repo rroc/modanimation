@@ -27,6 +27,7 @@ class NavierStokesSolver{
     void processVoxel(int i, int j, int k, float& element, float& centerElement, VolumeLevelSet* ls);
     void claculateDivergence(VolumeLevelSet* ls);
     float calculateVolume(VolumeLevelSet* ls);
+	void calculateEnergy(VolumeLevelSet* ls, float& potentialEnergy, float& kineticEnergy);
 		void swapFields();
 
 		// Solver steps
