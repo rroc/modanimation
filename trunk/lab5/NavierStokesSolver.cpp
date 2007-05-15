@@ -76,7 +76,6 @@ void NavierStokesSolver::solve(std::vector<Geometry*>& geometryList, float dt)
 			solvePoissonEquation(ls, dt);
 			velocityFieldCorrection(ls, dt);
 
-
 			// Once again enforce dirichlet boundary condition
 			// The pressure correction will break the dirichlet boundary condition
 			// so this has to be done
@@ -122,7 +121,8 @@ void NavierStokesSolver::selfAdvect(VolumeLevelSet* ls, float dt)
 	// Perform semi-lagrangian advection of the velocity field
 
 	const VolumeLevelSet::VolumeMask& volumeMask = ls->getVolumeMask();
-	for (unsigned int p = 0; p < volumeMask.size(); p++){
+	for (unsigned int p = 0; p < volumeMask.size(); p++)
+		{
 		const Vector3<int>& pos = volumeMask[p];
 		int i = pos.x();
 		int j = pos.y();
@@ -188,8 +188,10 @@ void NavierStokesSolver::enforceDirichletBoundaryCondition(std::vector<Geometry*
 	// Fluid intervals
 
 	assert(solids.size() < geometryList.size());
+
 	const VolumeLevelSet::VolumeMask& volumeMask = fluid->getVolumeMask();
-	for (unsigned int p = 0; p < volumeMask.size(); p++){
+	for (unsigned int p = 0; p < volumeMask.size(); p++)
+		{
 		const Vector3<int>& pos = volumeMask[p];
 		int i = pos.x();
 		int j = pos.y();
@@ -232,13 +234,16 @@ void NavierStokesSolver::enforceDirichletBoundaryCondition(std::vector<Geometry*
 		if (fluid->getValue(i,j,k) <= fluid->getInsideConstant()){
 			Vector3<float> v = field->getValue(i,j,k);
 
-			if (solidInXDirection){
+			if (solidInXDirection)
+				{
 				v.x() = 0;
 				}
-			if (solidInYDirection){
+			if (solidInYDirection)
+				{
 				v.y() = 0;
 				}
-			if (solidInZDirection){
+			if (solidInZDirection)
+				{
 				v.z() = 0;
 				}
 
@@ -328,6 +333,10 @@ void NavierStokesSolver::buildMatrix(VolumeLevelSet* ls)
 		row.c = -6.0;
 		row.cPos = pos;
 
+		//Make distinction of the voxels:
+		// Fluid 1
+		// Solid 0
+		// Empty 1
 		// Process voxels in x direction
 		processVoxel(i+1,j,k, row.xp1, row.c,ls);
 		processVoxel(i-1,j,k, row.xm1, row.c,ls);
@@ -352,7 +361,6 @@ void NavierStokesSolver::buildMatrix(VolumeLevelSet* ls)
 		row.zp1 /= dx2;
 		row.zm1 /= dx2;
 		row.c /= dx2;
-
 
 		mMatrix.addRow(row);
 		}
@@ -379,13 +387,13 @@ void NavierStokesSolver::solvePoissonEquation(VolumeLevelSet* ls, float dt)
 	// Solve the system using conjugate gradient.
 	ConjugateGradient<FluidSolverSparseMatrix, FluidSolverVector, float> CGSolver(100, 1e-3, pField, qField, rField, ls);
 	CGSolver.solve(matrix, pressureVector, RHSVector);
+
 	printf("Projection poisson equation solved in %i iterations. Tolerance: %e\n", CGSolver.getNumIter(), CGSolver.getTolerance());
 
 	delete pField;
 	delete qField;
 	delete rField;
 	}
-
 
 
 void NavierStokesSolver::velocityFieldCorrection(VolumeLevelSet* ls, float dt)
@@ -508,11 +516,13 @@ void NavierStokesSolver::calculateNewTimestep(std::vector<Geometry*>& geometryLi
 	std::vector<LevelSet*> solids;
 	VolumeLevelSet* fluid = NULL;
 	for (unsigned int i = 0; i < geometryList.size(); i++){
-		if (typeid(*geometryList[i]) == typeid(VolumeLevelSet)){
+		if (typeid(*geometryList[i]) == typeid(VolumeLevelSet))
+			{
 			fluid = dynamic_cast<VolumeLevelSet *>(geometryList[i]);
 			}
 		else{
-			if (typeid(*geometryList[i]) == typeid(LevelSet)){
+			if (typeid(*geometryList[i]) == typeid(LevelSet))
+				{
 				solids.push_back(dynamic_cast<LevelSet *>(geometryList[i]));
 				}
 			}
@@ -527,7 +537,8 @@ void NavierStokesSolver::calculateNewTimestep(std::vector<Geometry*>& geometryLi
 	const float dx = mCellSize;
 	float speed = 0;
 	float maxTimestep = std::numeric_limits<float>::max();
-	while (iter != iend) {
+	while (iter != iend) 
+		{
 		int i = iter.getI();
 		int j = iter.getJ();
 		int k = iter.getK();
@@ -537,21 +548,22 @@ void NavierStokesSolver::calculateNewTimestep(std::vector<Geometry*>& geometryLi
 		speed = std::max(speed, vLen);
 
 		// Compute distance vector to solid at this point
+		// When a hit is predicted decrease the time step
+		// to prevent intersection
 		for (int solidId = 0; solidId < numSolids; solidId++)
 			{
 			const LevelSet& solid = *(solids[solidId]);
 
 			// Calculate normal
-			Vector3<float> normal(solid.diffXpm(i,j,k),
-				solid.diffYpm(i,j,k),
-				solid.diffZpm(i,j,k));
+			Vector3<float> normal( solid.diffXpm(i,j,k), solid.diffYpm(i,j,k), solid.diffZpm(i,j,k));
 			normal.normalize();
 
 			// Create distance vector
 			const float closestDistToSolid = fabs(solid.getValue(i,j,k));
 			Vector3<float> distance = normal*closestDistToSolid;
 
-			// Calculate speed towards closest point on solid
+			// Calculate speed towards closest point on solid 
+			// (project the v into the normal direction)
 			const float speed2 = fabs(distance*v);
 
 			// Calculate time to reach the closest point given the current velocity
@@ -564,11 +576,9 @@ void NavierStokesSolver::calculateNewTimestep(std::vector<Geometry*>& geometryLi
 
 		iter++;
 		}
-
 	// Calculate largest timestep that satisfies the CFL condition. Assumes velocity is in unit m/s
 	const float alpha = 0.7;
 	mLargestDT = std::min(alpha*mCellSize/speed, maxTimestep);
-
 	}
 
 
