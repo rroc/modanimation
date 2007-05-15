@@ -9,7 +9,7 @@ class SemiLagrangianIntegrator{
     SemiLagrangianIntegrator();
     ~SemiLagrangianIntegrator();
 
-    Vector3<float> integrate(const Vector3<int>& x, const Volume<Vector3<float> >& y, const float dt, const unsigned int numSteps = 3) const;
+    Vector3<float> integrate(const Vector3<int>& pos, const Volume<Vector3<float> >& vectorField, const float dt, const unsigned int numSteps = 3) const;
 
 	private:
 };
