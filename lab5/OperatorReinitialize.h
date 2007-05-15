@@ -85,7 +85,10 @@ public :
         unsigned int j = iter.getJ();
         unsigned int k = iter.getK();
 
-        getGrid().setValue(i,j,k, (*iterBuffer));
+        if (fabs(getGrid().getValue(i,j,k)) >= 0.5*dx)
+        {
+          getGrid().setValue(i,j,k, (*iterBuffer));
+        }
         iter++;
         iterBuffer++;
       }
