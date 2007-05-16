@@ -72,6 +72,8 @@ private:
   void drawCube(Real angle);
   void drawFPS(float fps);
 
+  void deleteGeometry();
+
   // GUI parameters
   unsigned int mWindowHeight;
   unsigned int mWindowWidth;
