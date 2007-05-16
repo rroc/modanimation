@@ -66,14 +66,15 @@ struct Bbox
   friend Bbox boxIntersection(const Bbox& b1, const Bbox &b2)
 	  {
 	  Bbox b;
-	  b.pMin.x() = std::min(b1.pMin.x(), b2.pMin.x());
-	  b.pMin.y() = std::min(b1.pMin.y(), b2.pMin.y());
-	  b.pMin.z() = std::min(b1.pMin.z(), b2.pMin.z());
+	  b.pMin.x() = std::max(b1.pMin.x(), b2.pMin.x());
+	  b.pMin.y() = std::max(b1.pMin.y(), b2.pMin.y());
+	  b.pMin.z() = std::max(b1.pMin.z(), b2.pMin.z());
 
-	  b.pMax.x() = std::max(b1.pMax.x(), b2.pMax.x());
-	  b.pMax.y() = std::max(b1.pMax.y(), b2.pMax.y());
-	  b.pMax.z() = std::max(b1.pMax.z(), b2.pMax.z());
+	  b.pMax.x() = std::min(b1.pMax.x(), b2.pMax.x());
+	  b.pMax.y() = std::min(b1.pMax.y(), b2.pMax.y());
+	  b.pMax.z() = std::min(b1.pMax.z(), b2.pMax.z());
 	  return b;
+
 	  }
 
   friend Bbox pointIntersection(const Bbox& b, const Vector3<float> & v)
