@@ -28,7 +28,7 @@ using namespace std;
 
 //-----------------------------------------------------------------------------
 GUI::GUI()
-	{
+{
 	mDrawXZPlane = true;
 	mCurrentFPS = 0.0;
 	mTimeSinceLastFPS = 0.0;
@@ -76,19 +76,30 @@ GUI::GUI()
 	mMenu.addMenuLine("(7)   Blended Intersection (Implicit Spheres)");
 	mMenu.addMenuLine("(8)   Blended Difference (Implicit Spheres)");
 	mMenu.addMenuLine("(9)   Quadric");
-	}
+	mMenu.addMenuLine("(y)   Blended Union (Quadric Spheres)");
+	mMenu.addMenuLine("(k)   Union (Quadric Spheres)");
+	mMenu.addMenuLine("(c)   Enable/Disable Draw Curvature");
+	mMenu.addMenuLine("(g)   Enable/Disable Draw Gradients");
+}
 
 //-----------------------------------------------------------------------------
 GUI::~GUI()
-	{
-	for (unsigned int i = 0; i < mGeometryList.size(); i++){
-		delete mGeometryList[i];
-		}
-	}
+{
+	deleteGeometry();
+}
 
 //-----------------------------------------------------------------------------
+void GUI::deleteGeometry()
+{
+	for (unsigned int i = 0; i < mGeometryList.size(); i++){
+		delete mGeometryList[i];
+	}
+
+	mGeometryList.clear();
+}
+
 void GUI::init()
-	{
+{
 	unsigned int winPosX, winPosY;
 	winPosX = 100;//mScreenWidth/2 - mWindowWidth/2;
 	winPosY = 100;//mScreenHeight/2 - mWindowHeight/2;
@@ -135,19 +146,19 @@ void GUI::init()
 	glutPositionWindow(winPosX, winPosY);
 
 
-	}
+}
 
 //-----------------------------------------------------------------------------
 void GUI::update()
-	{
+{
 
 	// Force redraw graphics
 	glutPostRedisplay();
-	}
+}
 
 //-----------------------------------------------------------------------------
 void GUI::displayFunc()
-	{
+{
 	// Time stuff
 	Real timestamp = mClockArray[ANIMATION_CLOCK].read();
 	Real dt = timestamp - mFrameTimestamp;
@@ -159,7 +170,7 @@ void GUI::displayFunc()
 		mCurrentFPS = mFramecounter/timelimit;
 		mFramecounter = 0;
 		mTimeSinceLastFPS = timestamp;
-		}
+	}
 
 
 	// initializing draw
@@ -177,7 +188,7 @@ void GUI::displayFunc()
 	glDisable(GL_LIGHTING);
 	if (mDrawXZPlane){
 		drawXZplane(200,2.0,10);
-		}
+	}
 	glEnable(GL_LIGHTING);
 
 
@@ -191,7 +202,7 @@ void GUI::displayFunc()
 	glColor3f(0,0,0.7);
 	for (unsigned int i = 0; i < mGeometryList.size(); i++){
 		mGeometryList[i]->draw();
-		}
+	}
 
 
 	// Draw fps and menu
@@ -226,11 +237,11 @@ void GUI::displayFunc()
 
 	glFlush();
 	glutSwapBuffers();
-	}
+}
 
 //-----------------------------------------------------------------------------
 void GUI::winReshapeFunc(GLint newWidth, GLint newHeight)
-	{
+{
 	mWindowWidth = newWidth;
 	mWindowHeight = newHeight;
 
@@ -242,98 +253,98 @@ void GUI::winReshapeFunc(GLint newWidth, GLint newHeight)
 		glLoadIdentity();
 		gluPerspective(45.0f, (GLfloat)(mWindowWidth)/(GLfloat)(mWindowHeight),NEAR_PLANE, FAR_PLANE);
 		glMatrixMode(GL_MODELVIEW);
-		}
 	}
+}
 
 //-----------------------------------------------------------------------------
 void GUI::mouseFunc(GLint button, GLint action, GLint mouseX, GLint mouseY)
-	{
+{
 	if (mMousePos[X] == -1 && mMousePos[Y] == -1)
-		{
+	{
 		mMousePos[X] = mouseX;
 		mMousePos[Y] = mouseY;
 
 		mOldMousePos[X] = mouseX;
 		mOldMousePos[Y] = mouseY;
-		}
+	}
 	else
-		{
+	{
 		mOldMousePos[X] = mMousePos[X];
 		mOldMousePos[Y] = mMousePos[Y];
 
 		mMousePos[X] = mouseX;
 		mMousePos[Y] = mWindowHeight-mouseY;
-		}
+	}
 
 	glutPostRedisplay();
-	}
+}
 
 //-----------------------------------------------------------------------------
 void GUI::mouseActiveMotionFunc(GLint mouseX, GLint mouseY)
-	{
+{
 	Real mx, my, mOldX, mOldY;
 	if (mMousePos[X] == -1 && mMousePos[Y] == -1)
-		{
+	{
 		mMousePos[X] = mouseX;
 		mMousePos[Y] = mouseY;
 
 		mOldMousePos[X] = mouseX;
 		mOldMousePos[Y] = mouseY;
-		}
+	}
 	else
-		{
+	{
 		mOldMousePos[X] = mMousePos[X];
 		mOldMousePos[Y] = mMousePos[Y];
 
 		mMousePos[X] = mouseX;
 		mMousePos[Y] = mWindowHeight-mouseY;
-		}
+	}
 
 	//if (button == GLUT_LEFT_BUTTON)
-		{
+	{
 		getMouseScreenCoordinates(mOldMousePos[X], mOldMousePos[Y], mOldX,mOldY);
 		getMouseScreenCoordinates(mMousePos[X], mMousePos[Y], mx,my);
 
 		mCam.rotateXY((mOldX - mx)/2.0, (mOldY - my)/2.0);
-		}
-
-		glutPostRedisplay();
 	}
+
+	glutPostRedisplay();
+}
 
 //-----------------------------------------------------------------------------
 void GUI::mousePassiveMotionFunc(GLint mouseX, GLint mouseY)
-	{
+{
 	if (mMousePos[X] == -1 && mMousePos[Y] == -1)
-		{
+	{
 		mMousePos[X] = mouseX;
 		mMousePos[Y] = mouseY;
 
 		mOldMousePos[X] = mouseX;
 		mOldMousePos[Y] = mouseY;
-		}
+	}
 	else
-		{
+	{
 		mOldMousePos[X] = mMousePos[X];
 		mOldMousePos[Y] = mMousePos[Y];
 
 		mMousePos[X] = mouseX;
 		mMousePos[Y] = mWindowHeight-mouseY;
-		}
+	}
 
 	glutPostRedisplay();
-	}
+}
 
 
 
 //-----------------------------------------------------------------------------
 void GUI::keyboardUpFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
-	{
+{
 	mCam.stopAcc();
-	}
+}
 
 //-----------------------------------------------------------------------------
 void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
-	{
+{
 	switch(keycode){
   case 'q' : case 'Q' :
 	  exit(0);
@@ -344,73 +355,73 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 
   case 'W':
 	  {
-	  mCam.accUp();
-	  break;
+		  mCam.accUp();
+		  break;
 	  }
   case 'S':
 	  {
-	  mCam.accDown();
-	  break;
+		  mCam.accDown();
+		  break;
 	  }
   case 'w' :  // move forward
 	  {
-	  mCam.accForward();
-	  break;
+		  mCam.accForward();
+		  break;
 	  }
   case 's' :  // move backward
 	  {
-	  mCam.accBackward();
-	  break;
+		  mCam.accBackward();
+		  break;
 	  }
   case 'a' : case 'A' :
 	  {
-	  mCam.accLeft();
-	  break;
+		  mCam.accLeft();
+		  break;
 	  }
   case 'd' : case 'D' :
 	  {
-	  mCam.accRight();
-	  break;
+		  mCam.accRight();
+		  break;
 	  }
   case 'o' : case 'O' :  // center on origin
 	  {
-	  mCam.lookAtOrigo();
-	  break;
+		  mCam.lookAtOrigo();
+		  break;
 	  }
   case ' ' : // full stop
 	  {
-	  mCam.stop();
+		  mCam.stop();
 	  }
 	  break;
   case 'x' : case 'X' :  // return to original position
 	  {
-	  mCam.reset();
+		  mCam.reset();
 	  }
 	  break;
   case '.' :
 	  {
-	  mCam.dolly(.1);
+		  mCam.dolly(.1);
 	  }
 	  break;
   case ',' :
 	  {
-	  mCam.dolly(-.1);
+		  mCam.dolly(-.1);
 	  }
 	  break;
   case 'm' : case 'M':
 	  {
-	  // Wireframe rendering
-	  glDisable(GL_LIGHTING);
-	  glDisable(GL_CULL_FACE);
-	  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		  // Wireframe rendering
+		  glDisable(GL_LIGHTING);
+		  glDisable(GL_CULL_FACE);
+		  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	  }
 	  break;
   case 'n' : case 'N':
 	  {
-	  // Solid face rendering
-	  glEnable(GL_LIGHTING);
-	  glEnable(GL_CULL_FACE);
-	  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		  // Solid face rendering
+		  glEnable(GL_LIGHTING);
+		  glEnable(GL_CULL_FACE);
+		  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	  }
 	  break;
@@ -419,264 +430,347 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 	  {
 		  mShowMenu = !mShowMenu;
 	  }
-	break;
+	  break;
   case '1' :
 	  {
-	  std::cerr << "Loading mesh...\n";
+		  std::cerr << "Loading mesh...\n";
 
-	  // Open input file
-	  std::string filename("../Objs/bunnySmall.obj");
+		  // Open input file
+		  std::string filename("../Objs/bunnySmall.obj");
 
-	  // Create new mesh
-	  SimpleMesh* mesh = new SimpleMesh;
+		  // Create new mesh
+		  SimpleMesh* mesh = new SimpleMesh;
 
-	  // Load mesh and add to geometry list
-	  std::ifstream infile;
-	  ObjIO objIO;
-	  infile.open(filename.c_str());
-	  objIO.load(mesh, infile);
-	  mGeometryList.push_back(mesh);
+		  // Load mesh and add to geometry list
+		  std::ifstream infile;
+		  ObjIO objIO;
+		  infile.open(filename.c_str());
+		  objIO.load(mesh, infile);
+		  mGeometryList.push_back(mesh);
 
-	  // Calculate vertex normals
-	  mesh->calculateVertexNormals();
+		  // Calculate vertex normals
+		  mesh->calculateVertexNormals();
 
-	  // Calculate curvature
-	  mesh->calcCurv();
+		  // Calculate curvature
+		  mesh->calcCurv();
 
-	  // Move the mesh to a nice location
-	  mesh->translate(0.5, 0, -0.5);
-	  mesh->rotate(0, -0.15*M_PI, 0);
-	  mesh->scale(0.1);
+		  // Move the mesh to a nice location
+		  mesh->translate(0.5, 0, -0.5);
+		  mesh->rotate(0, -0.15*M_PI, 0);
+		  mesh->scale(0.1);
 	  }
 	  break;
   case '2' :
 	  {
-	  std::cerr << "Loading half edge mesh...\n";
+		  std::cerr << "Loading half edge mesh...\n";
 
-	  // Open input file
-	  std::string filename("../Objs/sphere1.0.obj");
+		  // Open input file
+		  std::string filename("../Objs/sphere1.0.obj");
 
-	  // Create new mesh
-	  HalfEdgeMesh* mesh = new HalfEdgeMesh;
+		  // Create new mesh
+		  HalfEdgeMesh* mesh = new HalfEdgeMesh;
 
-	  // Load mesh and add to geometry list
-	  std::ifstream infile;
-	  ObjIO objIO;
-	  infile.open(filename.c_str());
-	  objIO.load(mesh, infile);
+		  // Load mesh and add to geometry list
+		  std::ifstream infile;
+		  ObjIO objIO;
+		  infile.open(filename.c_str());
+		  objIO.load(mesh, infile);
 
-	  mesh->validate();
-	  mesh->calculateFaceNormals();
-	  mesh->calculateVertexNormals();
+		  mesh->validate();
+		  mesh->calculateFaceNormals();
+		  mesh->calculateVertexNormals();
 
-	  mesh->setShadingFlag(Mesh::SMOOTH_SHADING);
+		  mesh->setShadingFlag(Mesh::SMOOTH_SHADING);
 
-	  mGeometryList.push_back(mesh);
-	  mesh->scale(0.1);
+		  mGeometryList.push_back(mesh);
+		  mesh->scale(0.1);
 	  }
 	  break;
   case '3' :
 	  {
-	  std::cerr << "Loading simple decimation mesh...\n";
+		  std::cerr << "Loading simple decimation mesh...\n";
 
-	  // Open input file
-	  std::string filename("../Objs/cow.obj");
+		  // Open input file
+		  std::string filename("../Objs/cow.obj");
 
-	  // Create new mesh
-	  SimpleDecimationMesh* mesh = new SimpleDecimationMesh;
+		  // Create new mesh
+		  SimpleDecimationMesh* mesh = new SimpleDecimationMesh;
 
-	  // Load mesh and add to geometry list
-	  std::ifstream infile;
-	  ObjIO objIO;
-	  infile.open(filename.c_str());
-	  objIO.load(mesh, infile);
+		  // Load mesh and add to geometry list
+		  std::ifstream infile;
+		  ObjIO objIO;
+		  infile.open(filename.c_str());
+		  objIO.load(mesh, infile);
 
-	  mesh->validate();
-	  mesh->calculateFaceNormals();
-	  mesh->calculateVertexNormals();
+		  mesh->validate();
+		  mesh->calculateFaceNormals();
+		  mesh->calculateVertexNormals();
 
-	  mesh->initialize();
-	  mesh->setShadingFlag(Mesh::FLAT_SHADING);
+		  mesh->initialize();
+		  mesh->setShadingFlag(Mesh::FLAT_SHADING);
 
-	  mGeometryList.push_back(mesh);
+		  mGeometryList.push_back(mesh);
 	  }
 	  break;
   case '4' :
 	  {
-//	  SimpleDecimationMesh * mesh = static_cast<SimpleDecimationMesh *>(mGeometryList[mGeometryList.size()-1]);
-//	  mesh->decimate();
+		  //	  SimpleDecimationMesh * mesh = static_cast<SimpleDecimationMesh *>(mGeometryList[mGeometryList.size()-1]);
+		  //	  mesh->decimate();
 
-	  SphereFractal* sf = new SphereFractal(2);
-	  sf->scale(1.0);
+		  SphereFractal* sf = new SphereFractal(3);
+		  sf->scale(1.0);
 
-	  // Triangulate the sphere using a sample distance of 0.02
-	  // using a SimpleMesh and compute face and vertex normals
-	  //sf->triangulate<SimpleMesh>(0.02);
-	  //sf->getMesh<SimpleMesh>().calculateFaceNormals();
-	  //sf->getMesh<SimpleMesh>().calculateVertexNormals();
-	  sf->triangulate<QuadricDecimationMesh>(0.1);
-	  sf->getMesh<QuadricDecimationMesh>().calculateFaceNormals();
-	  sf->getMesh<QuadricDecimationMesh>().calculateVertexNormals();
+		  // Triangulate the sphere using a sample distance of 0.02
+		  // using a SimpleMesh and compute face and vertex normals
+		  //sf->triangulate<SimpleMesh>(0.02);
+		  //sf->getMesh<SimpleMesh>().calculateFaceNormals();
+		  //sf->getMesh<SimpleMesh>().calculateVertexNormals();
+		  sf->triangulate<QuadricDecimationMesh>(0.025);
+		  sf->getMesh<QuadricDecimationMesh>().calculateFaceNormals();
+		  sf->getMesh<QuadricDecimationMesh>().calculateVertexNormals();
 
-	  // Add it to the geometry list
-	  mGeometryList.push_back(sf);
+		  // Add it to the geometry list
+		  mGeometryList.push_back(sf);
 	  }
 	  break;
 
   case '5' :
 	  {
-	  unsigned int targetFaces;
-	  std::cout << "Enter target number of faces: ";
-	  std::cin >> targetFaces;
+		  unsigned int targetFaces;
+		  std::cout << "Enter target number of faces: ";
+		  std::cin >> targetFaces;
 
-	  if( mGeometryList.size()>0 )
+		  if( mGeometryList.size()>0 )
 		  {
-		  SphereFractal* sf = static_cast<SphereFractal*>(mGeometryList[mGeometryList.size()-1]);
-		  QuadricDecimationMesh& mesh = sf->getMesh<QuadricDecimationMesh>();
-		  mesh.initialize();
-		  mesh.decimate(targetFaces);
-		  //mesh.cleanup();
+			  SphereFractal* sf = static_cast<SphereFractal*>(mGeometryList[mGeometryList.size()-1]);
+			  QuadricDecimationMesh& mesh = sf->getMesh<QuadricDecimationMesh>();
+			  mesh.initialize();
+			  mesh.decimate(targetFaces);
+			  //mesh.cleanup();
 		  }
 	  }
 	  break;
   case '6' :
 	  {
-	  // Create an implicit sphere and transform it
-	  //   Sphere * s1 = new Sphere(1.0);
-	  //   //s1->translate(0, 0, 0.1);
-	  //   s1->scale(1.0);
+		  //// Create an implicit sphere and transform it
+		  //   Sphere * s1 = new Sphere(1.0);
+		  //   //s1->translate(0, 0, 0.1);
+		  //   s1->scale(1.0);
 
-	  //// Triangulate the sphere using a sample distance of 0.02
-	  //// using a SimpleMesh and compute face and vertex normals
-	  //s1->triangulate<SimpleMesh>(0.1);
-	  //s1->getMesh<SimpleMesh>().calculateFaceNormals();
-	  //s1->getMesh<SimpleMesh>().calculateVertexNormals();
+		  //// Triangulate the sphere using a sample distance of 0.02
+		  //// using a SimpleMesh and compute face and vertex normals
+		  //s1->triangulate<SimpleMesh>(0.1);
+		  //s1->getMesh<SimpleMesh>().calculateFaceNormals();
+		  //s1->getMesh<SimpleMesh>().calculateVertexNormals();
 
-	  //// Add it to the geometry list
-	  //mGeometryList.push_back(s1);
+		  //// Add it to the geometry list
+		  //mGeometryList.push_back(s1);
 
 
-	  Sphere * s1 = new Sphere(1.0);
-	  s1->translate(0, 0, 0.1);
-	  s1->scale(0.2);
+		  Sphere * s1 = new Sphere(1.0);
+		  s1->translate(0, 0, 0.15);
+		  s1->scale(0.2);
 
-	  // Create an implicit sphere and transform it
-	  Sphere * s2 = new Sphere(1.0);
-	  s2->translate(0, 0, -0.1);
-	  s2->scale(0.2);
+		  // Create an implicit sphere and transform it
+		  Sphere * s2 = new Sphere(1.0);
+		  s2->translate(0, 0, -0.15);
+		  s2->scale(0.2);
 
-	  //Union* blob = new Union( s1, s2 );
-	  BlendedUnion* blob = new BlendedUnion( s1, s2, 2 );
+		  //Intersection* blob = new Intersection( s1, s2 );
+		  BlendedUnion* blob = new BlendedUnion( s1, s2, 5 );
 
-	  // Triangulate the sphere using a sample distance of 0.02
-	     // using a SimpleMesh and compute face and vertex normals
-	     blob->triangulate<SimpleMesh>(0.02);
-	     blob->getMesh<SimpleMesh>().calculateFaceNormals();
-	     blob->getMesh<SimpleMesh>().calculateVertexNormals();
+		  // Triangulate the sphere using a sample distance of 0.02
+		  // using a SimpleMesh and compute face and vertex normals
+		  blob->triangulate<SimpleMesh>(0.05);
+		  blob->getMesh<SimpleMesh>().calculateFaceNormals();
+		  blob->getMesh<SimpleMesh>().calculateVertexNormals();
 
-	     // Add it to the geometry list
-	     mGeometryList.push_back(blob);
+		  // Add it to the geometry list
+		  mGeometryList.push_back(blob);
 	  }
 	  break;
   case '7' :
 	  {
-	  // Create an implicit sphere and transform it
-	  Sphere * s1 = new Sphere(1.0);
-	  s1->translate(0, 0, 0.1);
-	  s1->scale(0.2);
+		  // Create an implicit sphere and transform it
+		  Sphere * s1 = new Sphere(1.0);
+		  s1->translate(0, 0, 0.1);
+		  s1->scale(0.2);
 
-	  // Create an implicit sphere and transform it
-	  Sphere * s2 = new Sphere(1.0);
-	  s2->translate(0, 0, -0.1);
-	  s2->scale(0.2);
+		  // Create an implicit sphere and transform it
+		  Sphere * s2 = new Sphere(1.0);
+		  s2->translate(0, 0, -0.1);
+		  s2->scale(0.2);
 
-	  BlendedIntersection* blob = new BlendedIntersection( s1, s2, 10 );
+		  BlendedIntersection* blob = new BlendedIntersection( s1, s2, 10 );
 
-	  // Triangulate the sphere using a sample distance of 0.02
-	  // using a SimpleMesh and compute face and vertex normals
-	  blob->triangulate<SimpleMesh>(0.02);
-	  blob->getMesh<SimpleMesh>().calculateFaceNormals();
-	  blob->getMesh<SimpleMesh>().calculateVertexNormals();
+		  // Triangulate the sphere using a sample distance of 0.02
+		  // using a SimpleMesh and compute face and vertex normals
+		  blob->triangulate<SimpleMesh>(0.02);
+		  blob->getMesh<SimpleMesh>().calculateFaceNormals();
+		  blob->getMesh<SimpleMesh>().calculateVertexNormals();
 
-	  // Add it to the geometry list
-	  mGeometryList.push_back(blob);
+		  // Add it to the geometry list
+		  mGeometryList.push_back(blob);
 	  }
 	  break;
   case '8' :
 	  {
-	  // Create an implicit sphere and transform it
-	  Sphere * s1 = new Sphere(1.0);
-	  s1->translate(0, 0, 0.1);
-	  s1->scale(0.2);
+		  // Create an implicit sphere and transform it
+		  Sphere * s1 = new Sphere(1.0);
+		  s1->translate(0, 0, 0.1);
+		  s1->scale(0.2);
 
-	  // Create an implicit sphere and transform it
-	  Sphere * s2 = new Sphere(1.0);
-	  s2->translate(0, 0, -0.1);
-	  s2->scale(0.2);
+		  // Create an implicit sphere and transform it
+		  Sphere * s2 = new Sphere(1.0);
+		  s2->translate(0, 0, -0.1);
+		  s2->scale(0.2);
 
-	  BlendedDifference* blob = new BlendedDifference( s1, s2, 2 );
+		  BlendedDifference* blob = new BlendedDifference( s1, s2, 2 );
 
-	  // Triangulate the sphere using a sample distance of 0.02
-	  // using a SimpleMesh and compute face and vertex normals
-	  blob->triangulate<SimpleMesh>(0.01);
-	  blob->getMesh<SimpleMesh>().calculateFaceNormals();
-	  blob->getMesh<SimpleMesh>().calculateVertexNormals();
+		  // Triangulate the sphere using a sample distance of 0.02
+		  // using a SimpleMesh and compute face and vertex normals
+		  blob->triangulate<SimpleMesh>(0.01);
+		  blob->getMesh<SimpleMesh>().calculateFaceNormals();
+		  blob->getMesh<SimpleMesh>().calculateVertexNormals();
 
-	  // Add it to the geometry list
-	  mGeometryList.push_back(blob);
+		  // Add it to the geometry list
+		  mGeometryList.push_back(blob);
 	  }
 	  break;
   case '9' :
 	  {
-	  float q[4][4] = {
-		  {1.0f/(0.25*0.25),0,0,0},
-		  {0,1.0f/(0.25*0.25),0,0},
-		  {0,0,1.0f/(0.125*0.125),0},
-		  {0,0,0,-1}};
 		  //float q[4][4] = {
-		  //	{1.0f,0,0,0},
-		  //	{0,1.0f,0,0},
-		  //	{0,0,0,0},
-		  //	{0,0,0,-1}};
+		  // {1.0f/(0.25*0.25),0,0,0},
+		  // {0,1.0f/(0.25*0.25),0,0},
+		  // {0,0,1.0f/(0.125*0.125),0},
+		  // {0,0,0,-1}};
 
-		  Matrix4x4<float> cylinder( q );
+		  // sphere of radius 1
+		  float q[4][4] = {
+			  {1.0f,0,0,0},
+			  {0,1.0f,0,0},
+			  {0,0,-1.0f,0},
+			  {0,0,0,-1}};
 
-		  Quadric* quadric=new Quadric( cylinder );
+			  Matrix4x4<float> cylinder( q );
 
-		  quadric->scale(1.0);
+			  Quadric* quadric=new Quadric( cylinder );
 
-		  quadric->triangulate<SimpleMesh>(0.02);
-		  quadric->getMesh<SimpleMesh>().calculateFaceNormals();
-		  quadric->getMesh<SimpleMesh>().calculateVertexNormals();
+			  quadric->scale(1.0);
 
+			  quadric->triangulate<SimpleMesh>(0.1);
+			  quadric->getMesh<SimpleMesh>().calculateFaceNormals();
+			  quadric->getMesh<SimpleMesh>().calculateVertexNormals();
+
+
+			  // Add it to the geometry list
+			  mGeometryList.push_back(quadric);
+	  }
+	  break;
+  case 'k' :
+	  {
+		  Sphere * s1 = new Sphere(1.0);
+		  s1->translate(0, 0, 0.15);
+		  s1->scale(0.2);
+
+		  // Create an implicit sphere and transform it
+		  Sphere * s2 = new Sphere(1.0);
+		  s2->translate(0, 0, -0.15);
+		  s2->scale(0.2);
+
+		  Union* blob = new Union( s1, s2 );
+
+		  // Triangulate the sphere using a sample distance of 0.02
+		  // using a SimpleMesh and compute face and vertex normals
+		  blob->triangulate<SimpleMesh>(0.05);
+		  blob->getMesh<SimpleMesh>().calculateFaceNormals();
+		  blob->getMesh<SimpleMesh>().calculateVertexNormals();
 
 		  // Add it to the geometry list
-		  mGeometryList.push_back(quadric);
+		  mGeometryList.push_back(blob);
 	  }
 	  break;
 
-		}
+  case 'y' :
+	  {
+		  // sphere of radius 1
+		  float q[4][4] = {
+			  {1.0f,0,0,0},
+			  {0,1.0f,0,0},
+			  {0,0,1.0f,0},
+			  {0,0,0,-1}};
+
+			  Matrix4x4<float> sphere( q );
+
+			  Quadric* s1 = new Quadric( sphere );
+			  s1->translate(0, 0, 0.15);
+			  s1->scale(0.2);
+
+			  // Create a quadric sphere and transform it
+			  Quadric* s2 = new Quadric( sphere );
+			  s2->translate(0, 0, -0.15);
+			  s2->scale(0.2);
+
+			  //Intersection* blob = new Intersection( s1, s2 );
+			  BlendedUnion* blob = new BlendedUnion( s1, s2, 20 );
+
+			  // Triangulate the sphere using a sample distance of 0.02
+			  // using a SimpleMesh and compute face and vertex normals
+			  blob->triangulate<SimpleMesh>(0.05);
+			  blob->getMesh<SimpleMesh>().calculateFaceNormals();
+			  blob->getMesh<SimpleMesh>().calculateVertexNormals();
+
+			  // Add it to the geometry list
+			  mGeometryList.push_back(blob);
+	  }
+	  break;
+
+  case 'j': case 'J':
+	  deleteGeometry();
+	  break;
+
+  case 'c' : case 'C':
+	  for (unsigned int i = 0; i < mGeometryList.size(); i++){
+		  Implicit* imp = dynamic_cast<Implicit*>(mGeometryList[i]);
+		  if ( imp )
+		  {
+			  imp->setDrawCurvature( ! imp->getDrawCurvature() );
+		  }
+	  }
+	  break;
+
+  case 'g' : case 'G':
+	  for (unsigned int i = 0; i < mGeometryList.size(); i++){
+		  Implicit* imp = dynamic_cast<Implicit*>(mGeometryList[i]);
+		  if ( imp )
+		  {
+			  imp->setDrawGradients( ! imp->getDrawGradients() );
+		  }
+	  }
+	  break;
+
+	}
 
 	// Updating graphics
 	glutPostRedisplay();
-	}
+}
 
 //-----------------------------------------------------------------------------
 void GUI::specialFunc(GLint keycode, GLint mouseX, GLint mouseY)
-	{
-	}
+{
+}
 
 //-----------------------------------------------------------------------------
 void GUI::getMouseScreenCoordinates(int mouseX, int mouseY, Real &x, Real &y)
-	{
+{
 	// screen width = 4.0, screen height = 3.0, lower left corner = (0,0)
 	x = 4.0*((Real)mouseX/(mWindowWidth));
 	y = 3.0*((Real)mouseY/(mWindowHeight));
-	}
+}
 
 //-----------------------------------------------------------------------------
 void GUI::drawXZplane(int nrOfGridCells, Real width, int subGridLines)
-	{
+{
 	Real spacing = width/(Real)nrOfGridCells;
 	int counter;
 
@@ -688,30 +782,30 @@ void GUI::drawXZplane(int nrOfGridCells, Real width, int subGridLines)
 		if (counter >= subGridLines){
 			glColor3f(0.3f,0.3f,0.3f);
 			counter = 0;
-			}
+		}
 		else{
 			glColor3f(0.7f,0.7f,0.7f);
-			}
+		}
 		glVertex3f(x,0.0f,-width/2.0);
 		glVertex3f(x,0.0f,width/2.0);
 
 		counter++;
-		}
+	}
 	// z sweep
 	counter = 0;
 	for (Real z = -width/2.0; z < width/2.0; z += spacing){
 		if (counter >= subGridLines){
 			glColor3f(0.3f,0.3f,0.3f);
 			counter = 0;
-			}
+		}
 		else{
 			glColor3f(0.7f,0.7f,0.7f);
-			}
+		}
 		glVertex3f(-width/2.0, 0.0f, z);
 		glVertex3f(width/2.0, 0.0f, z);
 
 		counter++;
-		}
+	}
 
 	// draw coordinate system
 	//X-Axis
@@ -745,22 +839,22 @@ void GUI::drawXZplane(int nrOfGridCells, Real width, int subGridLines)
 	glRasterPos3f(0,0,distance);
 	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,'Z');
 
-	}
+}
 
 //-----------------------------------------------------------------------------
 void GUI::drawCube(Real angle)
-	{
+{
 	static const GLfloat vertices[][3] = {{-1.0,-1.0,-1.0},{1.0,-1.0,-1.0},
-		{1.0,1.0,-1.0}, {-1.0,1.0,-1.0}, {-1.0,-1.0,1.0},
-		{1.0,-1.0,1.0}, {1.0,1.0,1.0}, {-1.0,1.0,1.0}};
+	{1.0,1.0,-1.0}, {-1.0,1.0,-1.0}, {-1.0,-1.0,1.0},
+	{1.0,-1.0,1.0}, {1.0,1.0,1.0}, {-1.0,1.0,1.0}};
 
 	static const GLfloat normals[][3] = {{-1.0,-1.0,-1.0},{1.0,-1.0,-1.0},
-		{1.0,1.0,-1.0}, {-1.0,1.0,-1.0}, {-1.0,-1.0,1.0},
-		{1.0,-1.0,1.0}, {1.0,1.0,1.0}, {-1.0,1.0,1.0}};
+	{1.0,1.0,-1.0}, {-1.0,1.0,-1.0}, {-1.0,-1.0,1.0},
+	{1.0,-1.0,1.0}, {1.0,1.0,1.0}, {-1.0,1.0,1.0}};
 
 	static const GLfloat colors[][3] = {{0.0,0.0,0.0},{1.0,0.0,0.0},
-		{1.0,1.0,0.0}, {0.0,1.0,0.0}, {0.0,0.0,1.0},
-		{1.0,0.0,1.0}, {1.0,1.0,1.0}, {0.0,1.0,1.0}};
+	{1.0,1.0,0.0}, {0.0,1.0,0.0}, {0.0,0.0,1.0},
+	{1.0,0.0,1.0}, {1.0,1.0,1.0}, {0.0,1.0,1.0}};
 
 	static const int polyList[][4] = { {0,3,2,1}, {2,3,7,6}, {0,4,7,3}, {1,2,6,5}, {4,5,6,7}, {0,1,5,4} };
 
@@ -791,14 +885,14 @@ void GUI::drawCube(Real angle)
 		glNormal3fv(normals[d]);
 		glVertex3fv(vertices[d]);
 		glEnd();
-		}
+	}
 
 	glPopMatrix();
-	}
+}
 
 //-----------------------------------------------------------------------------
 void GUI::drawFPS(float fps)
-	{
+{
 	const float pixelsPerLine = 48.0;
 	float pixelsizeH = 1.0/mWindowHeight;
 	//float pixelsizeW = 1.0/mWindowWidth;
@@ -822,29 +916,29 @@ void GUI::drawFPS(float fps)
 
 	if (fps < 20){
 		glColor3f(0.7,0,0.0);
-		}
+	}
 	else if (fps < 50){
 		glColor3f(0.7,0.7,0.0);
-		}
+	}
 	else{
 		glColor3f(0,0.5,0.0);
-		}
+	}
 
 	glRasterPos2f(-1,1.0-1*pixelsPerLine*pixelsizeH);
 	for (unsigned int i = 0; i < result.length(); i++){
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,(result.c_str())[i]);
-		}
+	}
 
 	// Restore matrices
 	glLoadMatrixf(projection);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(modelview);
-	}
+}
 
 
 void GUI::drawText(const Vector3<float> & pos, const char * str)
-	{
+{
 	glRasterPos3f(pos[0], pos[1], pos[2]);
 	for (unsigned int i = 0; str[i] != '\n'; i++)
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
-	}
+}
