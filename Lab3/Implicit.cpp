@@ -112,7 +112,9 @@ void Implicit::drawGradients(){
 			}
 		}
 	else {
+#ifdef _DEBUG
 		std::cerr << "No drawGradients function implemented for mesh type: " << typeid(*mMesh).name() << std::endl;
+#endif // _DEBUG
 		}
 	}
 
@@ -129,18 +131,22 @@ void Implicit::drawCurvature(){
 
 		SimpleMesh * ptr = static_cast<SimpleMesh*>(mMesh);
 		const std::vector<Vector3<float> > verts = ptr->getVerts();
-
+		float curvature = 0.0f;
 		for(unsigned int i=0; i < verts.size(); i++){
 			const Vector3<float> v1 = verts.at(i);
 			glPushMatrix();
 			glTranslatef(v1.x(), v1.y(), v1.z());
+			curvature = getCurvature(v1.x(), v1.y(), v1.z());
+			//printf("Curvature: %f\n", curvature);
 			//glutSolidSphere(sqrtf(fabsf(getCurvature(v1.x(), v1.y(), v1.z(), 0.0001)))*.002, 5, 5);
-			glutSolidSphere(sqrtf(fabsf(getCurvature(v1.x(), v1.y(), v1.z() )))*.0005, 10, 10);
+			glutSolidSphere(sqrtf(fabsf(curvature))*.0005, 10, 10);
 			glPopMatrix();
 			}
 		}
 	else {
+#ifdef _DEBUG
 		std::cerr << "No drawCurvature function implemented for mesh type: " << typeid(*mMesh).name() << std::endl;
+#endif // _DEBUG
 		}
 	}
 
@@ -152,8 +158,8 @@ void Implicit::draw(){
 		mMesh->draw();
 
 	//  Turn these on to visualize gradients and curvature
-	//drawGradients();
-	//drawCurvature();
+	if (mDrawGradients) drawGradients();
+	if (mDrawCurvature) drawCurvature();
 
 	// Draw bounding box for debugging
 	Bbox b = getBoundingBox();
