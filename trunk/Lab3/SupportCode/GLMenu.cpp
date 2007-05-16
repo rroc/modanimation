@@ -46,6 +46,7 @@ void GLMenu::draw()
 		glPushMatrix();
 		glLoadIdentity();
 		{
+			glColor3f(0, 0, 0);
 			glOrtho(0, DEFAULT_WINDOW_WIDTH, 0, DEFAULT_WINDOW_HEIGHT, -1, 1);
 
 			std::vector<char*>::const_iterator linesIt = lines.begin();
