@@ -54,8 +54,24 @@ public:
   //! Sets the bounding box in world space coordinates
   void setBoundingBox(const Bbox & b);
 
+  //! Get draw curvature flag
+  bool getDrawCurvature() { return mDrawCurvature; };
+
+  //! Get draw gradients flag
+  bool getDrawGradients() { return mDrawGradients; };
+
   //! Set transformation
   virtual void setTransform(const Matrix4x4<float> & transform);
+
+  //! Set draw curvature flag
+  void setDrawCurvature(bool aDraw) { mDrawCurvature = aDraw; };
+
+  //! Set draw gradients flag
+  void setDrawGradients(bool aDraw) { mDrawGradients = aDraw; };
+
+private:
+	bool mDrawCurvature;
+	bool mDrawGradients;
 
 protected:
   void transformWorld2Obj(float & x, float & y, float & z) const;
