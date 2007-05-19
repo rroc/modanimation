@@ -15,7 +15,6 @@ Vector3<float> SemiLagrangianIntegrator::integrate(const Vector3<int>& pos, cons
 	//printf("Semi-lagrangian integration not yet implemented!\n");
 
 	float localDT = dt/numSteps;
-
 	Vector3<float> result;
 
 	// Get initial position

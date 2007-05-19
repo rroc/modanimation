@@ -173,7 +173,8 @@ void NavierStokesSolver::enforceDirichletBoundaryCondition(std::vector<Geometry*
 	std::vector<LevelSet*> solids;
 	VolumeLevelSet* fluid = NULL;
 	for (unsigned int i = 0; i < geometryList.size(); i++){
-		if (typeid(*geometryList[i]) == typeid(VolumeLevelSet)){
+		if (typeid(*geometryList[i]) == typeid(VolumeLevelSet))
+			{
 			fluid = dynamic_cast<VolumeLevelSet *>(geometryList[i]);
 			}
 		else{
