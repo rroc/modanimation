@@ -34,7 +34,7 @@ class NavierStokesSolver{
     void selfAdvect(VolumeLevelSet* ls, float dt);
 		void addForces(VolumeLevelSet* ls, float dt);
 		void enforceDirichletBoundaryCondition(std::vector<Geometry*>& geometryList, Volume<Vector3<float> >* field);
-		void calculateRHS(VolumeLevelSet* ls, float dt);
+		void calculateRHS(VolumeLevelSet* ls, float dt, float externalSource );
 		void buildMatrix(VolumeLevelSet* ls);
     void solvePoissonEquation(VolumeLevelSet* ls, float dt);
 
