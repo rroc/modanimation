@@ -31,6 +31,7 @@
 #include "VectorCutPlane.h"
 #include "ObjIO.h"
 #include "SphereFractal.h"
+#include "GLMenu.h"
 
 
 #include "Stopwatch.h"
@@ -79,6 +80,9 @@ private:
   unsigned int mWindowWidth;
   int mMousePos[2];
   int mOldMousePos[2];
+
+  GLMenu mMenu;
+  bool mShowMenu;
 
   // Observer position and motion
   Camera mCam;

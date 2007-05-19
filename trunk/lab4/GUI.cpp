@@ -58,7 +58,35 @@ GUI::GUI()
 	mWindowWidth = DEFAULT_WINDOW_WIDTH;
 	mWindowHeight = DEFAULT_WINDOW_HEIGHT;
 
+	mShowMenu = false;
 
+	mMenu.addMenuLine("(q)   Exit");
+	mMenu.addMenuLine("(p/P) Draw Plane");
+	mMenu.addMenuLine("(W)   Camera Up");
+	mMenu.addMenuLine("(S)   Camera Down");
+	mMenu.addMenuLine("(w)   Accelerate Forwards");
+	mMenu.addMenuLine("(s)   Accelerate Backwards");
+	mMenu.addMenuLine("(a/A) Accelerate Left");
+	mMenu.addMenuLine("(d/D) Accelerate Right");
+	mMenu.addMenuLine("(o/O) Look at Origin");
+	mMenu.addMenuLine("(x/X) Reset Camera");
+	mMenu.addMenuLine("( )   Freeze");
+	mMenu.addMenuLine("(.)   Dolly Pos.");
+	mMenu.addMenuLine("(,)   Dolly Neg.");
+
+	mMenu.addMenuLine("(m/M) Wireframe Render");
+
+	mMenu.addMenuLine(" - - - - - - - - - ");
+	mMenu.addMenuLine("(1)   Load Sphere Fractal");
+	mMenu.addMenuLine("(2)   Enable Value Cut Plane");
+	mMenu.addMenuLine("(3)   Enable Gradient Cut Plane");
+	mMenu.addMenuLine("(4)   Reinitialization");
+	mMenu.addMenuLine("(5)   Dilation");
+	mMenu.addMenuLine("(e)   Erosion");
+	mMenu.addMenuLine("(6)   Mean Curvature Flow");
+	mMenu.addMenuLine("(7)   Advection");
+	mMenu.addMenuLine("(8)   Enable Narrow Band");
+	mMenu.addMenuLine("(9)   Load Implicit Sphere");
 }
 
 //-----------------------------------------------------------------------------
@@ -167,6 +195,10 @@ void GUI::displayFunc()
 	glEnable(GL_LIGHTING);
 
 
+	if (mShowMenu)
+	{
+		mMenu.draw();
+	}
 
 	// Draw rotating cube
 	//Real angle = 5*2*M_PI*mClockArray[ANIMATION_CLOCK].read();
@@ -400,6 +432,11 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 
 	  }
 	  break;
+  case 'h' : case 'H':
+	  {
+		  mShowMenu = ! mShowMenu;
+	  }
+	  break;
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -447,7 +484,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 
 		  // Create a scalar cut plane using this field
 		  ScalarCutPlane * cut = new ScalarCutPlane(0.002, field, color);
-		  cut->scale(1.0);
+		  cut->scale(0.5);
 
 		  addGeometry("ValueCutPlane", cut, 10);
 	  }
@@ -601,7 +638,26 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 	  break;
   case '9' :
 	  {
+		  // Create an implicit sphere
+		  Sphere * s = new Sphere(1);
+		  s->scale(0.2);
 
+		  // Get the bounding box and increase it by 0.2
+		  // in all directions
+		  Bbox b = s->getBoundingBox();
+		  b.pMin -= 0.2;
+		  b.pMax += 0.2;
+
+		  // Create a level set from the implicit sphere,
+		  // with 0.02 sampling density
+		  LevelSet * LS = new LevelSet(0.02, *s, b);
+
+		  // Triangulate and calculate face normals
+		  LS->triangulate<SimpleMesh>(0.02);
+		  LS->getMesh<SimpleMesh>().calculateFaceNormals();
+
+		  // ...and add it to the list
+		  addGeometry("LevelSet", LS);
 	  }
 	  break;
 	}
