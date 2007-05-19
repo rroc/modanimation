@@ -36,10 +36,13 @@ void NavierStokesSolver::solve(std::vector<Geometry*>& geometryList, float dt)
 				dt = mCellSize;
 				}
 
+			//NOTE: if more fluids are used the 
+			//      target and current should be stored separately for each
 			// Calculate volume of fluid
 			mCurrentVolume = calculateVolume(ls);
 			printf("Current volume: %e m^3\n", mCurrentVolume);
-			if (mTargetVolume == 0.0){
+			if (mTargetVolume == 0.0) 
+				{
 				mTargetVolume = mCurrentVolume;
 				}
 
@@ -71,8 +74,10 @@ void NavierStokesSolver::solve(std::vector<Geometry*>& geometryList, float dt)
 
 			// Perform projection
 			//-------------------
-			calculateRHS(ls, dt);  //Get the right hand side of the Velocity Extension
+			float externalSource = (0.0f == mLargestDT )? 0: (mTargetVolume-mCurrentVolume)/mLargestDT;
+			calculateRHS(ls, dt, externalSource );  //Get the right hand side of the Velocity Extension
 			buildMatrix(ls);
+
 			solvePoissonEquation(ls, dt);
 			velocityFieldCorrection(ls, dt);
 
@@ -253,25 +258,34 @@ void NavierStokesSolver::enforceDirichletBoundaryCondition(std::vector<Geometry*
 		}
 	}
 
-void NavierStokesSolver::calculateRHS(VolumeLevelSet* ls, float dt)
+void NavierStokesSolver::calculateRHS(VolumeLevelSet* ls, float dt, float externalSource)
 	{
 	const float dx = mCellSize;
 	const VolumeLevelSet::InsideMask& insideMask = ls->getInsideMask();
 
+	int maskSize = insideMask.size();
+	float extSource = externalSource; ///maskSize;
 
-	for (unsigned int p = 0; p < insideMask.size(); p++){
+	printf("Adding external source: %f (per cell: %f)\n", externalSource, extSource);
+
+	for (unsigned int p = 0; p < maskSize; p++)
+		{
 		const Vector3<int>& pos = insideMask[p];
 		int i = pos.x();
 		int j = pos.y();
 		int k = pos.z();
 
 		// Use central differencing to calculate RHS
-		float RHS = mOldField->getValue(i+1,j,k).x() - mOldField->getValue(i-1,j,k).x() +
+		float RHS = 
+			mOldField->getValue(i+1,j,k).x() - mOldField->getValue(i-1,j,k).x() +
 			mOldField->getValue(i,j+1,k).y() - mOldField->getValue(i,j-1,k).y() +
 			mOldField->getValue(i,j,k+1).z() - mOldField->getValue(i,j,k-1).z();
 
 		RHS *= 1.0/2.0/dx;
 
+		//printf("Original RHS: %f\n", RHS );
+		RHS -= extSource; //*10000.0;
+		
 		mRHSField->setValue(i,j,k, RHS);
 		}
 	}
