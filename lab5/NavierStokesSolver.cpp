@@ -264,7 +264,7 @@ void NavierStokesSolver::calculateRHS(VolumeLevelSet* ls, float dt, float extern
 	const VolumeLevelSet::InsideMask& insideMask = ls->getInsideMask();
 
 	int maskSize = insideMask.size();
-	float extSource = externalSource; ///maskSize;
+	float extSource = externalSource; // /maskSize;
 
 	printf("Adding external source: %f (per cell: %f)\n", externalSource, extSource);
 
@@ -284,7 +284,7 @@ void NavierStokesSolver::calculateRHS(VolumeLevelSet* ls, float dt, float extern
 		RHS *= 1.0/2.0/dx;
 
 		//printf("Original RHS: %f\n", RHS );
-		RHS -= extSource; //*10000.0;
+		RHS -= extSource;
 		
 		mRHSField->setValue(i,j,k, RHS);
 		}

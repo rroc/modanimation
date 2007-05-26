@@ -23,6 +23,7 @@ class LevelSetOperator
 		LevelSetGrid & getGrid() { return mLS->mGrid; }
 		const LevelSetGrid & getGrid() const { return mLS->mGrid; }
 
+  //! Computes the squares of the gradients using Godunovs method
 		void godunov(unsigned int i, unsigned int j, unsigned int k, float a,
 			float & ddx2, float & ddy2, float & ddz2);
 

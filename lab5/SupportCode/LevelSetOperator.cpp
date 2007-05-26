@@ -11,6 +11,24 @@
 *************************************************************************************************/
 #include "LevelSetOperator.h"
 
+/*! Computes the squares of the partial derivatives in x, y, z using the
+ * Godunov method
+ *
+ * \f[
+ * \left( \dfrac{\partial\phi}{\partial x} \right)^2 \approx \begin{cases}
+ * \text{max}\left[\text{max}(\phi_x^-,0)^2,       \text{min}(\phi_x^+,0)^2\right] & F > 0 \\
+ * \text{max}\left[\text{min}(\phi_x^-,0)^2,       \text{max}(\phi_x^+,0)^2\right] & F < 0 \\
+ * \end{cases}
+ * \f]
+ *
+ * \param[in] i grid x coordinate
+ * \param[in] j grid y coordinate
+ * \param[in] k grid z coordinate
+ * \param[in] a speed function
+ * \param[out] ddx2 (dphi/dx)^2
+ * \param[out] ddy2 (dphi/dy)^2
+ * \param[out] ddz2 (dphi/dy)^2
+ */
 void LevelSetOperator::godunov(unsigned int i, unsigned int j, unsigned int k, float a,
                                float & ddx2, float & ddy2, float & ddz2)
 {
