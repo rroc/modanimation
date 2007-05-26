@@ -1,14 +1,14 @@
 /*************************************************************************************************
- *
- * Modeling and animation (TNM079) 2007
- * Code base for lab assignments. Copyright:
- *   Gunnar Johansson (gunnar.johansson@itn.liu.se)
- *   Ken Museth (ken.museth@itn.liu.se)
- *   Michael Bang Nielsen (bang@daimi.au.dk)
- *   Ola Nilsson (ola.nilsson@itn.liu.se)
- *   Andreas Sderstrm (andreas.soderstrom@itn.liu.se)
- *
- *************************************************************************************************/
+*
+* Modeling and animation (TNM079) 2007
+* Code base for lab assignments. Copyright:
+*   Gunnar Johansson (gunnar.johansson@itn.liu.se)
+*   Ken Museth (ken.museth@itn.liu.se)
+*   Michael Bang Nielsen (bang@daimi.au.dk)
+*   Ola Nilsson (ola.nilsson@itn.liu.se)
+*   Andreas Sderstrm (andreas.soderstrom@itn.liu.se)
+*
+*************************************************************************************************/
 #include "GUI.h"
 #include <cstdlib>
 #include <fstream>
@@ -38,821 +38,823 @@ using namespace std;
 
 //-----------------------------------------------------------------------------
 GUI::GUI()
-{
-  mPlayback = false;
-  mPlaybackIndex = 0;
-  mDrawWireframe = false;
-  mDrawXZPlane = true;
-  mCurrentFPS = 0.0;
-  mTimeSinceLastFPS = 0.0;
-  mFramecounter = 0;
+	{
+	mPlayback = false;
+	mPlaybackIndex = 0;
+	mDrawWireframe = false;
+	mDrawXZPlane = true;
+	mCurrentFPS = 0.0;
+	mTimeSinceLastFPS = 0.0;
+	mFramecounter = 0;
 
-  // Starting global clock
-  mClockArray[GLOBAL_CLOCK].start();
-  mClockArray[ANIMATION_CLOCK].highPrecision(true);
-  mClockArray[ANIMATION_CLOCK].start();
-  mFrameTimestamp = mClockArray[ANIMATION_CLOCK].read();
+	// Starting global clock
+	mClockArray[GLOBAL_CLOCK].start();
+	mClockArray[ANIMATION_CLOCK].highPrecision(true);
+	mClockArray[ANIMATION_CLOCK].start();
+	mFrameTimestamp = mClockArray[ANIMATION_CLOCK].read();
 
-  mCam = Camera(Vector3<float>(2, 1, -.1));
+	mCam = Camera(Vector3<float>(2, 1, -.1));
 
-  mMousePos[X] = -1;
-  mMousePos[Y] = -1;
+	mMousePos[X] = -1;
+	mMousePos[Y] = -1;
 
-  mWindowWidth = DEFAULT_WINDOW_WIDTH;
-  mWindowHeight = DEFAULT_WINDOW_HEIGHT;
+	mWindowWidth = DEFAULT_WINDOW_WIDTH;
+	mWindowHeight = DEFAULT_WINDOW_HEIGHT;
 
 
-}
+	}
 
 //-----------------------------------------------------------------------------
 GUI::~GUI()
-{
-  std::vector<Object>::iterator iter = mGeometryList.begin();
-  std::vector<Object>::iterator iend = mGeometryList.end();
-  while (iter != iend) {
-    delete (*iter).geometry;
-    iter++;
-  }
-}
+	{
+	std::vector<Object>::iterator iter = mGeometryList.begin();
+	std::vector<Object>::iterator iend = mGeometryList.end();
+	while (iter != iend) {
+		delete (*iter).geometry;
+		iter++;
+		}
+	}
 
 //-----------------------------------------------------------------------------
 void GUI::init()
-{
-  unsigned int winPosX, winPosY;
-  winPosX = 100;//mScreenWidth/2 - mWindowWidth/2;
-  winPosY = 100;//mScreenHeight/2 - mWindowHeight/2;
+	{
+	unsigned int winPosX, winPosY;
+	winPosX = 100;//mScreenWidth/2 - mWindowWidth/2;
+	winPosY = 100;//mScreenHeight/2 - mWindowHeight/2;
 
-  // Init glut and GL
-  glutInitDisplayMode ( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+	// Init glut and GL
+	glutInitDisplayMode ( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
-  // creating rendering window
-  glutInitWindowPosition(100,100);
-  glutInitWindowSize(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
-  glutCreateWindow("Mesh Viewer");
-  glutSetCursor(GLUT_CURSOR_CROSSHAIR);
+	// creating rendering window
+	glutInitWindowPosition(100,100);
+	glutInitWindowSize(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
+	glutCreateWindow("Mesh Viewer");
+	glutSetCursor(GLUT_CURSOR_CROSSHAIR);
 
-  // initializing openGL
-  glClearColor (0.53515625, 0.75390625f, 0.9609375f, 0.0);
-  glEnable(GL_NORMALIZE);
-
-
-  // Set default material
-  GLfloat specular [] = { 0.5, 0.5, 0.5, 0.5 };
-  GLfloat shininess [] = { 10.0 };
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
-  glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-  glEnable(GL_COLOR_MATERIAL);
-
-  //glShadeModel(GL_FLAT);
-  glShadeModel(GL_SMOOTH);
-  glEnable(GL_LIGHTING);
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LEQUAL);
-
-  glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  // Really nice perspective calculations
-
-  glCullFace(GL_BACK);
-  glEnable(GL_CULL_FACE);
-
-  glViewport(0,0,DEFAULT_WINDOW_WIDTH,DEFAULT_WINDOW_HEIGHT);
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  gluPerspective(45.0f, (GLfloat)(DEFAULT_WINDOW_WIDTH)/(GLfloat)(DEFAULT_WINDOW_HEIGHT),NEAR_PLANE, FAR_PLANE);
-  glMatrixMode(GL_MODELVIEW);
-
-  glutPositionWindow(winPosX, winPosY);
+	// initializing openGL
+	glClearColor (0.53515625, 0.75390625f, 0.9609375f, 0.0);
+	glEnable(GL_NORMALIZE);
 
 
-}
+	// Set default material
+	GLfloat specular [] = { 0.5, 0.5, 0.5, 0.5 };
+	GLfloat shininess [] = { 10.0 };
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
+
+	//glShadeModel(GL_FLAT);
+	glShadeModel(GL_SMOOTH);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  // Really nice perspective calculations
+
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
+
+	glViewport(0,0,DEFAULT_WINDOW_WIDTH,DEFAULT_WINDOW_HEIGHT);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(45.0f, (GLfloat)(DEFAULT_WINDOW_WIDTH)/(GLfloat)(DEFAULT_WINDOW_HEIGHT),NEAR_PLANE, FAR_PLANE);
+	glMatrixMode(GL_MODELVIEW);
+
+	glutPositionWindow(winPosX, winPosY);
+
+
+	}
 
 //-----------------------------------------------------------------------------
 void GUI::update()
-{
+	{
 
-  // Force redraw graphics
-  glutPostRedisplay();
-}
+	// Force redraw graphics
+	glutPostRedisplay();
+	}
 
 //-----------------------------------------------------------------------------
 void GUI::displayFunc()
-{
-  // Time stuff
-  Real timestamp = mClockArray[ANIMATION_CLOCK].read();
-  Real dt = timestamp - mFrameTimestamp;
-  mFrameTimestamp = timestamp;
+	{
+	// Time stuff
+	Real timestamp = mClockArray[ANIMATION_CLOCK].read();
+	Real dt = timestamp - mFrameTimestamp;
+	mFrameTimestamp = timestamp;
 
-  float drawFPSTime = timestamp - mTimeSinceLastFPS;
-  static const float timelimit = 0.5;  // How often do we update the FPS count?
-  if (drawFPSTime > timelimit){
-    mCurrentFPS = mFramecounter/timelimit;
-    mFramecounter = 0;
-    mTimeSinceLastFPS = timestamp;
-  }
-
-
-  // initializing draw
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-
-  // light source
-  GLfloat position [] = { 1.0, 1.0, 1.0, 1.0 };
-  glLightfv(GL_LIGHT0, GL_POSITION, position);
-  glEnable(GL_LIGHT0);
+	float drawFPSTime = timestamp - mTimeSinceLastFPS;
+	static const float timelimit = 0.5;  // How often do we update the FPS count?
+	if (drawFPSTime > timelimit){
+		mCurrentFPS = mFramecounter/timelimit;
+		mFramecounter = 0;
+		mTimeSinceLastFPS = timestamp;
+		}
 
 
-  // Drawing XZ plane
-  glDisable(GL_LIGHTING);
-  if (mDrawXZPlane){
-    drawXZplane(200,2.0,10);
-  }
-  glEnable(GL_LIGHTING);
+	// initializing draw
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	// light source
+	GLfloat position [] = { 1.0, 1.0, 1.0, 1.0 };
+	glLightfv(GL_LIGHT0, GL_POSITION, position);
+	glEnable(GL_LIGHT0);
+
+
+	// Drawing XZ plane
+	glDisable(GL_LIGHTING);
+	if (mDrawXZPlane){
+		drawXZplane(200,2.0,10);
+		}
+	glEnable(GL_LIGHTING);
 
 
 
-  // Draw rotating cube
-  //Real angle = 5*2*M_PI*mClockArray[ANIMATION_CLOCK].read();
-  //drawCube(angle);
+	// Draw rotating cube
+	//Real angle = 5*2*M_PI*mClockArray[ANIMATION_CLOCK].read();
+	//drawCube(angle);
 
 
-  // if fluid sim playback..
-  if (mPlayback){
-    float time = mClockArray[PLAYBACK_CLOCK].read()/3.0;
+	// if fluid sim playback..
+	if (mPlayback){
+		float time = mClockArray[PLAYBACK_CLOCK].read()/3.0;
 
-    for (unsigned int i = mPlaybackIndex; i+1 < mPlaybackMeshArray.size(); i++){
-      if (mPlaybackMeshArray[i+1].timestamp >= time){
-        mPlaybackIndex = i;
-        break;
-      }
-    }
-    if (mPlaybackMeshArray.size() != 0){
-      mPlaybackMeshArray[mPlaybackIndex].mesh.draw();
-    }
+		for (unsigned int i = mPlaybackIndex; i+1 < mPlaybackMeshArray.size(); i++){
+			if (mPlaybackMeshArray[i+1].timestamp >= time){
+				mPlaybackIndex = i;
+				break;
+				}
+			}
+		if (mPlaybackMeshArray.size() != 0){
+			mPlaybackMeshArray[mPlaybackIndex].mesh.draw();
+			}
 
-    if (mPlaybackMeshArray.size() == 1){
-      mPlayback = false;
-      mPlaybackIndex = 0;
-    }
+		if (mPlaybackMeshArray.size() == 1){
+			mPlayback = false;
+			mPlaybackIndex = 0;
+			}
 
-    // Stop
-    if (mPlaybackIndex + 2 == mPlaybackMeshArray.size()){
-      mPlayback = false;
-      mPlaybackIndex = 0;
-    }
-  }
-  else{
-    // Draw geometry object(s)
-    glColor3f(0,0,0.7);
-    std::vector<Object>::iterator iter = mGeometryList.begin();
-    std::vector<Object>::iterator iend = mGeometryList.end();
-    while (iter != iend) {
-      if (mDrawWireframe && (*iter).allowWireframe){
-        glDisable(GL_LIGHTING);
-        glDisable(GL_CULL_FACE);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-      }
-      else{
-        glEnable(GL_LIGHTING);
-        glEnable(GL_CULL_FACE);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-      }
+		// Stop
+		if (mPlaybackIndex + 2 == mPlaybackMeshArray.size()){
+			mPlayback = false;
+			mPlaybackIndex = 0;
+			}
+		}
+	else{
+		// Draw geometry object(s)
+		glColor3f(0,0,0.7);
+		std::vector<Object>::iterator iter = mGeometryList.begin();
+		std::vector<Object>::iterator iend = mGeometryList.end();
+		while (iter != iend) {
+			if (mDrawWireframe && (*iter).allowWireframe){
+				glDisable(GL_LIGHTING);
+				glDisable(GL_CULL_FACE);
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				}
+			else{
+				glEnable(GL_LIGHTING);
+				glEnable(GL_CULL_FACE);
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				}
 
-      if ((*iter).draw){
-        (*iter).geometry->draw();
-      }
-      iter++;
-    }
-  }
-
-
-  // Draw fps
-  glDisable(GL_LIGHTING);
-  drawFPS(mCurrentFPS);
-  glEnable(GL_LIGHTING);
+			if ((*iter).draw){
+				(*iter).geometry->draw();
+				}
+			iter++;
+			}
+		}
 
 
-  // Move observer
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
+	// Draw fps
+	glDisable(GL_LIGHTING);
+	drawFPS(mCurrentFPS);
+	glEnable(GL_LIGHTING);
 
-  // reset viewport and projection parameters
-  glViewport(0,0,mWindowWidth,mWindowHeight);
-  gluPerspective(45.0f, (GLfloat)(mWindowWidth)/(GLfloat)(mWindowHeight),NEAR_PLANE, FAR_PLANE);
 
-  //Move observer
-  mCam.advect(dt);
-  gluLookAt(mCam.getPosition().x(), mCam.getPosition().y(), mCam.getPosition().z(),
-	    mCam.getLookAtPoint().x(), mCam.getLookAtPoint().y(), mCam.getLookAtPoint().z(),
-	    0,1,0);
+	// Move observer
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
 
-  glMatrixMode(GL_MODELVIEW);
+	// reset viewport and projection parameters
+	glViewport(0,0,mWindowWidth,mWindowHeight);
+	gluPerspective(45.0f, (GLfloat)(mWindowWidth)/(GLfloat)(mWindowHeight),NEAR_PLANE, FAR_PLANE);
 
-  mFramecounter++;
+	//Move observer
+	mCam.advect(dt);
+	gluLookAt(mCam.getPosition().x(), mCam.getPosition().y(), mCam.getPosition().z(),
+		mCam.getLookAtPoint().x(), mCam.getLookAtPoint().y(), mCam.getLookAtPoint().z(),
+		0,1,0);
 
-  glFlush();
-  glutSwapBuffers();
-}
+	glMatrixMode(GL_MODELVIEW);
+
+	mFramecounter++;
+
+	glFlush();
+	glutSwapBuffers();
+	}
 
 //-----------------------------------------------------------------------------
 void GUI::winReshapeFunc(GLint newWidth, GLint newHeight)
-{
-  mWindowWidth = newWidth;
-  mWindowHeight = newHeight;
+	{
+	mWindowWidth = newWidth;
+	mWindowHeight = newHeight;
 
-  // reset viewport and projection parameters
-  glViewport(0,0,mWindowWidth,mWindowHeight);
+	// reset viewport and projection parameters
+	glViewport(0,0,mWindowWidth,mWindowHeight);
 
-  if (mWindowHeight != 0){
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(45.0f, (GLfloat)(mWindowWidth)/(GLfloat)(mWindowHeight),NEAR_PLANE, FAR_PLANE);
-    glMatrixMode(GL_MODELVIEW);
-  }
-}
+	if (mWindowHeight != 0){
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluPerspective(45.0f, (GLfloat)(mWindowWidth)/(GLfloat)(mWindowHeight),NEAR_PLANE, FAR_PLANE);
+		glMatrixMode(GL_MODELVIEW);
+		}
+	}
 
 //-----------------------------------------------------------------------------
 void GUI::mouseFunc(GLint button, GLint action, GLint mouseX, GLint mouseY)
-{
-  if (mMousePos[X] == -1 && mMousePos[Y] == -1)
-    {
-      mMousePos[X] = mouseX;
-      mMousePos[Y] = mouseY;
+	{
+	if (mMousePos[X] == -1 && mMousePos[Y] == -1)
+		{
+		mMousePos[X] = mouseX;
+		mMousePos[Y] = mouseY;
 
-      mOldMousePos[X] = mouseX;
-      mOldMousePos[Y] = mouseY;
-    }
-  else
-    {
-      mOldMousePos[X] = mMousePos[X];
-      mOldMousePos[Y] = mMousePos[Y];
+		mOldMousePos[X] = mouseX;
+		mOldMousePos[Y] = mouseY;
+		}
+	else
+		{
+		mOldMousePos[X] = mMousePos[X];
+		mOldMousePos[Y] = mMousePos[Y];
 
-      mMousePos[X] = mouseX;
-      mMousePos[Y] = mWindowHeight-mouseY;
-    }
+		mMousePos[X] = mouseX;
+		mMousePos[Y] = mWindowHeight-mouseY;
+		}
 
-  glutPostRedisplay();
-}
+	glutPostRedisplay();
+	}
 
 //-----------------------------------------------------------------------------
 void GUI::mouseActiveMotionFunc(GLint mouseX, GLint mouseY)
-{
-  Real mx, my, mOldX, mOldY;
-  if (mMousePos[X] == -1 && mMousePos[Y] == -1)
-    {
-      mMousePos[X] = mouseX;
-      mMousePos[Y] = mouseY;
+	{
+	Real mx, my, mOldX, mOldY;
+	if (mMousePos[X] == -1 && mMousePos[Y] == -1)
+		{
+		mMousePos[X] = mouseX;
+		mMousePos[Y] = mouseY;
 
-      mOldMousePos[X] = mouseX;
-      mOldMousePos[Y] = mouseY;
-    }
-  else
-    {
-      mOldMousePos[X] = mMousePos[X];
-      mOldMousePos[Y] = mMousePos[Y];
+		mOldMousePos[X] = mouseX;
+		mOldMousePos[Y] = mouseY;
+		}
+	else
+		{
+		mOldMousePos[X] = mMousePos[X];
+		mOldMousePos[Y] = mMousePos[Y];
 
-      mMousePos[X] = mouseX;
-      mMousePos[Y] = mWindowHeight-mouseY;
-    }
+		mMousePos[X] = mouseX;
+		mMousePos[Y] = mWindowHeight-mouseY;
+		}
 
-  //if (button == GLUT_LEFT_BUTTON)
-  {
-    getMouseScreenCoordinates(mOldMousePos[X], mOldMousePos[Y], mOldX,mOldY);
-    getMouseScreenCoordinates(mMousePos[X], mMousePos[Y], mx,my);
+	//if (button == GLUT_LEFT_BUTTON)
+		{
+		getMouseScreenCoordinates(mOldMousePos[X], mOldMousePos[Y], mOldX,mOldY);
+		getMouseScreenCoordinates(mMousePos[X], mMousePos[Y], mx,my);
 
-    mCam.rotateXY((mOldX - mx)/2.0, (mOldY - my)/2.0);
-  }
+		mCam.rotateXY((mOldX - mx)/2.0, (mOldY - my)/2.0);
+		}
 
-  glutPostRedisplay();
-}
+		glutPostRedisplay();
+	}
 
 //-----------------------------------------------------------------------------
 void GUI::mousePassiveMotionFunc(GLint mouseX, GLint mouseY)
-{
-  if (mMousePos[X] == -1 && mMousePos[Y] == -1)
-    {
-      mMousePos[X] = mouseX;
-      mMousePos[Y] = mouseY;
+	{
+	if (mMousePos[X] == -1 && mMousePos[Y] == -1)
+		{
+		mMousePos[X] = mouseX;
+		mMousePos[Y] = mouseY;
 
-      mOldMousePos[X] = mouseX;
-      mOldMousePos[Y] = mouseY;
-    }
-  else
-    {
-      mOldMousePos[X] = mMousePos[X];
-      mOldMousePos[Y] = mMousePos[Y];
+		mOldMousePos[X] = mouseX;
+		mOldMousePos[Y] = mouseY;
+		}
+	else
+		{
+		mOldMousePos[X] = mMousePos[X];
+		mOldMousePos[Y] = mMousePos[Y];
 
-      mMousePos[X] = mouseX;
-      mMousePos[Y] = mWindowHeight-mouseY;
-    }
+		mMousePos[X] = mouseX;
+		mMousePos[Y] = mWindowHeight-mouseY;
+		}
 
-  glutPostRedisplay();
-}
+	glutPostRedisplay();
+	}
 
 
 
 //-----------------------------------------------------------------------------
 void GUI::keyboardUpFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
-{
-  mCam.stopAcc();
-}
+	{
+	mCam.stopAcc();
+	}
 
 //-----------------------------------------------------------------------------
 void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
-{
-  switch(keycode){
+	{
+	switch(keycode){
   case 'q' : case 'Q' :
-    exit(0);
-    break;
+	  exit(0);
+	  break;
   case 'p' : case 'P' :
-    mDrawXZPlane = !mDrawXZPlane;
-    break;
+	  mDrawXZPlane = !mDrawXZPlane;
+	  break;
 
   case 'W':
-    {
-      mCam.accUp();
-      break;
-    }
+	  {
+	  mCam.accUp();
+	  break;
+	  }
   case 'S':
-    {
-      mCam.accDown();
-      break;
-    }
+	  {
+	  mCam.accDown();
+	  break;
+	  }
   case 'w' :  // move forward
-    {
-      mCam.accForward();
-      break;
-    }
+	  {
+	  mCam.accForward();
+	  break;
+	  }
   case 's' :  // move backward
-    {
-      mCam.accBackward();
-      break;
-    }
+	  {
+	  mCam.accBackward();
+	  break;
+	  }
   case 'a' : case 'A' :
-    {
-      mCam.accLeft();
-      break;
-    }
+	  {
+	  mCam.accLeft();
+	  break;
+	  }
   case 'd' : case 'D' :
-    {
-      mCam.accRight();
-      break;
-    }
+	  {
+	  mCam.accRight();
+	  break;
+	  }
   case 'o' : case 'O' :  // center on origin
-    {
-      mCam.lookAtOrigo();
-      break;
-    }
+	  {
+	  mCam.lookAtOrigo();
+	  break;
+	  }
   case ' ' : // full stop
-    {
-      mCam.stop();
-    }
-    break;
+	  {
+	  mCam.stop();
+	  }
+	  break;
   case 'x' : case 'X' :  // return to original position
-    {
-      mCam.reset();
-    }
-    break;
+	  {
+	  mCam.reset();
+	  }
+	  break;
   case '.' :
-    {
-      mCam.dolly(.1);
-    }
-    break;
+	  {
+	  mCam.dolly(.1);
+	  }
+	  break;
   case ',' :
-    {
-      mCam.dolly(-.1);
-    }
-    break;
+	  {
+	  mCam.dolly(-.1);
+	  }
+	  break;
   case 'm' : case 'M':
-    {
-      // Wireframe rendering
-      mDrawWireframe = true;
-    }
-    break;
+	  {
+	  // Wireframe rendering
+	  mDrawWireframe = true;
+	  }
+	  break;
   case 'n' : case 'N':
-    {
-      // Solid face rendering
-      mDrawWireframe = false;
-    }
-    break;
+	  {
+	  // Solid face rendering
+	  mDrawWireframe = false;
+	  }
+	  break;
   case 'b' : case 'B':
-    {
-      // Playback fluid sim
-      mPlayback = true;
-      mPlaybackIndex = 0;
+	  {
+	  // Playback fluid sim
+	  mPlayback = true;
+	  mPlaybackIndex = 0;
 
-      mClockArray[PLAYBACK_CLOCK].start();
-    }
-    break;
-
-//////////////////////////////////////////////////////////////////////////////////////
-
-  case '1' :
-    {
-      const float dx = 0.02;
-      mSimulationTimeCounter = 0;
-
-      FluidSimSetup simSetupClass(dx, 6);
-
-      // Add fluid
-      VolumeLevelSet* volLS = simSetupClass.getFluidBoxFluid();
-      addGeometry("Fluid LevelSet", volLS);
-
-      // Disable draw for the solid..
-      mGeometryList.back().drawAsWireframe(false);
-
-      // Write initial frame
-      Implicit* impl = dynamic_cast<Implicit*>(mGeometryList.back().geometry);
-      Frame frame;
-      frame.timestamp = 0.0;
-      frame.mesh = impl->getMesh<SimpleMesh>();
-      mPlaybackMeshArray.push_back(frame);
-
-      // Add solid
-      LevelSet* ls = simSetupClass.getFluidBoxSolid();
-      addGeometry("Solid LevelSet", ls, 10);
-
-      mDrawWireframe = true;
-    }
-    break;
-  case '2' :
-    {
-      const float dx = 0.02;
-      mSimulationTimeCounter = 0;
-
-      FluidSimSetup simSetupClass(dx, 6);
-
-      // Add fluid
-      VolumeLevelSet* volLS = simSetupClass.getSimpleFluid();
-      addGeometry("Fluid LevelSet", volLS);
-
-      // Write initial frame
-      Implicit* impl = dynamic_cast<Implicit*>(mGeometryList.back().geometry);
-      Frame frame;
-      frame.timestamp = 0.0;
-      frame.mesh = impl->getMesh<SimpleMesh>();
-      mPlaybackMeshArray.push_back(frame);
-
-      // Add solid
-      LevelSet* ls = simSetupClass.getSimpleSolid();
-      addGeometry("Solid LevelSet", ls, 10);
-    }
-    break;
-  case '3' :
-    {
-      const float dx = 0.02;
-      mSimulationTimeCounter = 0;
-
-      FluidSimSetup simSetupClass(dx, 6);
-
-      // Add fluid
-      VolumeLevelSet* volLS = simSetupClass.getComplexFluid();
-      addGeometry("Fluid LevelSet", volLS);
-
-      // Write initial frame
-      Implicit* impl = dynamic_cast<Implicit*>(mGeometryList.back().geometry);
-      Frame frame;
-      frame.timestamp = 0.0;
-      frame.mesh = impl->getMesh<SimpleMesh>();
-      mPlaybackMeshArray.push_back(frame);
-
-      // Add solid
-      LevelSet* ls = simSetupClass.getComplexSolid();
-      addGeometry("Solid LevelSet", ls, 10);
-    }
-    break;
-  case '4' :
-    {
-    }
-    break;
-  case '5' :
-    {
-    }
-    break;
-  case '6' :
-    {
-    }
-    break;
-  case '7' :
-    {
-    }
-    break;
-  case '8' :
-    {
-    }
-    break;
-  case '9' :
-    {
-
-    }
-    break;
-
-    case '-' :
-  	{
+	  mClockArray[PLAYBACK_CLOCK].start();
 	  }
 	  break;
 
-    case 'k' : case 'K' :
-    {
-      VolumeLevelSet * LS = getGeometry<VolumeLevelSet>("Fluid LevelSet");
+	  //////////////////////////////////////////////////////////////////////////////////////
 
-      float timeCounter = 0;
-      {
-        // Advect fluid level set one step
-        float dt = mNSSolver.getTimestep(); // Get latest dt max from the solver
-        timeCounter += dt;
-        mSimulationTimeCounter += dt;
+  case '1' :
+	  {
+	  const float dx = 0.02;
+	  mSimulationTimeCounter = 0;
 
-        NavierStokesVectorField* advectionField = LS->getAdvectionField();
-        OperatorAdvect opAdvect(LS, advectionField);
-        opAdvect.propagate(dt);
+	  FluidSimSetup simSetupClass(dx, 6);
 
-        // Re-initialize
-        OperatorReinitialize opReInit(LS);
-        opReInit.propagate(2*LS->getDx());
+	  // Add fluid
+	  VolumeLevelSet* volLS = simSetupClass.getFluidBoxFluid();
+	  addGeometry("Fluid LevelSet", volLS);
 
-        // Rebuild
-        LS->setNarrowBandWidth(6);
+	  // Disable draw for the solid..
+	  mGeometryList.back().drawAsWireframe(false);
 
-        delete advectionField;
+	  // Write initial frame
+	  Implicit* impl = dynamic_cast<Implicit*>(mGeometryList.back().geometry);
+	  Frame frame;
+	  frame.timestamp = 0.0;
+	  frame.mesh = impl->getMesh<SimpleMesh>();
+	  mPlaybackMeshArray.push_back(frame);
 
-        // Create list of geometry to pass to the solver
-        vector<Geometry*> geometryList;
-        for (unsigned int i = 0; i < mGeometryList.size(); i++){
-          geometryList.push_back(mGeometryList[i].geometry);
-        }
+	  // Add solid
+	  LevelSet* ls = simSetupClass.getFluidBoxSolid();
+	  addGeometry("Solid LevelSet", ls, 10);
 
-        mNSSolver.solve(geometryList, dt);
-
-        // Triangulate and calculate face normals
-        LS->triangulate<SimpleMesh>(0.02);
-        LS->getMesh<SimpleMesh>().calculateFaceNormals();
-
-        // Write frame for playback
-        Frame frame;
-        frame.timestamp = mSimulationTimeCounter;
-        frame.mesh = LS->getMesh<SimpleMesh>();
-        mPlaybackMeshArray.push_back(frame);
-      }
-    }
-    break;
-	case 'l' : case 'L' :
-		{
-			VolumeLevelSet * LS = getGeometry<VolumeLevelSet>("Fluid LevelSet");
-
-      float timeCounter = 0;
-      while (timeCounter < 1/25.0)
-      {
-  			// Advect fluid level set one step
-  			float dt = mNSSolver.getTimestep(); // Get latest dt max from the solver
-  			timeCounter += dt;
-  			mSimulationTimeCounter += dt;
-
-        NavierStokesVectorField* advectionField = LS->getAdvectionField();
-        OperatorAdvect opAdvect(LS, advectionField);
-        opAdvect.propagate(dt);
-
-        // Re-initialize
-        OperatorReinitialize opReInit(LS);
-        opReInit.propagate(2*LS->getDx());
-
-        // Rebuild
-        LS->setNarrowBandWidth(6);
-
-        delete advectionField;
-
-       	// Create list of geometry to pass to the solver
-       	vector<Geometry*> geometryList;
-       	for (unsigned int i = 0; i < mGeometryList.size(); i++){
-          geometryList.push_back(mGeometryList[i].geometry);
-  			}
-
-  			mNSSolver.solve(geometryList, dt);
-
-        // Triangulate and calculate face normals
-        LS->triangulate<SimpleMesh>(0.02);
-        LS->getMesh<SimpleMesh>().calculateFaceNormals();
-
-        // Write frame for playback
-        Frame frame;
-        frame.timestamp = mSimulationTimeCounter;
-        frame.mesh = LS->getMesh<SimpleMesh>();
-        mPlaybackMeshArray.push_back(frame);
-      }
+	  mDrawWireframe = true;
 	  }
-    break;
+	  break;
+  case '2' :
+	  {
+	  const float dx = 0.02;
+	  mSimulationTimeCounter = 0;
 
-  }
+	  FluidSimSetup simSetupClass(dx, 6);
 
-  // Updating graphics
-  glutPostRedisplay();
-}
+	  // Add fluid
+	  VolumeLevelSet* volLS = simSetupClass.getSimpleFluid();
+	  addGeometry("Fluid LevelSet", volLS);
+
+	  // Write initial frame
+	  Implicit* impl = dynamic_cast<Implicit*>(mGeometryList.back().geometry);
+	  Frame frame;
+	  frame.timestamp = 0.0;
+	  frame.mesh = impl->getMesh<SimpleMesh>();
+	  mPlaybackMeshArray.push_back(frame);
+
+	  // Add solid
+	  LevelSet* ls = simSetupClass.getSimpleSolid();
+	  addGeometry("Solid LevelSet", ls, 10);
+	  }
+	  break;
+  case '3' :
+	  {
+	  const float dx = 0.02;
+	  mSimulationTimeCounter = 0;
+
+	  FluidSimSetup simSetupClass(dx, 6);
+
+	  // Add fluid
+	  VolumeLevelSet* volLS = simSetupClass.getComplexFluid();
+	  addGeometry("Fluid LevelSet", volLS);
+
+	  // Write initial frame
+	  Implicit* impl = dynamic_cast<Implicit*>(mGeometryList.back().geometry);
+	  Frame frame;
+	  frame.timestamp = 0.0;
+	  frame.mesh = impl->getMesh<SimpleMesh>();
+	  mPlaybackMeshArray.push_back(frame);
+
+	  // Add solid
+	  LevelSet* ls = simSetupClass.getComplexSolid();
+	  addGeometry("Solid LevelSet", ls, 10);
+	  }
+	  break;
+  case '4' :
+	  {
+	  }
+	  break;
+  case '5' :
+	  {
+	  }
+	  break;
+  case '6' :
+	  {
+	  }
+	  break;
+  case '7' :
+	  {
+	  }
+	  break;
+  case '8' :
+	  {
+	  }
+	  break;
+  case '9' :
+	  {
+
+	  }
+	  break;
+
+  case '-' :
+	  {
+	  }
+	  break;
+
+  case 'k' : case 'K' :
+	  {
+	  VolumeLevelSet * LS = getGeometry<VolumeLevelSet>("Fluid LevelSet");
+
+	  float timeCounter = 0;
+		  {
+		  // Advect fluid level set one step
+		  float dt = mNSSolver.getTimestep(); // Get latest dt max from the solver
+		  timeCounter += dt;
+		  mSimulationTimeCounter += dt;
+
+		  NavierStokesVectorField* advectionField = LS->getAdvectionField();
+		  OperatorAdvect opAdvect(LS, advectionField);
+		  opAdvect.propagate(dt);
+
+		  // Re-initialize
+		  OperatorReinitialize opReInit(LS);
+		  opReInit.propagate(2*LS->getDx());
+
+		  // Rebuild
+		  LS->setNarrowBandWidth(6);
+
+		  delete advectionField;
+
+		  // Create list of geometry to pass to the solver
+		  vector<Geometry*> geometryList;
+		  for (unsigned int i = 0; i < mGeometryList.size(); i++){
+			  geometryList.push_back(mGeometryList[i].geometry);
+			  }
+
+		  mNSSolver.solve(geometryList, dt);
+
+		  // Triangulate and calculate face normals
+		  LS->triangulate<SimpleMesh>(0.02);
+		  LS->getMesh<SimpleMesh>().calculateFaceNormals();
+
+		  // Write frame for playback
+		  Frame frame;
+		  frame.timestamp = mSimulationTimeCounter;
+		  frame.mesh = LS->getMesh<SimpleMesh>();
+		  mPlaybackMeshArray.push_back(frame);
+		  }
+	  }
+	  break;
+  case 'l' : case 'L' :
+	  {
+	  VolumeLevelSet * LS = getGeometry<VolumeLevelSet>("Fluid LevelSet");
+
+
+	  float maxTime = 1.0f/25.0f;
+	  float timeCounter = 0;
+	  while (timeCounter < maxTime)
+		  {
+		  // Advect fluid level set one step
+		  float dt = mNSSolver.getTimestep(); // Get latest dt max from the solver
+		  timeCounter += dt;
+		  mSimulationTimeCounter += dt;
+
+		  NavierStokesVectorField* advectionField = LS->getAdvectionField();
+		  OperatorAdvect opAdvect(LS, advectionField);
+		  opAdvect.propagate(dt);
+
+		  // Re-initialize
+		  OperatorReinitialize opReInit(LS);
+		  opReInit.propagate(2*LS->getDx());
+
+		  // Rebuild
+		  LS->setNarrowBandWidth(6);
+
+		  delete advectionField;
+
+		  // Create list of geometry to pass to the solver
+		  vector<Geometry*> geometryList;
+		  for (unsigned int i = 0; i < mGeometryList.size(); i++){
+			  geometryList.push_back(mGeometryList[i].geometry);
+			  }
+
+		  mNSSolver.solve(geometryList, dt);
+
+		  // Triangulate and calculate face normals
+		  LS->triangulate<SimpleMesh>(0.02);
+		  LS->getMesh<SimpleMesh>().calculateFaceNormals();
+
+		  // Write frame for playback
+		  Frame frame;
+		  frame.timestamp = mSimulationTimeCounter;
+		  frame.mesh = LS->getMesh<SimpleMesh>();
+		  mPlaybackMeshArray.push_back(frame);
+		  }
+	  }
+	  break;
+
+		}
+
+	// Updating graphics
+	glutPostRedisplay();
+	}
 
 //-----------------------------------------------------------------------------
 void GUI::specialFunc(GLint keycode, GLint mouseX, GLint mouseY)
-{
-}
+	{
+	}
 
 //-----------------------------------------------------------------------------
 void GUI::getMouseScreenCoordinates(int mouseX, int mouseY, Real &x, Real &y)
-{
-  // screen width = 4.0, screen height = 3.0, lower left corner = (0,0)
-  x = 4.0*((Real)mouseX/(mWindowWidth));
-  y = 3.0*((Real)mouseY/(mWindowHeight));
-}
+	{
+	// screen width = 4.0, screen height = 3.0, lower left corner = (0,0)
+	x = 4.0*((Real)mouseX/(mWindowWidth));
+	y = 3.0*((Real)mouseY/(mWindowHeight));
+	}
 
 //-----------------------------------------------------------------------------
 void GUI::drawXZplane(int nrOfGridCells, Real width, int subGridLines)
-{
-  Real spacing = width/(Real)nrOfGridCells;
-  int counter;
+	{
+	Real spacing = width/(Real)nrOfGridCells;
+	int counter;
 
-  glBegin(GL_LINES);
-  glColor3f(0.7f,0.7f,0.7f);
-  // x sweep
-  counter = 0;
-  for (Real x = -width/2.0; x < width/2.0; x += spacing){
-    if (counter >= subGridLines){
-      glColor3f(0.3f,0.3f,0.3f);
-      counter = 0;
-    }
-    else{
-      glColor3f(0.7f,0.7f,0.7f);
-    }
-    glVertex3f(x,0.0f,-width/2.0);
-    glVertex3f(x,0.0f,width/2.0);
+	glBegin(GL_LINES);
+	glColor3f(0.7f,0.7f,0.7f);
+	// x sweep
+	counter = 0;
+	for (Real x = -width/2.0; x < width/2.0; x += spacing){
+		if (counter >= subGridLines){
+			glColor3f(0.3f,0.3f,0.3f);
+			counter = 0;
+			}
+		else{
+			glColor3f(0.7f,0.7f,0.7f);
+			}
+		glVertex3f(x,0.0f,-width/2.0);
+		glVertex3f(x,0.0f,width/2.0);
 
-    counter++;
-  }
-  // z sweep
-  counter = 0;
-  for (Real z = -width/2.0; z < width/2.0; z += spacing){
-    if (counter >= subGridLines){
-      glColor3f(0.3f,0.3f,0.3f);
-      counter = 0;
-    }
-    else{
-      glColor3f(0.7f,0.7f,0.7f);
-    }
-    glVertex3f(-width/2.0, 0.0f, z);
-    glVertex3f(width/2.0, 0.0f, z);
+		counter++;
+		}
+	// z sweep
+	counter = 0;
+	for (Real z = -width/2.0; z < width/2.0; z += spacing){
+		if (counter >= subGridLines){
+			glColor3f(0.3f,0.3f,0.3f);
+			counter = 0;
+			}
+		else{
+			glColor3f(0.7f,0.7f,0.7f);
+			}
+		glVertex3f(-width/2.0, 0.0f, z);
+		glVertex3f(width/2.0, 0.0f, z);
 
-    counter++;
-  }
+		counter++;
+		}
 
-  // draw coordinate system
-  //X-Axis
-  glColor3f(1.0f,0.0f,0.0f);
-  glVertex3f(0.0f, 0.0f, 0.0f);
-  glVertex3f(width/2.0, 0.0f, 0.0f);
+	// draw coordinate system
+	//X-Axis
+	glColor3f(1.0f,0.0f,0.0f);
+	glVertex3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(width/2.0, 0.0f, 0.0f);
 
-  //Y-axis
-  glColor3f(0.0f,1.0f,0.0f);
-  glVertex3f(0.0f, 0.0f, 0.0f);
-  glVertex3f(0.0f, width/2.0, 0.0f);
+	//Y-axis
+	glColor3f(0.0f,1.0f,0.0f);
+	glVertex3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(0.0f, width/2.0, 0.0f);
 
-  //Z-axis
-  glColor3f(0.0f,0.0f,1.0f);
-  glVertex3f(0.0f, 0.0f, 0.0f);
-  glVertex3f(0.0f, 0.0f, width/2.0);
+	//Z-axis
+	glColor3f(0.0f,0.0f,1.0f);
+	glVertex3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(0.0f, 0.0f, width/2.0);
 
-  glEnd();
+	glEnd();
 
-  // Write axis info
-  static const float distance = 0.1;
-  glColor3f(1.0f,0.0f,0.0f);
-  glRasterPos3f(distance,0,0);
-  glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,'X');
+	// Write axis info
+	static const float distance = 0.1;
+	glColor3f(1.0f,0.0f,0.0f);
+	glRasterPos3f(distance,0,0);
+	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,'X');
 
-  glColor3f(0.0f,1.0f,0.0f);
-  glRasterPos3f(0,distance,0);
-  glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,'Y');
+	glColor3f(0.0f,1.0f,0.0f);
+	glRasterPos3f(0,distance,0);
+	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,'Y');
 
-  glColor3f(0.0f,0.0f,1.0f);
-  glRasterPos3f(0,0,distance);
-  glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,'Z');
+	glColor3f(0.0f,0.0f,1.0f);
+	glRasterPos3f(0,0,distance);
+	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,'Z');
 
-}
+	}
 
 //-----------------------------------------------------------------------------
 void GUI::drawCube(Real angle)
-{
-  static const GLfloat vertices[][3] = {{-1.0,-1.0,-1.0},{1.0,-1.0,-1.0},
-					{1.0,1.0,-1.0}, {-1.0,1.0,-1.0}, {-1.0,-1.0,1.0},
-					{1.0,-1.0,1.0}, {1.0,1.0,1.0}, {-1.0,1.0,1.0}};
+	{
+	static const GLfloat vertices[][3] = {{-1.0,-1.0,-1.0},{1.0,-1.0,-1.0},
+		{1.0,1.0,-1.0}, {-1.0,1.0,-1.0}, {-1.0,-1.0,1.0},
+		{1.0,-1.0,1.0}, {1.0,1.0,1.0}, {-1.0,1.0,1.0}};
 
-  static const GLfloat normals[][3] = {{-1.0,-1.0,-1.0},{1.0,-1.0,-1.0},
-				       {1.0,1.0,-1.0}, {-1.0,1.0,-1.0}, {-1.0,-1.0,1.0},
-				       {1.0,-1.0,1.0}, {1.0,1.0,1.0}, {-1.0,1.0,1.0}};
+	static const GLfloat normals[][3] = {{-1.0,-1.0,-1.0},{1.0,-1.0,-1.0},
+		{1.0,1.0,-1.0}, {-1.0,1.0,-1.0}, {-1.0,-1.0,1.0},
+		{1.0,-1.0,1.0}, {1.0,1.0,1.0}, {-1.0,1.0,1.0}};
 
-  static const GLfloat colors[][3] = {{0.0,0.0,0.0},{1.0,0.0,0.0},
-				      {1.0,1.0,0.0}, {0.0,1.0,0.0}, {0.0,0.0,1.0},
-				      {1.0,0.0,1.0}, {1.0,1.0,1.0}, {0.0,1.0,1.0}};
+	static const GLfloat colors[][3] = {{0.0,0.0,0.0},{1.0,0.0,0.0},
+		{1.0,1.0,0.0}, {0.0,1.0,0.0}, {0.0,0.0,1.0},
+		{1.0,0.0,1.0}, {1.0,1.0,1.0}, {0.0,1.0,1.0}};
 
-  static const int polyList[][4] = { {0,3,2,1}, {2,3,7,6}, {0,4,7,3}, {1,2,6,5}, {4,5,6,7}, {0,1,5,4} };
+	static const int polyList[][4] = { {0,3,2,1}, {2,3,7,6}, {0,4,7,3}, {1,2,6,5}, {4,5,6,7}, {0,1,5,4} };
 
-  glPushMatrix();
+	glPushMatrix();
 
-  glScalef(0.1f,0.1f,0.1f);
-  glTranslatef(0.0f, 5.0f,0.0f);
-  glRotatef(angle,0.0f,1.0f,0.0f);
-  glRotatef(angle,1.0f,1.0f,1.0f);
+	glScalef(0.1f,0.1f,0.1f);
+	glTranslatef(0.0f, 5.0f,0.0f);
+	glRotatef(angle,0.0f,1.0f,0.0f);
+	glRotatef(angle,1.0f,1.0f,1.0f);
 
-  // Draw the cube..
-  for (int i = 0; i < 6; i++){
-    const int a = polyList[i][0];
-    const int b = polyList[i][1];
-    const int c = polyList[i][2];
-    const int d = polyList[i][3];
-    glBegin(GL_POLYGON);
-    glColor3fv(colors[a]);
-    glNormal3fv(normals[a]);
-    glVertex3fv(vertices[a]);
-    glColor3fv(colors[b]);
-    glNormal3fv(normals[b]);
-    glVertex3fv(vertices[b]);
-    glColor3fv(colors[c]);
-    glNormal3fv(normals[c]);
-    glVertex3fv(vertices[c]);
-    glColor3fv(colors[d]);
-    glNormal3fv(normals[d]);
-    glVertex3fv(vertices[d]);
-    glEnd();
-  }
+	// Draw the cube..
+	for (int i = 0; i < 6; i++){
+		const int a = polyList[i][0];
+		const int b = polyList[i][1];
+		const int c = polyList[i][2];
+		const int d = polyList[i][3];
+		glBegin(GL_POLYGON);
+		glColor3fv(colors[a]);
+		glNormal3fv(normals[a]);
+		glVertex3fv(vertices[a]);
+		glColor3fv(colors[b]);
+		glNormal3fv(normals[b]);
+		glVertex3fv(vertices[b]);
+		glColor3fv(colors[c]);
+		glNormal3fv(normals[c]);
+		glVertex3fv(vertices[c]);
+		glColor3fv(colors[d]);
+		glNormal3fv(normals[d]);
+		glVertex3fv(vertices[d]);
+		glEnd();
+		}
 
-  glPopMatrix();
-}
+	glPopMatrix();
+	}
 
 //-----------------------------------------------------------------------------
 void GUI::drawFPS(float fps)
-{
-  const float pixelsPerLine = 48.0;
-  float pixelsizeH = 1.0/mWindowHeight;
-  //float pixelsizeW = 1.0/mWindowWidth;
+	{
+	const float pixelsPerLine = 48.0;
+	float pixelsizeH = 1.0/mWindowHeight;
+	//float pixelsizeW = 1.0/mWindowWidth;
 
-  // Save matrices
-  GLfloat modelview[16];
-  GLfloat projection[16];
-  glGetFloatv(GL_MODELVIEW_MATRIX, modelview);
-  glGetFloatv(GL_PROJECTION_MATRIX, projection);
+	// Save matrices
+	GLfloat modelview[16];
+	GLfloat projection[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, modelview);
+	glGetFloatv(GL_PROJECTION_MATRIX, projection);
 
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
 
-  //std::stringify FPS
-  char buffer[10];
-  sprintf(buffer, "%.0f", fps);
-  std::string fpsStr(buffer);
-  std::string result = std::string("FPS: ") + fpsStr;
+	//std::stringify FPS
+	char buffer[10];
+	sprintf(buffer, "%.0f", fps);
+	std::string fpsStr(buffer);
+	std::string result = std::string("FPS: ") + fpsStr;
 
-  if (fps < 20){
-    glColor3f(0.7,0,0.0);
-  }
-  else if (fps < 50){
-    glColor3f(0.7,0.7,0.0);
-  }
-  else{
-    glColor3f(0,0.5,0.0);
-  }
+	if (fps < 20){
+		glColor3f(0.7,0,0.0);
+		}
+	else if (fps < 50){
+		glColor3f(0.7,0.7,0.0);
+		}
+	else{
+		glColor3f(0,0.5,0.0);
+		}
 
-  glRasterPos2f(-1,1.0-1*pixelsPerLine*pixelsizeH);
-  for (unsigned int i = 0; i < result.length(); i++){
-    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,(result.c_str())[i]);
-  }
+	glRasterPos2f(-1,1.0-1*pixelsPerLine*pixelsizeH);
+	for (unsigned int i = 0; i < result.length(); i++){
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,(result.c_str())[i]);
+		}
 
-  // Restore matrices
-  glLoadMatrixf(projection);
-  glMatrixMode(GL_MODELVIEW);
-  glLoadMatrixf(modelview);
-}
+	// Restore matrices
+	glLoadMatrixf(projection);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(modelview);
+	}
 
 
 void GUI::drawText(const Vector3<float> & pos, const char * str)
-{
-  glRasterPos3f(pos[0], pos[1], pos[2]);
-  for (unsigned int i = 0; str[i] != '\n'; i++)
-    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
-}
+	{
+	glRasterPos3f(pos[0], pos[1], pos[2]);
+	for (unsigned int i = 0; str[i] != '\n'; i++)
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
+	}
 
 
 void GUI::addGeometry(const std::string & name, Geometry * geometry, int order)
-{
-  mGeometryList.push_back(Object(name, geometry, order));
-  std::sort(mGeometryList.begin(), mGeometryList.end());
-}
+	{
+	mGeometryList.push_back(Object(name, geometry, order));
+	std::sort(mGeometryList.begin(), mGeometryList.end());
+	}
 
 
 template <class T> T * GUI::getGeometry(const std::string & name)
-{
-  std::vector<Object>::iterator iter = mGeometryList.begin();
-  std::vector<Object>::iterator iend = mGeometryList.end();
-  while (iter != iend) {
-    if ((*iter).name == name)
-      return dynamic_cast<T *>((*iter).geometry);
-    iter++;
-  }
-  std::cerr << "Warning: cannot find '" << name << "' in geometry list!" << std::endl;
-  return NULL;
-}
+	{
+	std::vector<Object>::iterator iter = mGeometryList.begin();
+	std::vector<Object>::iterator iend = mGeometryList.end();
+	while (iter != iend) {
+		if ((*iter).name == name)
+			return dynamic_cast<T *>((*iter).geometry);
+		iter++;
+		}
+	std::cerr << "Warning: cannot find '" << name << "' in geometry list!" << std::endl;
+	return NULL;
+	}
