@@ -1,0 +1,592 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D426FF5B0BFB1B6A0063CC24 /* LoopSubdivisionMesh.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D426FF5A0BFB1B6A0063CC24 /* LoopSubdivisionMesh.h */; };
+		D426FF6E0BFB1BA70063CC24 /* LoopSubdivisionMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D426FF6D0BFB1BA70063CC24 /* LoopSubdivisionMesh.cpp */; };
+		D474EEB60BFAFA2E002B97EA /* SemiLagrangianIntegrator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EE800BFAFA2E002B97EA /* SemiLagrangianIntegrator.cpp */; };
+		D474EEB70BFAFA2E002B97EA /* TrilinearInterpolator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EE810BFAFA2E002B97EA /* TrilinearInterpolator.h */; };
+		D474EEB80BFAFA2E002B97EA /* TrilinearInterpolator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EE820BFAFA2E002B97EA /* TrilinearInterpolator.cpp */; };
+		D474EEB90BFAFA2E002B97EA /* OperatorReinitialize.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EE830BFAFA2E002B97EA /* OperatorReinitialize.h */; };
+		D474EEBA0BFAFA2E002B97EA /* OperatorMeanCurvatureFlow.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EE840BFAFA2E002B97EA /* OperatorMeanCurvatureFlow.h */; };
+		D474EEBB0BFAFA2E002B97EA /* FluidSolverSparseMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EE850BFAFA2E002B97EA /* FluidSolverSparseMatrix.cpp */; };
+		D474EEBC0BFAFA2E002B97EA /* Interpolator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EE860BFAFA2E002B97EA /* Interpolator.h */; };
+		D474EEBD0BFAFA2E002B97EA /* ObjIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EE870BFAFA2E002B97EA /* ObjIO.cpp */; };
+		D474EEBE0BFAFA2E002B97EA /* ObjIO.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EE880BFAFA2E002B97EA /* ObjIO.h */; };
+		D474EEBF0BFAFA2E002B97EA /* OperatorDilateErode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EE890BFAFA2E002B97EA /* OperatorDilateErode.h */; };
+		D474EEC00BFAFA2E002B97EA /* OperatorAdvect.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EE8A0BFAFA2E002B97EA /* OperatorAdvect.h */; };
+		D474EEC10BFAFA2E002B97EA /* VolumeLevelSet.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EE8B0BFAFA2E002B97EA /* VolumeLevelSet.h */; };
+		D474EEC20BFAFA2E002B97EA /* FluidSolverVector.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EE8C0BFAFA2E002B97EA /* FluidSolverVector.h */; };
+		D474EEC30BFAFA2E002B97EA /* FluidSimSetup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EE8D0BFAFA2E002B97EA /* FluidSimSetup.cpp */; };
+		D474EEC40BFAFA2E002B97EA /* FluidSolverSparseMatrix.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EE8E0BFAFA2E002B97EA /* FluidSolverSparseMatrix.h */; };
+		D474EEC50BFAFA2E002B97EA /* FluidSimSetup.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EE8F0BFAFA2E002B97EA /* FluidSimSetup.h */; };
+		D474EEC60BFAFA2E002B97EA /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EE900BFAFA2E002B97EA /* Sphere.cpp */; };
+		D474EEC70BFAFA2E002B97EA /* HalfEdgeMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EE910BFAFA2E002B97EA /* HalfEdgeMesh.cpp */; };
+		D474EEC80BFAFA2E002B97EA /* SimpleDecimationMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EE920BFAFA2E002B97EA /* SimpleDecimationMesh.cpp */; };
+		D474EEC90BFAFA2E002B97EA /* GUI.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EE930BFAFA2E002B97EA /* GUI.h */; };
+		D474EECA0BFAFA2E002B97EA /* FluidSolverVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EE940BFAFA2E002B97EA /* FluidSolverVector.cpp */; };
+		D474EECB0BFAFA2E002B97EA /* ConjugateGradient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EE950BFAFA2E002B97EA /* ConjugateGradient.h */; };
+		D474EECC0BFAFA2E002B97EA /* Quadric.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EE960BFAFA2E002B97EA /* Quadric.h */; };
+		D474EECD0BFAFA2E002B97EA /* SimpleMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EE970BFAFA2E002B97EA /* SimpleMesh.cpp */; };
+		D474EECE0BFAFA2E002B97EA /* NavierStokesSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EE980BFAFA2E002B97EA /* NavierStokesSolver.cpp */; };
+		D474EECF0BFAFA2E002B97EA /* Cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EE990BFAFA2E002B97EA /* Cube.cpp */; };
+		D474EED00BFAFA2E002B97EA /* LevelSet.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EE9A0BFAFA2E002B97EA /* LevelSet.h */; };
+		D474EED10BFAFA2E002B97EA /* QuadricDecimationMesh.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EE9B0BFAFA2E002B97EA /* QuadricDecimationMesh.h */; };
+		D474EED20BFAFA2E002B97EA /* CSG.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EE9C0BFAFA2E002B97EA /* CSG.h */; };
+		D474EED30BFAFA2E002B97EA /* Sphere.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EE9D0BFAFA2E002B97EA /* Sphere.h */; };
+		D474EED40BFAFA2E002B97EA /* Implicit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EE9E0BFAFA2E002B97EA /* Implicit.cpp */; };
+		D474EED50BFAFA2E002B97EA /* VolumeLevelSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EE9F0BFAFA2E002B97EA /* VolumeLevelSet.cpp */; };
+		D474EED60BFAFA2E002B97EA /* Mesh.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEA00BFAFA2E002B97EA /* Mesh.h */; };
+		D474EED70BFAFA2E002B97EA /* EulerIntegrator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EEA10BFAFA2E002B97EA /* EulerIntegrator.cpp */; };
+		D474EED80BFAFA2E002B97EA /* NavierStokesSolver.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEA20BFAFA2E002B97EA /* NavierStokesSolver.h */; };
+		D474EED90BFAFA2E002B97EA /* GUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EEA30BFAFA2E002B97EA /* GUI.cpp */; };
+		D474EEDA0BFAFA2E002B97EA /* QuadricDecimationMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EEA40BFAFA2E002B97EA /* QuadricDecimationMesh.cpp */; };
+		D474EEDB0BFAFA2E002B97EA /* Cube.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEA50BFAFA2E002B97EA /* Cube.h */; };
+		D474EEDC0BFAFA2E002B97EA /* Implicit.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEA60BFAFA2E002B97EA /* Implicit.h */; };
+		D474EEDD0BFAFA2E002B97EA /* SimpleMesh.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEA70BFAFA2E002B97EA /* SimpleMesh.h */; };
+		D474EEDE0BFAFA2E002B97EA /* LevelSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EEA80BFAFA2E002B97EA /* LevelSet.cpp */; };
+		D474EEDF0BFAFA2E002B97EA /* SphereFractal.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEA90BFAFA2E002B97EA /* SphereFractal.h */; };
+		D474EEE00BFAFA2E002B97EA /* SphereFractal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EEAA0BFAFA2E002B97EA /* SphereFractal.cpp */; };
+		D474EEE20BFAFA2E002B97EA /* HalfEdgeMesh.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEAC0BFAFA2E002B97EA /* HalfEdgeMesh.h */; };
+		D474EEE30BFAFA2E002B97EA /* SemiLagrangianIntegrator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEAD0BFAFA2E002B97EA /* SemiLagrangianIntegrator.h */; };
+		D474EEE40BFAFA2E002B97EA /* SignedDistanceSphere.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEAE0BFAFA2E002B97EA /* SignedDistanceSphere.h */; };
+		D474EEE50BFAFA2E002B97EA /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EEAF0BFAFA2E002B97EA /* Mesh.cpp */; };
+		D474EEE60BFAFA2E002B97EA /* EulerIntegrator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEB00BFAFA2E002B97EA /* EulerIntegrator.h */; };
+		D474EEE70BFAFA2E002B97EA /* SimpleDecimationMesh.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEB10BFAFA2E002B97EA /* SimpleDecimationMesh.h */; };
+		D474EEE80BFAFA2E002B97EA /* Quadric.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EEB20BFAFA2E002B97EA /* Quadric.cpp */; };
+		D474EEE90BFAFA2E002B97EA /* NavierStokesVectorField.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEB30BFAFA2E002B97EA /* NavierStokesVectorField.h */; };
+		D474EEEA0BFAFA2E002B97EA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EEB40BFAFA2E002B97EA /* main.cpp */; };
+		D474EEEB0BFAFA2E002B97EA /* SignedDistanceSphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EEB50BFAFA2E002B97EA /* SignedDistanceSphere.cpp */; };
+		D474EF1B0BFAFA5F002B97EA /* Bbox.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEF10BFAFA5F002B97EA /* Bbox.h */; };
+		D474EF1C0BFAFA5F002B97EA /* BitMask3D.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEF20BFAFA5F002B97EA /* BitMask3D.h */; };
+		D474EF1D0BFAFA5F002B97EA /* Camera.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEF30BFAFA5F002B97EA /* Camera.h */; };
+		D474EF1E0BFAFA5F002B97EA /* ColorMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EEF40BFAFA5F002B97EA /* ColorMap.cpp */; };
+		D474EF1F0BFAFA5F002B97EA /* ColorMap.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEF50BFAFA5F002B97EA /* ColorMap.h */; };
+		D474EF200BFAFA5F002B97EA /* ConstantVectorField.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEF60BFAFA5F002B97EA /* ConstantVectorField.h */; };
+		D474EF210BFAFA5F002B97EA /* DecimationInterface.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEF70BFAFA5F002B97EA /* DecimationInterface.h */; };
+		D474EF220BFAFA5F002B97EA /* DecimationMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EEF80BFAFA5F002B97EA /* DecimationMesh.cpp */; };
+		D474EF230BFAFA5F002B97EA /* DecimationMesh.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEF90BFAFA5F002B97EA /* DecimationMesh.h */; };
+		D474EF240BFAFA5F002B97EA /* Function3D.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEFA0BFAFA5F002B97EA /* Function3D.h */; };
+		D474EF250BFAFA5F002B97EA /* Geometry.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEFB0BFAFA5F002B97EA /* Geometry.h */; };
+		D474EF260BFAFA5F002B97EA /* glext.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEFC0BFAFA5F002B97EA /* glext.h */; };
+		D474EF270BFAFA5F002B97EA /* Heap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EEFD0BFAFA5F002B97EA /* Heap.cpp */; };
+		D474EF280BFAFA5F002B97EA /* Heap.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EEFE0BFAFA5F002B97EA /* Heap.h */; };
+		D474EF2A0BFAFA5F002B97EA /* ImplicitGradientField.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EF000BFAFA5F002B97EA /* ImplicitGradientField.h */; };
+		D474EF2B0BFAFA5F002B97EA /* ImplicitValueField.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EF010BFAFA5F002B97EA /* ImplicitValueField.h */; };
+		D474EF2C0BFAFA5F002B97EA /* IsoContourColorMap.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EF020BFAFA5F002B97EA /* IsoContourColorMap.h */; };
+		D474EF2D0BFAFA5F002B97EA /* LevelSetGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EF030BFAFA5F002B97EA /* LevelSetGrid.cpp */; };
+		D474EF2E0BFAFA5F002B97EA /* LevelSetGrid.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EF040BFAFA5F002B97EA /* LevelSetGrid.h */; };
+		D474EF2F0BFAFA5F002B97EA /* LevelSetOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EF050BFAFA5F002B97EA /* LevelSetOperator.cpp */; };
+		D474EF300BFAFA5F002B97EA /* LevelSetOperator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EF060BFAFA5F002B97EA /* LevelSetOperator.h */; };
+		D474EF310BFAFA5F002B97EA /* MarchingCubes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EF070BFAFA5F002B97EA /* MarchingCubes.cpp */; };
+		D474EF320BFAFA5F002B97EA /* MarchingCubes.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EF080BFAFA5F002B97EA /* MarchingCubes.h */; };
+		D474EF330BFAFA5F002B97EA /* MarchingCubesTable.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EF090BFAFA5F002B97EA /* MarchingCubesTable.h */; };
+		D474EF340BFAFA5F002B97EA /* Matrix4x4.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EF0A0BFAFA5F002B97EA /* Matrix4x4.h */; };
+		D474EF350BFAFA5F002B97EA /* Matrix4x4_Impl.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EF0B0BFAFA5F002B97EA /* Matrix4x4_Impl.h */; };
+		D474EF360BFAFA5F002B97EA /* ScalarCutPlane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EF0C0BFAFA5F002B97EA /* ScalarCutPlane.cpp */; };
+		D474EF370BFAFA5F002B97EA /* ScalarCutPlane.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EF0D0BFAFA5F002B97EA /* ScalarCutPlane.h */; };
+		D474EF380BFAFA5F002B97EA /* Stopwatch.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EF0E0BFAFA5F002B97EA /* Stopwatch.h */; };
+		D474EF390BFAFA5F002B97EA /* Util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EF0F0BFAFA5F002B97EA /* Util.cpp */; };
+		D474EF3A0BFAFA5F002B97EA /* Util.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EF100BFAFA5F002B97EA /* Util.h */; };
+		D474EF3B0BFAFA5F002B97EA /* Vector3.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EF110BFAFA5F002B97EA /* Vector3.h */; };
+		D474EF3C0BFAFA5F002B97EA /* Vector4.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EF120BFAFA5F002B97EA /* Vector4.h */; };
+		D474EF3D0BFAFA5F002B97EA /* VectorCutPlane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D474EF130BFAFA5F002B97EA /* VectorCutPlane.cpp */; };
+		D474EF3E0BFAFA5F002B97EA /* VectorCutPlane.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EF140BFAFA5F002B97EA /* VectorCutPlane.h */; };
+		D474EF3F0BFAFA5F002B97EA /* Volume.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EF150BFAFA5F002B97EA /* Volume.h */; };
+		D474EF400BFAFA5F002B97EA /* VortexVectorField.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D474EF160BFAFA5F002B97EA /* VortexVectorField.h */; };
+		D474EF470BFAFAF0002B97EA /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D474EF450BFAFAF0002B97EA /* GLUT.framework */; };
+		D474EF480BFAFAF0002B97EA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D474EF460BFAFAF0002B97EA /* OpenGL.framework */; };
+		D4A3207C0C02C79300FE5D13 /* AdaptiveLoopSubdivisionMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A3207A0C02C79300FE5D13 /* AdaptiveLoopSubdivisionMesh.cpp */; };
+		D4A3207D0C02C79300FE5D13 /* AdaptiveLoopSubdivisionMesh.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D4A3207B0C02C79300FE5D13 /* AdaptiveLoopSubdivisionMesh.h */; };
+		D4A320CD0C0361F400FE5D13 /* UniformCubicSpline.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D4A320CB0C0361F400FE5D13 /* UniformCubicSpline.h */; };
+		D4A320CE0C0361F400FE5D13 /* UniformSplineSubdivision.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D4A320CC0C0361F400FE5D13 /* UniformSplineSubdivision.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8DD76F690486A84900D96B5E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				D474EEB70BFAFA2E002B97EA /* TrilinearInterpolator.h in CopyFiles */,
+				D474EEB90BFAFA2E002B97EA /* OperatorReinitialize.h in CopyFiles */,
+				D474EEBA0BFAFA2E002B97EA /* OperatorMeanCurvatureFlow.h in CopyFiles */,
+				D474EEBC0BFAFA2E002B97EA /* Interpolator.h in CopyFiles */,
+				D474EEBE0BFAFA2E002B97EA /* ObjIO.h in CopyFiles */,
+				D474EEBF0BFAFA2E002B97EA /* OperatorDilateErode.h in CopyFiles */,
+				D474EEC00BFAFA2E002B97EA /* OperatorAdvect.h in CopyFiles */,
+				D474EEC10BFAFA2E002B97EA /* VolumeLevelSet.h in CopyFiles */,
+				D474EEC20BFAFA2E002B97EA /* FluidSolverVector.h in CopyFiles */,
+				D474EEC40BFAFA2E002B97EA /* FluidSolverSparseMatrix.h in CopyFiles */,
+				D474EEC50BFAFA2E002B97EA /* FluidSimSetup.h in CopyFiles */,
+				D474EEC90BFAFA2E002B97EA /* GUI.h in CopyFiles */,
+				D474EECB0BFAFA2E002B97EA /* ConjugateGradient.h in CopyFiles */,
+				D474EECC0BFAFA2E002B97EA /* Quadric.h in CopyFiles */,
+				D474EED00BFAFA2E002B97EA /* LevelSet.h in CopyFiles */,
+				D474EED10BFAFA2E002B97EA /* QuadricDecimationMesh.h in CopyFiles */,
+				D474EED20BFAFA2E002B97EA /* CSG.h in CopyFiles */,
+				D474EED30BFAFA2E002B97EA /* Sphere.h in CopyFiles */,
+				D474EED60BFAFA2E002B97EA /* Mesh.h in CopyFiles */,
+				D474EED80BFAFA2E002B97EA /* NavierStokesSolver.h in CopyFiles */,
+				D474EEDB0BFAFA2E002B97EA /* Cube.h in CopyFiles */,
+				D474EEDC0BFAFA2E002B97EA /* Implicit.h in CopyFiles */,
+				D474EEDD0BFAFA2E002B97EA /* SimpleMesh.h in CopyFiles */,
+				D474EEDF0BFAFA2E002B97EA /* SphereFractal.h in CopyFiles */,
+				D474EEE20BFAFA2E002B97EA /* HalfEdgeMesh.h in CopyFiles */,
+				D474EEE30BFAFA2E002B97EA /* SemiLagrangianIntegrator.h in CopyFiles */,
+				D474EEE40BFAFA2E002B97EA /* SignedDistanceSphere.h in CopyFiles */,
+				D474EEE60BFAFA2E002B97EA /* EulerIntegrator.h in CopyFiles */,
+				D474EEE70BFAFA2E002B97EA /* SimpleDecimationMesh.h in CopyFiles */,
+				D474EEE90BFAFA2E002B97EA /* NavierStokesVectorField.h in CopyFiles */,
+				D474EF1B0BFAFA5F002B97EA /* Bbox.h in CopyFiles */,
+				D474EF1C0BFAFA5F002B97EA /* BitMask3D.h in CopyFiles */,
+				D474EF1D0BFAFA5F002B97EA /* Camera.h in CopyFiles */,
+				D474EF1F0BFAFA5F002B97EA /* ColorMap.h in CopyFiles */,
+				D474EF200BFAFA5F002B97EA /* ConstantVectorField.h in CopyFiles */,
+				D474EF210BFAFA5F002B97EA /* DecimationInterface.h in CopyFiles */,
+				D474EF230BFAFA5F002B97EA /* DecimationMesh.h in CopyFiles */,
+				D474EF240BFAFA5F002B97EA /* Function3D.h in CopyFiles */,
+				D474EF250BFAFA5F002B97EA /* Geometry.h in CopyFiles */,
+				D474EF260BFAFA5F002B97EA /* glext.h in CopyFiles */,
+				D474EF280BFAFA5F002B97EA /* Heap.h in CopyFiles */,
+				D474EF2A0BFAFA5F002B97EA /* ImplicitGradientField.h in CopyFiles */,
+				D474EF2B0BFAFA5F002B97EA /* ImplicitValueField.h in CopyFiles */,
+				D474EF2C0BFAFA5F002B97EA /* IsoContourColorMap.h in CopyFiles */,
+				D474EF2E0BFAFA5F002B97EA /* LevelSetGrid.h in CopyFiles */,
+				D474EF300BFAFA5F002B97EA /* LevelSetOperator.h in CopyFiles */,
+				D474EF320BFAFA5F002B97EA /* MarchingCubes.h in CopyFiles */,
+				D474EF330BFAFA5F002B97EA /* MarchingCubesTable.h in CopyFiles */,
+				D474EF340BFAFA5F002B97EA /* Matrix4x4.h in CopyFiles */,
+				D474EF350BFAFA5F002B97EA /* Matrix4x4_Impl.h in CopyFiles */,
+				D474EF370BFAFA5F002B97EA /* ScalarCutPlane.h in CopyFiles */,
+				D474EF380BFAFA5F002B97EA /* Stopwatch.h in CopyFiles */,
+				D474EF3A0BFAFA5F002B97EA /* Util.h in CopyFiles */,
+				D474EF3B0BFAFA5F002B97EA /* Vector3.h in CopyFiles */,
+				D474EF3C0BFAFA5F002B97EA /* Vector4.h in CopyFiles */,
+				D474EF3E0BFAFA5F002B97EA /* VectorCutPlane.h in CopyFiles */,
+				D474EF3F0BFAFA5F002B97EA /* Volume.h in CopyFiles */,
+				D474EF400BFAFA5F002B97EA /* VortexVectorField.h in CopyFiles */,
+				D426FF5B0BFB1B6A0063CC24 /* LoopSubdivisionMesh.h in CopyFiles */,
+				D4A3207D0C02C79300FE5D13 /* AdaptiveLoopSubdivisionMesh.h in CopyFiles */,
+				D4A320CD0C0361F400FE5D13 /* UniformCubicSpline.h in CopyFiles */,
+				D4A320CE0C0361F400FE5D13 /* UniformSplineSubdivision.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		8DD76F6C0486A84900D96B5E /* Modeling & Animation */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Modeling & Animation"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D426FF5A0BFB1B6A0063CC24 /* LoopSubdivisionMesh.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = LoopSubdivisionMesh.h; sourceTree = "<group>"; };
+		D426FF6D0BFB1BA70063CC24 /* LoopSubdivisionMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoopSubdivisionMesh.cpp; sourceTree = "<group>"; };
+		D474EE800BFAFA2E002B97EA /* SemiLagrangianIntegrator.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = SemiLagrangianIntegrator.cpp; sourceTree = "<group>"; };
+		D474EE810BFAFA2E002B97EA /* TrilinearInterpolator.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TrilinearInterpolator.h; sourceTree = "<group>"; };
+		D474EE820BFAFA2E002B97EA /* TrilinearInterpolator.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TrilinearInterpolator.cpp; sourceTree = "<group>"; };
+		D474EE830BFAFA2E002B97EA /* OperatorReinitialize.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OperatorReinitialize.h; sourceTree = "<group>"; };
+		D474EE840BFAFA2E002B97EA /* OperatorMeanCurvatureFlow.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OperatorMeanCurvatureFlow.h; sourceTree = "<group>"; };
+		D474EE850BFAFA2E002B97EA /* FluidSolverSparseMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = FluidSolverSparseMatrix.cpp; sourceTree = "<group>"; };
+		D474EE860BFAFA2E002B97EA /* Interpolator.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Interpolator.h; sourceTree = "<group>"; };
+		D474EE870BFAFA2E002B97EA /* ObjIO.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ObjIO.cpp; sourceTree = "<group>"; };
+		D474EE880BFAFA2E002B97EA /* ObjIO.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ObjIO.h; sourceTree = "<group>"; };
+		D474EE890BFAFA2E002B97EA /* OperatorDilateErode.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OperatorDilateErode.h; sourceTree = "<group>"; };
+		D474EE8A0BFAFA2E002B97EA /* OperatorAdvect.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OperatorAdvect.h; sourceTree = "<group>"; };
+		D474EE8B0BFAFA2E002B97EA /* VolumeLevelSet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = VolumeLevelSet.h; sourceTree = "<group>"; };
+		D474EE8C0BFAFA2E002B97EA /* FluidSolverVector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FluidSolverVector.h; sourceTree = "<group>"; };
+		D474EE8D0BFAFA2E002B97EA /* FluidSimSetup.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = FluidSimSetup.cpp; sourceTree = "<group>"; };
+		D474EE8E0BFAFA2E002B97EA /* FluidSolverSparseMatrix.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FluidSolverSparseMatrix.h; sourceTree = "<group>"; };
+		D474EE8F0BFAFA2E002B97EA /* FluidSimSetup.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FluidSimSetup.h; sourceTree = "<group>"; };
+		D474EE900BFAFA2E002B97EA /* Sphere.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Sphere.cpp; sourceTree = "<group>"; };
+		D474EE910BFAFA2E002B97EA /* HalfEdgeMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = HalfEdgeMesh.cpp; sourceTree = "<group>"; };
+		D474EE920BFAFA2E002B97EA /* SimpleDecimationMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = SimpleDecimationMesh.cpp; sourceTree = "<group>"; };
+		D474EE930BFAFA2E002B97EA /* GUI.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GUI.h; sourceTree = "<group>"; };
+		D474EE940BFAFA2E002B97EA /* FluidSolverVector.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = FluidSolverVector.cpp; sourceTree = "<group>"; };
+		D474EE950BFAFA2E002B97EA /* ConjugateGradient.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ConjugateGradient.h; sourceTree = "<group>"; };
+		D474EE960BFAFA2E002B97EA /* Quadric.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Quadric.h; sourceTree = "<group>"; };
+		D474EE970BFAFA2E002B97EA /* SimpleMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = SimpleMesh.cpp; sourceTree = "<group>"; };
+		D474EE980BFAFA2E002B97EA /* NavierStokesSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = NavierStokesSolver.cpp; sourceTree = "<group>"; };
+		D474EE990BFAFA2E002B97EA /* Cube.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Cube.cpp; sourceTree = "<group>"; };
+		D474EE9A0BFAFA2E002B97EA /* LevelSet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = LevelSet.h; sourceTree = "<group>"; };
+		D474EE9B0BFAFA2E002B97EA /* QuadricDecimationMesh.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = QuadricDecimationMesh.h; sourceTree = "<group>"; };
+		D474EE9C0BFAFA2E002B97EA /* CSG.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CSG.h; sourceTree = "<group>"; };
+		D474EE9D0BFAFA2E002B97EA /* Sphere.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Sphere.h; sourceTree = "<group>"; };
+		D474EE9E0BFAFA2E002B97EA /* Implicit.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Implicit.cpp; sourceTree = "<group>"; };
+		D474EE9F0BFAFA2E002B97EA /* VolumeLevelSet.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = VolumeLevelSet.cpp; sourceTree = "<group>"; };
+		D474EEA00BFAFA2E002B97EA /* Mesh.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
+		D474EEA10BFAFA2E002B97EA /* EulerIntegrator.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = EulerIntegrator.cpp; sourceTree = "<group>"; };
+		D474EEA20BFAFA2E002B97EA /* NavierStokesSolver.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = NavierStokesSolver.h; sourceTree = "<group>"; };
+		D474EEA30BFAFA2E002B97EA /* GUI.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = GUI.cpp; sourceTree = "<group>"; };
+		D474EEA40BFAFA2E002B97EA /* QuadricDecimationMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = QuadricDecimationMesh.cpp; sourceTree = "<group>"; };
+		D474EEA50BFAFA2E002B97EA /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
+		D474EEA60BFAFA2E002B97EA /* Implicit.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Implicit.h; sourceTree = "<group>"; };
+		D474EEA70BFAFA2E002B97EA /* SimpleMesh.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SimpleMesh.h; sourceTree = "<group>"; };
+		D474EEA80BFAFA2E002B97EA /* LevelSet.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = LevelSet.cpp; sourceTree = "<group>"; };
+		D474EEA90BFAFA2E002B97EA /* SphereFractal.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SphereFractal.h; sourceTree = "<group>"; };
+		D474EEAA0BFAFA2E002B97EA /* SphereFractal.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = SphereFractal.cpp; sourceTree = "<group>"; };
+		D474EEAC0BFAFA2E002B97EA /* HalfEdgeMesh.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HalfEdgeMesh.h; sourceTree = "<group>"; };
+		D474EEAD0BFAFA2E002B97EA /* SemiLagrangianIntegrator.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SemiLagrangianIntegrator.h; sourceTree = "<group>"; };
+		D474EEAE0BFAFA2E002B97EA /* SignedDistanceSphere.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SignedDistanceSphere.h; sourceTree = "<group>"; };
+		D474EEAF0BFAFA2E002B97EA /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
+		D474EEB00BFAFA2E002B97EA /* EulerIntegrator.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = EulerIntegrator.h; sourceTree = "<group>"; };
+		D474EEB10BFAFA2E002B97EA /* SimpleDecimationMesh.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SimpleDecimationMesh.h; sourceTree = "<group>"; };
+		D474EEB20BFAFA2E002B97EA /* Quadric.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Quadric.cpp; sourceTree = "<group>"; };
+		D474EEB30BFAFA2E002B97EA /* NavierStokesVectorField.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = NavierStokesVectorField.h; sourceTree = "<group>"; };
+		D474EEB40BFAFA2E002B97EA /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		D474EEB50BFAFA2E002B97EA /* SignedDistanceSphere.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = SignedDistanceSphere.cpp; sourceTree = "<group>"; };
+		D474EEF10BFAFA5F002B97EA /* Bbox.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Bbox.h; sourceTree = "<group>"; };
+		D474EEF20BFAFA5F002B97EA /* BitMask3D.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = BitMask3D.h; sourceTree = "<group>"; };
+		D474EEF30BFAFA5F002B97EA /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
+		D474EEF40BFAFA5F002B97EA /* ColorMap.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ColorMap.cpp; sourceTree = "<group>"; };
+		D474EEF50BFAFA5F002B97EA /* ColorMap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ColorMap.h; sourceTree = "<group>"; };
+		D474EEF60BFAFA5F002B97EA /* ConstantVectorField.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ConstantVectorField.h; sourceTree = "<group>"; };
+		D474EEF70BFAFA5F002B97EA /* DecimationInterface.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DecimationInterface.h; sourceTree = "<group>"; };
+		D474EEF80BFAFA5F002B97EA /* DecimationMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = DecimationMesh.cpp; sourceTree = "<group>"; };
+		D474EEF90BFAFA5F002B97EA /* DecimationMesh.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DecimationMesh.h; sourceTree = "<group>"; };
+		D474EEFA0BFAFA5F002B97EA /* Function3D.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Function3D.h; sourceTree = "<group>"; };
+		D474EEFB0BFAFA5F002B97EA /* Geometry.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Geometry.h; sourceTree = "<group>"; };
+		D474EEFC0BFAFA5F002B97EA /* glext.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = glext.h; sourceTree = "<group>"; };
+		D474EEFD0BFAFA5F002B97EA /* Heap.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Heap.cpp; sourceTree = "<group>"; };
+		D474EEFE0BFAFA5F002B97EA /* Heap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Heap.h; sourceTree = "<group>"; };
+		D474EF000BFAFA5F002B97EA /* ImplicitGradientField.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ImplicitGradientField.h; sourceTree = "<group>"; };
+		D474EF010BFAFA5F002B97EA /* ImplicitValueField.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ImplicitValueField.h; sourceTree = "<group>"; };
+		D474EF020BFAFA5F002B97EA /* IsoContourColorMap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IsoContourColorMap.h; sourceTree = "<group>"; };
+		D474EF030BFAFA5F002B97EA /* LevelSetGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = LevelSetGrid.cpp; sourceTree = "<group>"; };
+		D474EF040BFAFA5F002B97EA /* LevelSetGrid.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = LevelSetGrid.h; sourceTree = "<group>"; };
+		D474EF050BFAFA5F002B97EA /* LevelSetOperator.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = LevelSetOperator.cpp; sourceTree = "<group>"; };
+		D474EF060BFAFA5F002B97EA /* LevelSetOperator.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = LevelSetOperator.h; sourceTree = "<group>"; };
+		D474EF070BFAFA5F002B97EA /* MarchingCubes.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = MarchingCubes.cpp; sourceTree = "<group>"; };
+		D474EF080BFAFA5F002B97EA /* MarchingCubes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MarchingCubes.h; sourceTree = "<group>"; };
+		D474EF090BFAFA5F002B97EA /* MarchingCubesTable.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MarchingCubesTable.h; sourceTree = "<group>"; };
+		D474EF0A0BFAFA5F002B97EA /* Matrix4x4.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Matrix4x4.h; sourceTree = "<group>"; };
+		D474EF0B0BFAFA5F002B97EA /* Matrix4x4_Impl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Matrix4x4_Impl.h; sourceTree = "<group>"; };
+		D474EF0C0BFAFA5F002B97EA /* ScalarCutPlane.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ScalarCutPlane.cpp; sourceTree = "<group>"; };
+		D474EF0D0BFAFA5F002B97EA /* ScalarCutPlane.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ScalarCutPlane.h; sourceTree = "<group>"; };
+		D474EF0E0BFAFA5F002B97EA /* Stopwatch.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Stopwatch.h; sourceTree = "<group>"; };
+		D474EF0F0BFAFA5F002B97EA /* Util.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Util.cpp; sourceTree = "<group>"; };
+		D474EF100BFAFA5F002B97EA /* Util.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
+		D474EF110BFAFA5F002B97EA /* Vector3.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Vector3.h; sourceTree = "<group>"; };
+		D474EF120BFAFA5F002B97EA /* Vector4.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Vector4.h; sourceTree = "<group>"; };
+		D474EF130BFAFA5F002B97EA /* VectorCutPlane.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = VectorCutPlane.cpp; sourceTree = "<group>"; };
+		D474EF140BFAFA5F002B97EA /* VectorCutPlane.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = VectorCutPlane.h; sourceTree = "<group>"; };
+		D474EF150BFAFA5F002B97EA /* Volume.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Volume.h; sourceTree = "<group>"; };
+		D474EF160BFAFA5F002B97EA /* VortexVectorField.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = VortexVectorField.h; sourceTree = "<group>"; };
+		D474EF450BFAFAF0002B97EA /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = /System/Library/Frameworks/GLUT.framework; sourceTree = "<absolute>"; };
+		D474EF460BFAFAF0002B97EA /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		D4A3207A0C02C79300FE5D13 /* AdaptiveLoopSubdivisionMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = AdaptiveLoopSubdivisionMesh.cpp; sourceTree = "<group>"; };
+		D4A3207B0C02C79300FE5D13 /* AdaptiveLoopSubdivisionMesh.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AdaptiveLoopSubdivisionMesh.h; sourceTree = "<group>"; };
+		D4A320CB0C0361F400FE5D13 /* UniformCubicSpline.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = UniformCubicSpline.h; sourceTree = "<group>"; };
+		D4A320CC0C0361F400FE5D13 /* UniformSplineSubdivision.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = UniformSplineSubdivision.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8DD76F660486A84900D96B5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D474EF470BFAFAF0002B97EA /* GLUT.framework in Frameworks */,
+				D474EF480BFAFAF0002B97EA /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* Modeling & Animation */ = {
+			isa = PBXGroup;
+			children = (
+				D474EF450BFAFAF0002B97EA /* GLUT.framework */,
+				D474EF460BFAFAF0002B97EA /* OpenGL.framework */,
+				08FB7795FE84155DC02AAC07 /* Source */,
+				C6859E8C029090F304C91782 /* Documentation */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = "Modeling & Animation";
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				D4A320CB0C0361F400FE5D13 /* UniformCubicSpline.h */,
+				D4A320CC0C0361F400FE5D13 /* UniformSplineSubdivision.h */,
+				D4A3207A0C02C79300FE5D13 /* AdaptiveLoopSubdivisionMesh.cpp */,
+				D4A3207B0C02C79300FE5D13 /* AdaptiveLoopSubdivisionMesh.h */,
+				D426FF5A0BFB1B6A0063CC24 /* LoopSubdivisionMesh.h */,
+				D474EEEC0BFAFA5F002B97EA /* SupportCode */,
+				D474EE800BFAFA2E002B97EA /* SemiLagrangianIntegrator.cpp */,
+				D474EE810BFAFA2E002B97EA /* TrilinearInterpolator.h */,
+				D474EE820BFAFA2E002B97EA /* TrilinearInterpolator.cpp */,
+				D474EE830BFAFA2E002B97EA /* OperatorReinitialize.h */,
+				D474EE840BFAFA2E002B97EA /* OperatorMeanCurvatureFlow.h */,
+				D474EE850BFAFA2E002B97EA /* FluidSolverSparseMatrix.cpp */,
+				D474EE860BFAFA2E002B97EA /* Interpolator.h */,
+				D474EE870BFAFA2E002B97EA /* ObjIO.cpp */,
+				D474EE880BFAFA2E002B97EA /* ObjIO.h */,
+				D474EE890BFAFA2E002B97EA /* OperatorDilateErode.h */,
+				D474EE8A0BFAFA2E002B97EA /* OperatorAdvect.h */,
+				D474EE8B0BFAFA2E002B97EA /* VolumeLevelSet.h */,
+				D474EE8C0BFAFA2E002B97EA /* FluidSolverVector.h */,
+				D474EE8D0BFAFA2E002B97EA /* FluidSimSetup.cpp */,
+				D474EE8E0BFAFA2E002B97EA /* FluidSolverSparseMatrix.h */,
+				D474EE8F0BFAFA2E002B97EA /* FluidSimSetup.h */,
+				D474EE900BFAFA2E002B97EA /* Sphere.cpp */,
+				D474EE910BFAFA2E002B97EA /* HalfEdgeMesh.cpp */,
+				D474EE920BFAFA2E002B97EA /* SimpleDecimationMesh.cpp */,
+				D474EE930BFAFA2E002B97EA /* GUI.h */,
+				D474EE940BFAFA2E002B97EA /* FluidSolverVector.cpp */,
+				D474EE950BFAFA2E002B97EA /* ConjugateGradient.h */,
+				D474EE960BFAFA2E002B97EA /* Quadric.h */,
+				D474EE970BFAFA2E002B97EA /* SimpleMesh.cpp */,
+				D474EE980BFAFA2E002B97EA /* NavierStokesSolver.cpp */,
+				D474EE990BFAFA2E002B97EA /* Cube.cpp */,
+				D474EE9A0BFAFA2E002B97EA /* LevelSet.h */,
+				D474EE9B0BFAFA2E002B97EA /* QuadricDecimationMesh.h */,
+				D474EE9C0BFAFA2E002B97EA /* CSG.h */,
+				D474EE9D0BFAFA2E002B97EA /* Sphere.h */,
+				D474EE9E0BFAFA2E002B97EA /* Implicit.cpp */,
+				D474EE9F0BFAFA2E002B97EA /* VolumeLevelSet.cpp */,
+				D474EEA00BFAFA2E002B97EA /* Mesh.h */,
+				D474EEA10BFAFA2E002B97EA /* EulerIntegrator.cpp */,
+				D474EEA20BFAFA2E002B97EA /* NavierStokesSolver.h */,
+				D474EEA30BFAFA2E002B97EA /* GUI.cpp */,
+				D474EEA40BFAFA2E002B97EA /* QuadricDecimationMesh.cpp */,
+				D474EEA50BFAFA2E002B97EA /* Cube.h */,
+				D474EEA60BFAFA2E002B97EA /* Implicit.h */,
+				D474EEA70BFAFA2E002B97EA /* SimpleMesh.h */,
+				D474EEA80BFAFA2E002B97EA /* LevelSet.cpp */,
+				D474EEA90BFAFA2E002B97EA /* SphereFractal.h */,
+				D474EEAA0BFAFA2E002B97EA /* SphereFractal.cpp */,
+				D474EEAC0BFAFA2E002B97EA /* HalfEdgeMesh.h */,
+				D474EEAD0BFAFA2E002B97EA /* SemiLagrangianIntegrator.h */,
+				D474EEAE0BFAFA2E002B97EA /* SignedDistanceSphere.h */,
+				D474EEAF0BFAFA2E002B97EA /* Mesh.cpp */,
+				D474EEB00BFAFA2E002B97EA /* EulerIntegrator.h */,
+				D474EEB10BFAFA2E002B97EA /* SimpleDecimationMesh.h */,
+				D474EEB20BFAFA2E002B97EA /* Quadric.cpp */,
+				D474EEB30BFAFA2E002B97EA /* NavierStokesVectorField.h */,
+				D474EEB40BFAFA2E002B97EA /* main.cpp */,
+				D474EEB50BFAFA2E002B97EA /* SignedDistanceSphere.cpp */,
+				D426FF6D0BFB1BA70063CC24 /* LoopSubdivisionMesh.cpp */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8DD76F6C0486A84900D96B5E /* Modeling & Animation */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C6859E8C029090F304C91782 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Documentation;
+			sourceTree = "<group>";
+		};
+		D474EEEC0BFAFA5F002B97EA /* SupportCode */ = {
+			isa = PBXGroup;
+			children = (
+				D474EEF10BFAFA5F002B97EA /* Bbox.h */,
+				D474EEF20BFAFA5F002B97EA /* BitMask3D.h */,
+				D474EEF30BFAFA5F002B97EA /* Camera.h */,
+				D474EEF40BFAFA5F002B97EA /* ColorMap.cpp */,
+				D474EEF50BFAFA5F002B97EA /* ColorMap.h */,
+				D474EEF60BFAFA5F002B97EA /* ConstantVectorField.h */,
+				D474EEF70BFAFA5F002B97EA /* DecimationInterface.h */,
+				D474EEF80BFAFA5F002B97EA /* DecimationMesh.cpp */,
+				D474EEF90BFAFA5F002B97EA /* DecimationMesh.h */,
+				D474EEFA0BFAFA5F002B97EA /* Function3D.h */,
+				D474EEFB0BFAFA5F002B97EA /* Geometry.h */,
+				D474EEFC0BFAFA5F002B97EA /* glext.h */,
+				D474EEFD0BFAFA5F002B97EA /* Heap.cpp */,
+				D474EEFE0BFAFA5F002B97EA /* Heap.h */,
+				D474EF000BFAFA5F002B97EA /* ImplicitGradientField.h */,
+				D474EF010BFAFA5F002B97EA /* ImplicitValueField.h */,
+				D474EF020BFAFA5F002B97EA /* IsoContourColorMap.h */,
+				D474EF030BFAFA5F002B97EA /* LevelSetGrid.cpp */,
+				D474EF040BFAFA5F002B97EA /* LevelSetGrid.h */,
+				D474EF050BFAFA5F002B97EA /* LevelSetOperator.cpp */,
+				D474EF060BFAFA5F002B97EA /* LevelSetOperator.h */,
+				D474EF070BFAFA5F002B97EA /* MarchingCubes.cpp */,
+				D474EF080BFAFA5F002B97EA /* MarchingCubes.h */,
+				D474EF090BFAFA5F002B97EA /* MarchingCubesTable.h */,
+				D474EF0A0BFAFA5F002B97EA /* Matrix4x4.h */,
+				D474EF0B0BFAFA5F002B97EA /* Matrix4x4_Impl.h */,
+				D474EF0C0BFAFA5F002B97EA /* ScalarCutPlane.cpp */,
+				D474EF0D0BFAFA5F002B97EA /* ScalarCutPlane.h */,
+				D474EF0E0BFAFA5F002B97EA /* Stopwatch.h */,
+				D474EF0F0BFAFA5F002B97EA /* Util.cpp */,
+				D474EF100BFAFA5F002B97EA /* Util.h */,
+				D474EF110BFAFA5F002B97EA /* Vector3.h */,
+				D474EF120BFAFA5F002B97EA /* Vector4.h */,
+				D474EF130BFAFA5F002B97EA /* VectorCutPlane.cpp */,
+				D474EF140BFAFA5F002B97EA /* VectorCutPlane.h */,
+				D474EF150BFAFA5F002B97EA /* Volume.h */,
+				D474EF160BFAFA5F002B97EA /* VortexVectorField.h */,
+			);
+			path = SupportCode;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8DD76F620486A84900D96B5E /* Modeling & Animation */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB923108733DC60010E9CD /* Build configuration list for PBXNativeTarget "Modeling & Animation" */;
+			buildPhases = (
+				8DD76F640486A84900D96B5E /* Sources */,
+				8DD76F660486A84900D96B5E /* Frameworks */,
+				8DD76F690486A84900D96B5E /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Modeling & Animation";
+			productInstallPath = "$(HOME)/bin";
+			productName = "Modeling & Animation";
+			productReference = 8DD76F6C0486A84900D96B5E /* Modeling & Animation */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "ModelingAnimation" */;
+			hasScannedForEncodings = 1;
+			mainGroup = 08FB7794FE84155DC02AAC07 /* Modeling & Animation */;
+			projectDirPath = "";
+			targets = (
+				8DD76F620486A84900D96B5E /* Modeling & Animation */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8DD76F640486A84900D96B5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D474EEB60BFAFA2E002B97EA /* SemiLagrangianIntegrator.cpp in Sources */,
+				D474EEB80BFAFA2E002B97EA /* TrilinearInterpolator.cpp in Sources */,
+				D474EEBB0BFAFA2E002B97EA /* FluidSolverSparseMatrix.cpp in Sources */,
+				D474EEBD0BFAFA2E002B97EA /* ObjIO.cpp in Sources */,
+				D474EEC30BFAFA2E002B97EA /* FluidSimSetup.cpp in Sources */,
+				D474EEC60BFAFA2E002B97EA /* Sphere.cpp in Sources */,
+				D474EEC70BFAFA2E002B97EA /* HalfEdgeMesh.cpp in Sources */,
+				D474EEC80BFAFA2E002B97EA /* SimpleDecimationMesh.cpp in Sources */,
+				D474EECA0BFAFA2E002B97EA /* FluidSolverVector.cpp in Sources */,
+				D474EECD0BFAFA2E002B97EA /* SimpleMesh.cpp in Sources */,
+				D474EECE0BFAFA2E002B97EA /* NavierStokesSolver.cpp in Sources */,
+				D474EECF0BFAFA2E002B97EA /* Cube.cpp in Sources */,
+				D474EED40BFAFA2E002B97EA /* Implicit.cpp in Sources */,
+				D474EED50BFAFA2E002B97EA /* VolumeLevelSet.cpp in Sources */,
+				D474EED70BFAFA2E002B97EA /* EulerIntegrator.cpp in Sources */,
+				D474EED90BFAFA2E002B97EA /* GUI.cpp in Sources */,
+				D474EEDA0BFAFA2E002B97EA /* QuadricDecimationMesh.cpp in Sources */,
+				D474EEDE0BFAFA2E002B97EA /* LevelSet.cpp in Sources */,
+				D474EEE00BFAFA2E002B97EA /* SphereFractal.cpp in Sources */,
+				D474EEE50BFAFA2E002B97EA /* Mesh.cpp in Sources */,
+				D474EEE80BFAFA2E002B97EA /* Quadric.cpp in Sources */,
+				D474EEEA0BFAFA2E002B97EA /* main.cpp in Sources */,
+				D474EEEB0BFAFA2E002B97EA /* SignedDistanceSphere.cpp in Sources */,
+				D474EF1E0BFAFA5F002B97EA /* ColorMap.cpp in Sources */,
+				D474EF220BFAFA5F002B97EA /* DecimationMesh.cpp in Sources */,
+				D474EF270BFAFA5F002B97EA /* Heap.cpp in Sources */,
+				D474EF2D0BFAFA5F002B97EA /* LevelSetGrid.cpp in Sources */,
+				D474EF2F0BFAFA5F002B97EA /* LevelSetOperator.cpp in Sources */,
+				D474EF310BFAFA5F002B97EA /* MarchingCubes.cpp in Sources */,
+				D474EF360BFAFA5F002B97EA /* ScalarCutPlane.cpp in Sources */,
+				D474EF390BFAFA5F002B97EA /* Util.cpp in Sources */,
+				D474EF3D0BFAFA5F002B97EA /* VectorCutPlane.cpp in Sources */,
+				D426FF6E0BFB1BA70063CC24 /* LoopSubdivisionMesh.cpp in Sources */,
+				D4A3207C0C02C79300FE5D13 /* AdaptiveLoopSubdivisionMesh.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB923208733DC60010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = "Modeling & Animation";
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		1DEB923308733DC60010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = "Modeling & Animation";
+			};
+			name = Release;
+		};
+		1DEB923608733DC60010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Debug;
+		};
+		1DEB923708733DC60010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB923108733DC60010E9CD /* Build configuration list for PBXNativeTarget "Modeling & Animation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB923208733DC60010E9CD /* Debug */,
+				1DEB923308733DC60010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "ModelingAnimation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB923608733DC60010E9CD /* Debug */,
+				1DEB923708733DC60010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}

@@ -1,0 +1,79 @@
+/*! \mainpage Modeling and animation course
+ *
+ * \author Gunnar Johansson (gunnar.johansson@itn.liu.se) \n
+ *   Ken Museth (ken.museth@itn.liu.se) \n
+ *   Michael Bang Nielsen (bang@daimi.au.dk) \n
+ *   Ola Nilsson (ola.nilsson@itn.liu.se) \n
+ *   Andreas Söderström (andreas.soderstrom@itn.liu.se)
+ * \date 2007
+ *
+ * \section intro_sec Introduction
+ *
+ * This is the help generated from the code in the practicals for the course modeling and animation. To get started look at:
+ *  - \ref Lab1Assignments - Meshes
+ *  - \ref Lab2Assignments - %Mesh simplification
+ *  - \ref Lab3Assignments - %Implicit modeling
+ *  - \ref Lab4Assignments - %Level-set modeling
+ *  - \ref Lab5Assignments - Simulation of smoke and water
+ *  - \ref Lab6Assignments - Splines and subdivision
+ *
+ * It migh also be helpful to look at the <a href="hierarchy.html">hierarchy</a> which provides an overview over classes.
+ *
+ * \section downloadcode Download the code
+ *
+ * Start by downloading the code base using svn (more info about Subversion at http://subversion.tigris.org)
+ * \verbatim
+  mkdir moacode;
+  cd moacode;
+  svn co https://gg.itn.liu.se/svn/courses/moa/labX mylabX;
+  \endverbatim
+ * The X is a placeholder for the lab session number (1 through 6).
+ * -  <b> Use <tt>tnm079</tt> for both username and password </b>.
+ *
+ * This will check out (i.e. download) the code in directory labX located at the url into a  directory called mylabX. You should be able to compile and run the main application (<tt>main</tt>) straight away.
+ * \verbatim
+  cd mylabX;
+  make;
+  ./main;
+  \endverbatim
+ *
+ */
+
+/*! \page Lab1Assignments Lab 1
+ * \section intro Introduction
+ * We learn how to work with mesh data structures and look at how much memory they use. We see that it is sometimes important to sacrifice storage space for more efficient neighborhood search capabilities. We also learn how to classify manifolds according to the Euler-Poincar\'e equations. Physical attributes such as normals, curvature, area and volume are inspected and discrete fomulae derived and implemented.
+ * \section Assignments
+*/
+
+/*! \page Lab2Assignments Lab 2
+ * \section intro Introduction
+ * In computer graphics it is often necessary to use highly detailed models in order to achieve a convincing level of realism. However, using the full detail representation all the time is a waste of resources since lower detail can often suffice. Low resolution models can automatically be obtained from high resolution ones using a decimation algorithm. This lab will deal with one such algorithm which uses quadrics to measure the error introduced when reducing the model.
+ *
+ * \section Assignments
+*/
+
+/*! \page Lab3Assignments Lab 3
+ * \section intro Introduction
+ * What makes implicit surfaces attractive in modeling and animation is their robustness. An implicit surface is guaranteed to be physically realisable and therefore known to work well in simulations. %Implicit surfaces are also free of holes and self-intersections. In this lab we implement a simple but yet effective modeling framework for implicit geometry. The framework contains operators for computational solid geometry (CSG) such as union and intersection as well as their blending counterparts. We restrict our system (for the moment) to analytical surfaces such as quadrics and torii, and investigate analytical differential geometrical properties.
+ *
+ * \section Assignments
+*/
+
+/*! \page Lab4Assignments Lab 4
+ * \section intro Introduction
+* This lab will target the numerics involved in implementing a level   set framework. In this context a ``level set'' is an implicit surface which can   be deformed by solving a set of <em>partial differential equations</em> (PDEs).   The implicit representation provides several benefits, such as natural changes   in topology and robust deformations. However, going from the continuous   analytical PDEs to discretized counterparts (as used by the computer), requires   special care since different discrete difference schemes highly affect the   stability of the method. In this lab you will learn that there are two   different types of PDEs, <em>parabolic</em> and <em>hyperbolic</em>, requiring   different numerical implementations. You will implement commonly used PDEs for   performing dilation, erosion, advection and smoothing.
+ *
+ * \section Assignments
+*/
+
+/*! \page Lab5Assignments Lab 5
+ * \section intro Introduction
+ *
+ * \section Assignments
+*/
+
+/*! \page Lab6Assignments Lab 6
+ * \section intro Introduction
+ *
+ * \section Assignments
+*/
