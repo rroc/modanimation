@@ -35,10 +35,12 @@ public :
     // Create buffer used to store intermediate results
     std::vector<float> buffer;
 
+	// Max norm of gradient
+	float maxGrad = -std::numeric_limits<float>::max();
+
     // Determine timestep for stability
     float dx = mLS->getDx();
     float dt = 0.5 * dx;
-
 
     // Propagate level set with stable timestep dt
     // until requested time is reached
@@ -66,6 +68,9 @@ public :
         float val = getGrid().getValue(i,j,k);
         float sign = val / std::sqrt(val*val + normgrad2*dx*dx);
 
+		// update max gradient
+		if (maxGrad < normgrad2) maxGrad = normgrad2;
+
         float ddx2, ddy2, ddz2;
         godunov(i,j,k, sign, ddx2, ddy2, ddz2);
 
@@ -91,23 +96,6 @@ public :
       }
       buffer.clear();
 
-      // Read maximum norm of gradient
-      float maxGrad = -std::numeric_limits<float>::max();
-      iter = getGrid().beginNarrowBand();
-      while (iter != iend) {
-        unsigned int i = iter.getI();
-        unsigned int j = iter.getJ();
-        unsigned int k = iter.getK();
-
-
-        float ddxc = mLS->diffXpm(i,j,k);
-        float ddyc = mLS->diffYpm(i,j,k);
-        float ddzc = mLS->diffZpm(i,j,k);
-        float normgrad2 = ddxc*ddxc + ddyc*ddyc + ddzc*ddzc;
-        if (maxGrad < normgrad2) maxGrad = normgrad2;
-
-        iter++;
-      }
       maxGrad = std::sqrt(maxGrad);
       std::cerr << "Maximum gradient: " << maxGrad << std::endl;
 
