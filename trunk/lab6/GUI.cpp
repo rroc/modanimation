@@ -546,7 +546,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 
       mesh->scale(0.2);
       mesh->validate();
-      mesh->calculateFaceNormals();
+      mesh->calculateVertexNormals();
 
       addGeometry("Subdivision", mesh);
     }
@@ -559,7 +559,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
       std::cerr << " done" << std::endl;
 
       mesh->validate();
-      mesh->calculateFaceNormals();
+      mesh->calculateVertexNormals();
     }
     break;
   case '6' :
