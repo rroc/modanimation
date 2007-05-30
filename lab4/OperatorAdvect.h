@@ -173,7 +173,6 @@ class OperatorAdvect : public LevelSetOperator
 				this->mLS->grid2World(i,j,k, x,y,z);
 				v = mVectorField->getValue( x,y,z );
 
-				//getGrid().getValue(i, j, k);
 				float velocity = - gradient(v, i,j,k, mUseWENO) * v;
 				float phiNext  = forwardEuler( i,j,k, velocity, dt );
 
