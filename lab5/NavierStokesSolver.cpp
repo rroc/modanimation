@@ -75,7 +75,10 @@ void NavierStokesSolver::solve(std::vector<Geometry*>& geometryList, float dt)
 			// Perform projection
 			//-------------------
 			float externalSource = (0.0f == mLargestDT )? 0: (mTargetVolume-mCurrentVolume)/mLargestDT;
-			calculateRHS(ls, dt, externalSource );  //Get the right hand side of the Velocity Extension
+
+			printf("Volume delta: %f\n", (mTargetVolume-mCurrentVolume));
+
+			calculateRHS(ls, dt, externalSource );  //Get the right hand side of the poisson equation
 			buildMatrix(ls);
 
 			solvePoissonEquation(ls, dt);
@@ -263,10 +266,10 @@ void NavierStokesSolver::calculateRHS(VolumeLevelSet* ls, float dt, float extern
 	const float dx = mCellSize;
 	const VolumeLevelSet::InsideMask& insideMask = ls->getInsideMask();
 
-	int maskSize = insideMask.size();
-	float extSource = externalSource; // /maskSize;
+	const float dx3 = dx * dx * dx;
 
-	printf("Adding external source: %f (per cell: %f)\n", externalSource, extSource);
+	int maskSize = insideMask.size();
+	float extSource = externalSource / (maskSize * dx3);
 
 	for (unsigned int p = 0; p < maskSize; p++)
 		{
@@ -284,6 +287,7 @@ void NavierStokesSolver::calculateRHS(VolumeLevelSet* ls, float dt, float extern
 		RHS *= 1.0/2.0/dx;
 
 		//printf("Original RHS: %f\n", RHS );
+		//RHS -= extSource;
 		RHS -= extSource;
 		
 		mRHSField->setValue(i,j,k, RHS);
@@ -345,6 +349,9 @@ void NavierStokesSolver::buildMatrix(VolumeLevelSet* ls)
 		row.ym1 = 0.0;
 		row.zp1 = 0.0;
 		row.zm1 = 0.0;
+
+		// initialized to -6 so it could be summed with
+		// the neighbors and vary from [-6, 1]
 		row.c = -6.0;
 		row.cPos = pos;
 
@@ -458,7 +465,7 @@ void NavierStokesSolver::calculateEnergy(VolumeLevelSet* ls, float& potentialEne
 		int j = pos.y();
 		int k = pos.z();
 
-		// Compute the voxel mass using a Heavy-Side Function
+		// Compute the voxel mass using a Heaviside Function
 		const float phi0 = ls->getValue(i,j,k)*oo_dx;
 
 		float voxelMass;
