@@ -533,7 +533,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
       std::cerr << "Loading subdivision mesh...\n";
 
       // Open input file
-      std::string filename("../Objs/cube.obj");
+      std::string filename("../Objs/cow.obj");
 
       // Create new mesh
       LoopSubdivisionMesh * mesh = new LoopSubdivisionMesh();
