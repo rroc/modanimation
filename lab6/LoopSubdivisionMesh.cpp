@@ -33,12 +33,12 @@ bool LoopSubdivisionMesh::subdivide()
 		e1 = mEdges[(*it).edge].next;
 		e2 = mEdges[(*it).edge].prev;
 
-		// Compute positions of the vertices
+		// Compute positions of the old vertices
 		Vector3<float> pn0 = computeVertex(e0);
 		Vector3<float> pn1 = computeVertex(e1);
 		Vector3<float> pn2 = computeVertex(e2);
 
-		// Compute positions of the edge vertices
+		// Compute positions of the new vertices on the edge
 		Vector3<float> pn3 = computeEdgeVertex(e0);
 		Vector3<float> pn4 = computeEdgeVertex(e1);
 		Vector3<float> pn5 = computeEdgeVertex(e2);

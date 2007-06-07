@@ -43,10 +43,10 @@ protected :
   unsigned int mNumSubDivs;
 
   //! Computes a new vertex, replacing a vertex in the old mesh
-  Vector3<float> computeVertex(unsigned int edgeIndex);
+  virtual Vector3<float> computeVertex(unsigned int edgeIndex);
 
   //! Computes a new vertex, placed along an edge in the old mesh
-  Vector3<float> computeEdgeVertex(unsigned int edgeIndex);
+  virtual Vector3<float> computeEdgeVertex(unsigned int edgeIndex);
 };
 
 #endif
