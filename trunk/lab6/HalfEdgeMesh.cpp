@@ -73,7 +73,7 @@ bool HalfEdgeMesh::addTriangle(const Vector3<float> &v1, const Vector3<float> &v
 	// All half-edges share the same left face (previously added)
 	int index = mFaceSize++;
 
-	mEdges[edgeind1 ].face = index;
+	mEdges[ edgeind1 ].face = index;
 	mEdges[ edgeind2 ].face = index;
 	mEdges[ edgeind3 ].face = index;
 
