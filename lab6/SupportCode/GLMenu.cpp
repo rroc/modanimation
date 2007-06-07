@@ -14,12 +14,9 @@ GLMenu::GLMenu(void)
 
 GLMenu::~GLMenu(void)
 {
-	std::vector<char*>::iterator linesIt = lines.begin();
-	std::vector<char*>::iterator end = lines.end();
-
-	for(; linesIt != end; ++linesIt)
+	for (int i = 0; i < lines.size(); i++)
 	{
-		//delete (*linesIt);
+		delete []lines[i];
 	}
 }
 
