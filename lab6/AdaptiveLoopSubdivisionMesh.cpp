@@ -41,6 +41,10 @@ bool AdaptiveLoopSubdivisionMesh::subdivide(float flatAngle)
 		// Only subdivide if flatness is 0
 		if (*flatnessIter == 0)
 		{
+#ifdef _DEBUG
+			std::cout << "* ";
+#endif // _DEBUG
+
 			// get the inner halfedges
 			unsigned int e0, e1, e2;
 			e0 = (*it).edge;
@@ -72,6 +76,10 @@ bool AdaptiveLoopSubdivisionMesh::subdivide(float flatAngle)
 		++flatnessIter;
 	}
 
+#ifdef _DEBUG
+	std::cout << std::endl;
+#endif // _DEBUG
+
 	// Treat all faces with flatness != 0
 	treatFlatFaces(subDivMesh);
 
@@ -79,6 +87,10 @@ bool AdaptiveLoopSubdivisionMesh::subdivide(float flatAngle)
 	// Assigns the new mesh
 	*this = AdaptiveLoopSubdivisionMesh(subDivMesh, ++mNumSubDivs);
 	// Change return value....
+
+	std::cout << "Subdivided to " << this->mFaceSize << " faces\n";
+	std::cout << "Subdivided to " << this->mVertSize << " vertices\n";
+
 	return mNumSubDivs;
 }
 
@@ -94,6 +106,10 @@ void AdaptiveLoopSubdivisionMesh::treatFlatFaces(HalfEdgeMesh& subDivMesh)
 		// if flatness degree n > 0
 		if (*flatnessIter > 0)
 		{
+#ifdef _DEBUG
+			std::cout << "# ";
+#endif // _DEBUG
+
 			// Loop trough edges and count the number of edges that 
 			// are shared with neighbour subdivided triangles
 			unsigned int numShared = 0;
@@ -146,24 +162,63 @@ void AdaptiveLoopSubdivisionMesh::treatFlatFaces(HalfEdgeMesh& subDivMesh)
 				// Strategy 1: only one edge is shared by subdivided tri
 				Vector3<float> verts[4];
 
-				// Add your code here..
+				unsigned int sharedEdge = sharedEdges[ 0 ];
 
-				// PROBLEM: Should the 3 vertices "shared" with the subdivided one
-				// be moved? - computeVertex should test if it should or not move 
-				// them based on the flatness
+				// get the inner halfedges: start from the
+				// shared edge and loop it
+				unsigned int e0, e1, e2;
+				e0 = sharedEdge;
+				e1 = mEdges[e0].next;
+				e2 = mEdges[e0].prev;
 
-				// 1. For shared edge, compute new vertex
-				// 2. Update the other two on the extreme of edge
-				// 3. add the 2 new triangles
+				// Compute positions of the old vertices
+				Vector3<float> pn0 = computeVertex(e0);
+				Vector3<float> pn1 = computeVertex(e1);
+				Vector3<float> pn2 = computeVertex(e2);
 
-				// Add triangles to the new mesh
+				// Compute positions of the new vertices on the edge
+				Vector3<float> pn3 = computeEdgeVertex( sharedEdge );
+
+				// Add the triangle: always works on the same way: pn3 is always between
+				// pn0 and pn1
+				subDivMesh.addTriangle(pn0, pn3, pn2);
+				subDivMesh.addTriangle(pn3, pn1, pn2);
 			}
 			else{
 				// Strategy 2: two edges are shared by subdivided tri
 				Vector3<float> verts[5];
 
+				unsigned int sharedEdge1 = sharedEdges[ 0 ];
+				unsigned int sharedEdge2 = sharedEdges[ 1 ];
+
+				// get the inner halfedges
+				unsigned int e0, e1, e2;
+				e0 = sharedEdge1;
+				e1 = mEdges[e0].next;
+				e2 = mEdges[e0].prev;
+
+				// Compute positions of the old vertices
+				Vector3<float> pn0 = computeVertex(e0);
+				Vector3<float> pn1 = computeVertex(e1);
+				Vector3<float> pn2 = computeVertex(e2);
+
+				// Compute positions of the new vertices on the edge
+				Vector3<float> pn3 = computeEdgeVertex( sharedEdge1 );
+				Vector3<float> pn4 = computeEdgeVertex( sharedEdge2 );
 
 				// Add triangles to the new mesh
+				if (e1 == sharedEdge2)
+				{
+					subDivMesh.addTriangle(pn3, pn1, pn4);
+					subDivMesh.addTriangle(pn3, pn4, pn0);
+					subDivMesh.addTriangle(pn0, pn4, pn2);
+				}
+				else
+				{
+					subDivMesh.addTriangle(pn3, pn4, pn0);
+					subDivMesh.addTriangle(pn3, pn2, pn4);
+					subDivMesh.addTriangle(pn1, pn2, pn3);
+				}
 			}
 		}
 
@@ -171,6 +226,10 @@ void AdaptiveLoopSubdivisionMesh::treatFlatFaces(HalfEdgeMesh& subDivMesh)
 		++flatFaceIter;
 		++flatnessIter;
 	}
+
+#ifdef _DEBUG
+	std::cout << std::endl;
+#endif // _DEBUG
 
 }
 
@@ -181,6 +240,7 @@ void AdaptiveLoopSubdivisionMesh::findFlatTriangles(float flatAngle)
 	// Convert angle to radians
 	const float limitAngleRad = flatAngle*M_PI/180.0;
 
+	printf("Flatness angle: %f degrees / %f radians\n", flatAngle, limitAngleRad);
 
 	// Classify all faces as either flat or not flat
 	mFaceIsFlat.clear();
@@ -314,7 +374,7 @@ bool AdaptiveLoopSubdivisionMesh::isSharedBySubdividedTriangle(unsigned int vert
 	findNeighbourTriangles(vertexIndex, neighbourTriangles);
 
 	for (unsigned int j = 0; j < neighbourTriangles.size(); j++){
-		if (!mFaceIsFlat[neighbourTriangles[j]] && mFlatness[neighbourTriangles[j]] == 0)
+		if (!mFaceIsFlat[neighbourTriangles[j]] || mFlatness[neighbourTriangles[j]] > 0)
 		{
 			subdividedNeighbour = true;
 			break;
