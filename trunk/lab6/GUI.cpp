@@ -121,7 +121,7 @@ void GUI::init()
   glutInitWindowPosition(100,100);
   glutInitWindowSize(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
   glutCreateWindow("Mesh Viewer");
-  glutSetCursor(GLUT_CURSOR_CROSSHAIR);
+  //glutSetCursor(GLUT_CURSOR_CROSSHAIR);
 
   // initializing openGL
   glClearColor (0.53515625, 0.75390625f, 0.9609375f, 0.0);
@@ -533,7 +533,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
       std::cerr << "Loading subdivision mesh...\n";
 
       // Open input file
-      std::string filename("../Objs/cow.obj");
+      std::string filename("../Objs/cube.obj");
 
       // Create new mesh
       LoopSubdivisionMesh * mesh = new LoopSubdivisionMesh();
@@ -567,7 +567,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
       std::cerr << "Loading adaptive subdivision mesh...\n";
 
       // Open input file
-      std::string filename("Objs/cube.obj");
+      std::string filename("../Objs/cow.obj");
 
       // Create new mesh
       AdaptiveLoopSubdivisionMesh * mesh = new AdaptiveLoopSubdivisionMesh();
@@ -576,13 +576,22 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
       std::ifstream infile;
       ObjIO objIO;
       infile.open(filename.c_str());
+
       objIO.load(mesh, infile);
+
+	  std::cerr << "Loaded the mesh...\n";
 
       mesh->scale(0.2);
       mesh->validate();
-      mesh->calculateFaceNormals();
 
+	  std::cerr << "Calculating Normals...\n";
+      mesh->calculateFaceNormals();
+	  //mesh->calculateVertexNormals();
+
+	  std::cerr << "Adding geometry ...\n";
       addGeometry("AdaptiveSubdivision", mesh);
+
+	  std::cerr << "Finished adding geometry ...\n";
     }
     break;
   case '7' :
@@ -593,6 +602,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
       std::cerr << " done" << std::endl;
 
       mesh->calculateFaceNormals();
+	  mesh->calculateVertexNormals();
     }
     break;
   case '8' :
