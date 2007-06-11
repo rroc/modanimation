@@ -117,7 +117,8 @@ public:
 
 		// iterate from max(0, knot) 
 		int i = std::max(knot - 2, 0);
-		for (; i < knot+3; i++)
+		int end = std::min(knot+2, (int)mCoefficients.size()-1);
+		for (; i <= end; i++)
 		{
 			coef = mCoefficients[ i ];
 			bSplineVal = getBSplineValue(i, t);
