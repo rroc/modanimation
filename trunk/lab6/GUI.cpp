@@ -567,7 +567,9 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
       std::cerr << "Loading adaptive subdivision mesh...\n";
 
       // Open input file
-      std::string filename("../Objs/cow.obj");
+      //std::string filename("../Objs/cow.obj");
+	  //std::string filename("../Objs/bunnyTiny.obj");
+	  std::string filename("../Objs/bunnyOriginal.obj");
 
       // Create new mesh
       AdaptiveLoopSubdivisionMesh * mesh = new AdaptiveLoopSubdivisionMesh();
@@ -586,7 +588,7 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 
 	  std::cerr << "Calculating Normals...\n";
       mesh->calculateFaceNormals();
-	  //mesh->calculateVertexNormals();
+	  mesh->calculateVertexNormals();
 
 	  std::cerr << "Adding geometry ...\n";
       addGeometry("AdaptiveSubdivision", mesh);

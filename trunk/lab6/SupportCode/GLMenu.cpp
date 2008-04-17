@@ -16,7 +16,7 @@ GLMenu::~GLMenu(void)
 {
 	for (int i = 0; i < lines.size(); i++)
 	{
-		delete []lines[i];
+//		delete []lines[i];
 	}
 }
 
