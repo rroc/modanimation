@@ -44,7 +44,7 @@ public :
 
   Heapable * remove(Heapable * h);
 
-  inline unsigned int size() { return mNodes.size()-1; }
+  inline unsigned int size() { return static_cast<int>(mNodes.size()-1); }
 
   inline bool isEmpty() { return size() == 0; }
 

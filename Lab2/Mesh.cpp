@@ -16,7 +16,7 @@ float Mesh::triArea(const Vector3<float> & v1, const Vector3<float> & v2, const 
 {
   Vector3<float> e1(v2 - v1);
   Vector3<float> e2(v3 - v1);
-  return .5*(cross(e1, e2).length());
+  return 0.5f*(cross(e1, e2).length());
 }
 
 float Mesh::area() const

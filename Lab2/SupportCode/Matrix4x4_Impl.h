@@ -133,7 +133,7 @@ Real Matrix4x4<Real>::determinant() const
 template <typename Real>
 bool Matrix4x4<Real>::isSingular(Real epsilon) const
 {
-  return fabsf(determinant() < epsilon);
+	return (0.0f != fabsf(determinant() < epsilon))?1:0;
 }
 
 template <typename Real>
@@ -187,14 +187,14 @@ Matrix4x4<Real> Matrix4x4<Real>::inverse() const
 		}
 #endif // _DEBUG
     
-	pivinv=1.0/a[icol][icol];
-    a[icol][icol]=1.0;
+	pivinv=1.0f/a[icol][icol];
+    a[icol][icol]=1.0f;
     for (l=0;l<n;l++) a[icol][l] *= pivinv;
     for (l=0;l<m;l++) b[icol][l] *= pivinv;
     for (ll=0;ll<n;ll++)
       if (ll != icol) {
 	dum=a[ll][icol];
-	a[ll][icol]=0.0;
+	a[ll][icol]=0.0f;
 	for (l=0;l<n;l++) a[ll][l] -= a[icol][l]*dum;
 	for (l=0;l<m;l++) b[ll][l] -= b[icol][l]*dum;
       }

@@ -15,7 +15,7 @@
 void QuadricDecimationMesh::initialize()
 	{
 	// Allocate memory for the quadric array
-	unsigned int numVerts = mVerts.size();
+	unsigned int numVerts = static_cast<int>(mVerts.size());
 	mQuadrics.reserve(numVerts);
 	mErrorIsoSurfaces.resize(numVerts, NULL);
 
@@ -86,7 +86,7 @@ void QuadricDecimationMesh::computeCollapse(EdgeCollapse * collapse)
 		}
 	else
 		{
-		collapse->position = (v1+v2)/2;
+		collapse->position = (v1+v2)/2.0f;
 		}
 
 	// Then, compute the new position and the cost	
