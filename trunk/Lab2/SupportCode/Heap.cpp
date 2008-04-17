@@ -26,7 +26,7 @@ Heap::~Heap()
 void Heap::push(Heapable * h)
 {
   mNodes.push_back(h);
-  percolateUp(mNodes.size()-1);
+  percolateUp(static_cast<int>(mNodes.size()-1));
 }
 
 
@@ -103,7 +103,7 @@ void Heap::percolateUp(unsigned int hole)
 void Heap::percolateDown(unsigned int hole)
 {
   Heapable * start = mNodes[hole];
-  unsigned int currentSize = mNodes.size();
+  unsigned int currentSize = static_cast<int>(mNodes.size());
 
   while (leftChild(hole) < currentSize) {
     unsigned int left = leftChild(hole);

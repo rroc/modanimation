@@ -83,16 +83,17 @@ public:
   // Draw call
   virtual void draw();
 
-  int genus() const {
+  int genus() const 
+  {
     std::set<MyEdge> uniqueEdges;
     for(unsigned int i=0; i<mFaces.size(); i++){
       uniqueEdges.insert(MyEdge(mFaces[i].v1, mFaces[i].v2));
       uniqueEdges.insert(MyEdge(mFaces[i].v1, mFaces[i].v3));
       uniqueEdges.insert(MyEdge(mFaces[i].v2, mFaces[i].v3));
     }
-    int E = uniqueEdges.size();
-    int V = mVerts.size();
-    int F = mFaces.size();
+    int E = static_cast<int>(uniqueEdges.size());
+    int V = static_cast<int>(mVerts.size());
+    int F = static_cast<int>(mFaces.size());
 
     std::cerr << "Number of edges: " << E << ", F: " << F << ", V: " << V << "\n";
     return -(V-E+F-2)/2;

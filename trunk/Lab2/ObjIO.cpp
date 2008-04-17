@@ -19,13 +19,17 @@
 bool ObjIO::load(Mesh *mesh, std::istream & is){
   // std::cerr << "Reading obj file.\nOutputting any skipped line(s) for reference.\n";
   bool success = readHeader(is);
-  if(!success) { return false; }
+  if(!success) 
+  {
+	std::cerr << "Error reading header.\n";
+	return false; 
+  }
 
   success = readData(is);
   if(!success) { return false; }
 
   // Build mesh
-  const unsigned int numTris = loadData.tris.size();
+  const unsigned int numTris = static_cast<int>(loadData.tris.size());
   for (unsigned int t = 0; t < numTris; t++)
 	{
     Vector3<unsigned int>& triangle = loadData.tris[t];
@@ -41,6 +45,12 @@ bool ObjIO::load(Mesh *mesh, std::istream & is){
 
 bool ObjIO::readHeader(std::istream & is){
   std::string buf;
+
+  if(!is.good())
+  {
+	std::cerr << "File Open Error, file probably does not exist.\n";
+	return false;
+  }
   // just read to the first line starting with a 'v'
   while(is.good() && !is.eof() && is.peek() != 'v'){
     getline(is, buf);

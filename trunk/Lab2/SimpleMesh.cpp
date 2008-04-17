@@ -42,14 +42,16 @@ bool SimpleMesh::addTriangle(const Vector3<float> &v1, const Vector3<float> &v2,
 }
 
 //-----------------------------------------------------------------------------
-bool SimpleMesh::addVertex(const Vector3<float> & v, unsigned int &indx){
+bool SimpleMesh::addVertex(const Vector3<float> & v, unsigned int &indx)
+{
 	std::map<Vector3<float>,unsigned int>::iterator it = mUniqueVerts.find(v);
-	if (it != mUniqueVerts.end()){
+	if (it != mUniqueVerts.end())
+	{
 		indx = (*it).second; // (*it).second == it->second, which to me was not as clear...
 		return false;
 	}
 
-	mUniqueVerts[v] = indx = mVerts.size(); // op. [ ] constructs a new entry in map
+	mUniqueVerts[v] = indx = static_cast<int>(mVerts.size()); // op. [ ] constructs a new entry in map
 	mVerts.push_back(v);
 
 	return true;
@@ -110,7 +112,7 @@ void SimpleMesh::calculateVertexNormals()
 	mNormals.clear();
 
 	std::vector<unsigned int> neighbourTriangles;
-	const unsigned int numVertices = mVerts.size();
+	const unsigned int numVertices = static_cast<int>(mVerts.size());
 	for (unsigned int v = 0; v < numVertices; v++){
 
 		findNeighbourTriangles(v, neighbourTriangles);
@@ -118,7 +120,7 @@ void SimpleMesh::calculateVertexNormals()
 		// Approximate vertex normal
 		Vector3<float> n(0,0,0);
 
-		const unsigned int numCandidates = neighbourTriangles.size();
+		const unsigned int numCandidates = static_cast<int>(neighbourTriangles.size());
 		for (unsigned int i = 0; i < numCandidates; i++){
 			Face& triangle = mFaces[neighbourTriangles[i]];
 
@@ -159,7 +161,7 @@ void SimpleMesh::draw()
 
 	// Draw geometry
 	glBegin(GL_TRIANGLES);
-	const int numTriangles = mFaces.size();
+	const int numTriangles = static_cast<int>(mFaces.size());
 	for (int i = 0; i < numTriangles; i++){
 		Face& triangle = mFaces[i];
 
@@ -359,7 +361,7 @@ void SimpleMesh::calcCurv()
 
 	curvatureArray.clear();
 
-	const unsigned int numVerts = mVerts.size();
+	const unsigned int numVerts = static_cast<int>(mVerts.size());
 	for (unsigned int i = 0; i < numVerts; i++){
 		float k = curvature(i, mNormals[i]);
 		mMinCurv = min(mMinCurv, k);

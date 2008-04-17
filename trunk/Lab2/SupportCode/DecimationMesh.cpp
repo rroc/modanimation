@@ -42,7 +42,7 @@ void DecimationMesh::initialize()
 	// Loop through the half-edges (we know they are stored
 	// sequentially) and create an edge collapse operation
 	// for each pair
-	unsigned int numCollapses = mEdges.size()/2;
+	unsigned int numCollapses = static_cast<int>(mEdges.size()/2);
 	for (unsigned int i = 0; i < numCollapses; i++) {
 		EdgeCollapse * collapse = new EdgeCollapse();
 
@@ -189,25 +189,29 @@ bool DecimationMesh::decimate()
 	do {
 		unsigned int face = mEdges[edge].face;
 		unsigned int vert = mEdges[mEdges[edge].pair].vert;
-		if (!isFaceCollapsed(face))    updateFaceProperties(face);
-		if (!isVertexCollapsed(vert))  updateVertexProperties(vert);
 
-		collapse = mHalfEdge2EdgeCollapse[edge];
-		if (collapse != NULL) {
-			if (!isValidCollapse(collapse)) {
-				delete mHeap.remove(collapse);
-				mHalfEdge2EdgeCollapse[edge] = NULL;
-				mHalfEdge2EdgeCollapse[mEdges[edge].pair] = NULL;
+		//still needed?
+		if ( BORDER != face )
+		{
+			if (!isFaceCollapsed(face))    updateFaceProperties(face);
+			if (!isVertexCollapsed(vert))  updateVertexProperties(vert);
+
+			collapse = mHalfEdge2EdgeCollapse[edge];
+			if (collapse != NULL) {
+				if (!isValidCollapse(collapse)) {
+					delete mHeap.remove(collapse);
+					mHalfEdge2EdgeCollapse[edge] = NULL;
+					mHalfEdge2EdgeCollapse[mEdges[edge].pair] = NULL;
 #ifdef _DEBUG
-				std::cout << "Removed one invalid edge collapse" << std::endl;
+					std::cout << "Removed one invalid edge collapse" << std::endl;
 #endif // _DEBUG
+					}
+				else {
+					computeCollapse(collapse);
+					mHeap.update(collapse);
+					}
 				}
-			else {
-				computeCollapse(collapse);
-				mHeap.update(collapse);
-				}
-			}
-
+		}
 		edge = mEdges[mEdges[edge].pair].next;
 		} while (edge != mVerts[v2].edge);
 
@@ -225,7 +229,7 @@ void DecimationMesh::updateVertexProperties(unsigned int ind)
 	// Approximate vertex normal
 	Vector3<float> n(0,0,0);
 
-	const unsigned int numCandidates = neighbourTriangles.size();
+	const unsigned int numCandidates = static_cast<int>(neighbourTriangles.size());
 	for (unsigned int i = 0; i < numCandidates; i++){
 		Face& triangle = mFaces[neighbourTriangles[i]];
 
@@ -288,6 +292,11 @@ bool DecimationMesh::isValidCollapse(EdgeCollapse * collapse)
 	// Do a dummy check
 	if (isEdgeCollapsed(e1) || isEdgeCollapsed(e2) || isVertexCollapsed(v1) || isVertexCollapsed(v2)) return false;
 
+	if( BORDER == mEdges[e1].face || BORDER == mEdges[e2].face )
+	{
+		return false;
+	}
+
 	unsigned int edge = mVerts[v2].edge;
 	std::vector<unsigned int> neighbors;
 	do {
@@ -330,7 +339,7 @@ void DecimationMesh::draw()
 	glLoadMatrixf(glMatrix);
 
 	// Draw geometry
-	const unsigned int numTriangles = mFaces.size();
+	const unsigned int numTriangles = static_cast<int>(mFaces.size());
 	for (unsigned int i = 0; i < numTriangles; i++){
 
 		if (isFaceCollapsed(i)) continue;
@@ -584,7 +593,7 @@ bool DecimationMesh::cleanup()
 		{
 		//FACES
 		unsigned int face = mEdges[i].face;
-		if( UNCOLLAPSED != mCollapsedFaces[face] )
+		if( BORDER != face && UNCOLLAPSED != mCollapsedFaces[face] )
 			{
 			mEdges[i].face = mCollapsedFaces[face];
 			}
@@ -624,7 +633,7 @@ bool DecimationMesh::cleanup()
 		}
 
 	//UPDATE HEAPABLE	
-	for (unsigned int i=0, endI = mHalfEdge2EdgeCollapse.size(); i<endI; i++ )
+	for (unsigned int i=0, endI = static_cast<int>(mHalfEdge2EdgeCollapse.size()); i<endI; i++ )
 		{
 		if( NULL != mHalfEdge2EdgeCollapse[i])
 			{

@@ -135,7 +135,7 @@ public:
   //! Scaling of vector by division
   template<typename Scalar>
   Vector3<Real> operator/(Scalar s) const {
-    Real invS = 1.0/s;
+    Real invS = 1.0f/s;
     return Vector3<Real>(v[0]*invS, v[1]*invS, v[2]*invS);
   }
   //! Multiplication with another vector entry by entry

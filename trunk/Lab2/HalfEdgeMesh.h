@@ -73,11 +73,11 @@ protected:
 		Vector3<float> normal; // the face normal
 		};
 
-	int mEdgeSize;
+	unsigned int mEdgeSize;
 	std::vector<HalfEdge> mEdges;
-	int mVertSize;
+	unsigned int mVertSize;
 	std::vector<Vertex> mVerts;
-	int mFaceSize;
+	unsigned int mFaceSize;
 	std::vector<Face> mFaces;
 
 
@@ -94,8 +94,11 @@ protected:
 	bool addHalfEdgePair(unsigned int v1, unsigned int v2, unsigned int &indx1, unsigned int &indx2);
 
 	void mergeBoundaryEdge(unsigned int indx);
+  
+  void insertBoundaryEdge( unsigned int indx );
 
-
+  void getTriangleVerts(int aTriangle, std::vector<unsigned int>& aVerts ) const;
+  
 	// Given a vertex, find all triangles that includes this vertex
 	virtual bool findNeighbourTriangles(const unsigned int vertexIndex, std::vector<unsigned int>& foundTriangles) const;
 
