@@ -496,11 +496,12 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 	//std::string filename("../Objs/cow.obj");
 	//std::string filename("../Objs/cube.obj");
 	//std::string filename("../Objs/nonmanifold_cube.obj");
+	std::string filename("../Objs/genuscube.obj");
 	//std::string filename("../Objs/cowFix.obj");
 	//std::string filename("../Objs/bunnyLarge.obj");
 	
 	//std::string filename("../Objs/bunnySmall_holes.obj");
-	std::string filename("../Objs/bunnyOriginal.obj");
+	//std::string filename("../Objs/bunnyOriginal.obj");
 	
 	// Create new mesh
 	QuadricDecimationMesh* mesh = new QuadricDecimationMesh;
@@ -517,6 +518,8 @@ void GUI::keyboardFunc(unsigned char keycode, GLint mouseX, GLint mouseY)
 
 	mesh->initialize();
 	mesh->setShadingFlag(Mesh::FLAT_SHADING);
+
+	int g = mesh->genus();
 
 	mGeometryList.push_back(mesh);
 	

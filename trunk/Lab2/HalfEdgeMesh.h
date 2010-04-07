@@ -38,7 +38,7 @@ public:
 
 	virtual void calculateVertexNormals();
 
-	Vector3<float> calculateFaceNormal( unsigned int aTriangle );
+	Vector3<float> calculateFaceNormalUnNormalized( unsigned int aTriangle );
 
 	virtual void draw();
 

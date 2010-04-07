@@ -356,7 +356,7 @@ float HalfEdgeMesh::area()
 	unsigned int numTriangles = mFaceSize;
 	for (unsigned int i = 0; i < numTriangles; i++)
 		{
-		totalArea += calculateFaceNormal( i ).length() / 2.0f;
+		totalArea += calculateFaceNormalUnNormalized( i ).length() / 2.0f;
 		}		
 	return totalArea;
 	}
@@ -368,7 +368,7 @@ float HalfEdgeMesh::volume()
 	unsigned int numTriangles = mFaceSize;
 	for (unsigned int i = 0; i < numTriangles; i++)
 		{
-		Vector3<float> normal = calculateFaceNormal( i );
+		Vector3<float> normal = calculateFaceNormalUnNormalized( i );
 		float length = normal.length();
 		normal.normalize();
 		int edgeIndex1 = mFaces.at(i).edge;
@@ -524,7 +524,7 @@ void HalfEdgeMesh::calculateVertexNormals()
 		int endJ=static_cast<int>(foundTriangles.size());
 		for (int j=0; j<endJ; j++)
 			{
-			normal += calculateFaceNormal( foundTriangles[j] ).normalize();
+			normal += calculateFaceNormalUnNormalized( foundTriangles[j] ).normalize();
 			}
 		normal = normal/endJ;
 
@@ -534,12 +534,12 @@ void HalfEdgeMesh::calculateVertexNormals()
 	}
 
 
-Vector3<float> HalfEdgeMesh::calculateFaceNormal( unsigned int aTriangle )
+Vector3<float> HalfEdgeMesh::calculateFaceNormalUnNormalized( unsigned int aTriangle )
 	{
 	//For non manifold surfaces
 	if( BORDER == aTriangle )
 		{
-		printf("calculateFaceNormal: BORDER edge found!\n");
+		printf("calculateFaceNormalUnNormalized: BORDER edge found!\n");
 		exit(1);
 		}
 
@@ -557,7 +557,7 @@ Vector3<float> HalfEdgeMesh::calculateFaceNormal( unsigned int aTriangle )
 	Vector3<float> v1 = p1-p0;
 	Vector3<float> v2 = p2-p0;
 	Vector3<float> n = cross(v1,v2);
-	return n.normalize();
+	return n;
 	}
 
 //-----------------------------------------------------------------------------
