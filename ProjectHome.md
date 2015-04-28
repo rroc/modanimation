@@ -1,0 +1,1 @@
+This project stores the labs of Modelling and Animation course for 2007.
